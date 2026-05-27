@@ -1,0 +1,2180 @@
+[
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Initialize FlowForge project: Create a clean Fastify + TypeScript ESM backend with basic folder structure, health check endpoint, and Prisma setup",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "977d7a98-a4b3-4ff2-828a-9fbf9ee87761",
+    "rev": 2,
+    "createdAt": 1779906320550,
+    "updatedAt": 1779906626898
+  },
+  {
+    "type": "task",
+    "title": "Initialize ESM project skeleton",
+    "content": "Create package.json (type:module, strict TS, Fastify, Prisma, Zod, Vitest, Supertest), tsconfig.json (strict, ESM paths, .js imports), .eslintrc, prettier config, and empty src/ folder tree (domain/, application/, adapters/, infrastructure/, routes/, server.ts). Install dependencies. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "1d104694-babd-4d3c-87e8-a5bd9f2f5db5",
+    "rev": 1,
+    "createdAt": 1779906333955,
+    "updatedAt": 1779906333955
+  },
+  {
+    "type": "task",
+    "title": "Set up Prisma + PostgreSQL config",
+    "content": "Add prisma/ folder, schema.prisma (User, Project, Task models), .env.example, docker-compose.yml for Postgres, and Prisma client generation script. Configure connection in infrastructure/. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "24a7e5a8-a93a-4c4a-9561-ba527b3f5059",
+    "rev": 1,
+    "createdAt": 1779906333955,
+    "updatedAt": 1779906333955
+  },
+  {
+    "type": "task",
+    "title": "Implement health check endpoint",
+    "content": "Create minimal Fastify server.ts with /health route returning 200 { status: 'ok' }. Wire basic error handler and start script. Ensure ESM .js imports throughout. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "5a7785d7-8154-421b-aa1c-11c26573a9b4",
+    "rev": 1,
+    "createdAt": 1779906333955,
+    "updatedAt": 1779906333955
+  },
+  {
+    "type": "result",
+    "title": "Result: Initialize ESM project skeleton",
+    "content": "## Implementation\n\nThe FlowForge ESM + TypeScript backend skeleton is initialized and ready for downstream agents (Prisma setup, health endpoint, etc.).\n\n## Changes Made\n\n### Configuration files\n\n| File | Purpose |\n|------|---------|\n| `package.json` | `\"type\": \"module\"`, Node 20+, scripts for dev/build/test/lint/format/prisma |\n| `tsconfig.json` | Strict TS, `NodeNext` modules, path aliases, `.js` import convention |\n| `.eslintrc.cjs` | TypeScript-eslint with type-checked rules (`.cjs` required because package is ESM) |\n| `.prettierrc` / `.prettierignore` | Formatting config |\n| `vitest.config.ts` | Vitest + `passWithNoTests: true` for skeleton phase |\n| `.gitignore` | Ignores `node_modules`, `dist`, `.env`, etc. |\n\n### Dependencies installed\n\n**Runtime:** `fastify`, `@prisma/client`, `zod`  \n**Dev:** `typescript`, `tsx`, `prisma`, `vitest`, `supertest`, `@types/*`, `eslint`, `prettier`\n\n### Source folder tree\n\n```\nsrc/\n├── domain/.gitkeep\n├── application/.gitkeep\n├── adapters/.gitkeep\n├── infrastructure/.gitkeep\n├── routes/.gitkeep\n└── server.ts          # placeholder entry point\n```\n\n### npm scripts\n\n- `dev` — `tsx watch src/server.ts`\n- `build` — `tsc` → `dist/`\n- `start` — `node dist/server.js`\n- `test` / `test:watch` — Vitest\n- `lint` / `lint:fix` — ESLint\n- `format` / `format:check` — Prettier\n- `prisma:generate` / `prisma:migrate` / `prisma:studio` — Prisma CLI\n\n### Verification\n\nAll tooling passes:\n\n- `npm run build` — compiles cleanly\n- `npm run lint` — no errors\n- `npm run format:check` — passes after formatting\n- `npm test` — exits 0 (no tests yet, `passWithNoTests` enabled)\n- `npm install` — 312 packages, 0 vulnerabilities\n\n## Next Steps\n\nReady for parallel downstream work:\n\n1. **Prisma agent** — Add `prisma/schema.prisma`, `.env.example`, `docker-compose.yml`, and wire Prisma client in `infrastructure/`\n2. **Health check agent** — Implement Fastify server in `src/server.ts` with `/health` route, error handler, and start script wiring\n3. **Tests** — Add\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "bd19da3f-716a-41b4-81e4-d648fa3b9dd1",
+    "rev": 1,
+    "createdAt": 1779906474326,
+    "updatedAt": 1779906474326
+  },
+  {
+    "type": "result",
+    "title": "Result: Set up Prisma + PostgreSQL config",
+    "content": "## Implementation\n\nPrisma + PostgreSQL configuration is in place and wired through `src/infrastructure/`. The Prisma client generates on install and build.\n\n## Changes Made\n\n### Prisma schema (`prisma/schema.prisma`)\n\nThree models with relations for a task/project app:\n\n| Model | Key fields | Relations |\n|-------|------------|-----------|\n| **User** | `email` (unique), `name`, `password` | owns `Project[]`, assigned `Task[]` |\n| **Project** | `name`, `description?`, `ownerId` | belongs to `User`, has `Task[]` |\n| **Task** | `title`, `status` (TODO/IN_PROGRESS/DONE), `projectId`, `assigneeId?` | belongs to `Project`, optional `User` assignee |\n\nCascade deletes: deleting a user removes their projects; deleting a project removes its tasks.\n\n### Environment & Docker\n\n| File | Purpose |\n|------|---------|\n| `.env.example` | `DATABASE_URL`, `PORT`, `NODE_ENV` defaults matching docker-compose |\n| `docker-compose.yml` | PostgreSQL 16 on port 5432 (`flowforge`/`flowforge`), named volume, healthcheck |\n\n### Infrastructure wiring (`src/infrastructure/`)\n\n| File | Exports |\n|------|---------|\n| `config.ts` | `getEnv()` — Zod-validated env (`DATABASE_URL`, `PORT`, `NODE_ENV`) |\n| `database.ts` | `prisma` singleton, `connectDatabase()`, `disconnectDatabase()` |\n| `index.ts` | Re-exports for `@infrastructure/*` imports |\n\nDownstream handlers can use:\n\n```typescript\nimport { getEnv, prisma, connectDatabase, disconnectDatabase } from '@infrastructure/index.js';\n```\n\n### Scripts (`package.json`)\n\n- `postinstall`: runs `prisma generate` after `npm install`\n- `build`: runs `prisma generate && tsc` (client always fresh before compile)\n- Existing: `prisma:generate`, `prisma:migrate`, `prisma:studio`\n\n## Verification\n\nAll checks pass:\n\n- `npm run prisma:generate` — client generated\n- `npm run build` — compiles cleanly\n- `npm run lint` — no errors\n- `npm run format:check` — passes\n- `npm test` — exits 0\n\n## Next Steps\n\nFor the **health check agent** and later route handlers:\n\n1. Copy env: \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "467e9cd3-29f6-4cbb-88f4-690030894d48",
+    "rev": 1,
+    "createdAt": 1779906547834,
+    "updatedAt": 1779906547834
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement health check endpoint",
+    "content": "## Implementation\n\nThe health check endpoint is fully wired end-to-end: Fastify server, `/health` route, error handler, start script, and integration tests.\n\n## Changes Made\n\n### `src/server.ts`\n- Builds a Fastify app via `buildServer()` (reusable in tests)\n- Registers the error handler and health routes\n- Reads `PORT` from env via existing `getEnv()` infrastructure\n- Starts the server when run directly (`npm run dev` / `npm start`)\n\n### `src/routes/health.ts`\n- `GET /health` returns `200` with `{ status: 'ok' }`\n\n### `src/infrastructure/error-handler.ts`\n- Global error handler returns structured JSON for all errors\n- 404 handler for unknown routes\n- Sends the full JSON response before the stream closes — no `req.destroy()` on error paths\n- Handles invalid JSON (`400`) and payload-too-large (`413`) with clear messages\n\n### `src/server.test.ts` + `tests/setup.ts`\n- Health endpoint returns `200 { status: 'ok' }`\n- Unknown routes return `404` JSON\n- Invalid JSON body returns `400` JSON (not a connection error)\n\n### `vitest.config.ts`\n- Added `setupFiles` so tests have required `DATABASE_URL` without a live DB\n\n## Verification\n\n| Check | Result |\n|-------|--------|\n| `npm run build` | Passes |\n| `npm run lint` | Passes |\n| `npm test` | 3/3 tests pass |\n| `npm start` → `GET /health` | Returns `{\"status\":\"ok\"}` |\n\n## Next Steps\n\nReady for downstream work:\n\n1. **Integration tests agent** — Can extend `src/server.test.ts` with Supertest if preferred over `app.inject`\n2. **Auth agent** — When signing JWTs, include `jti: crypto.randomUUID()` in every access token (constraint noted; not applicable to this task)\n3. **Prisma agent** — Wire `connectDatabase()` / `disconnectDatabase()` into server lifecycle when DB-dependent routes are added\n\n**Start locally:** `npm run dev` (or `npm run build && npm start`) with `DATABASE_URL` set per `.env.example`.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "189e7755-8854-4e1a-a749-aae6f2bd87f6",
+    "rev": 1,
+    "createdAt": 1779906571700,
+    "updatedAt": 1779906571700
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Set up configuration system with Zod-validated environment variables, .env.example, and database connection factory",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "245d7d99-78e0-438e-aeb5-dab4696b4b2d",
+    "rev": 2,
+    "createdAt": 1779907033426,
+    "updatedAt": 1779907166904
+  },
+  {
+    "type": "task",
+    "title": "Implement Zod-validated config + DB connection factory",
+    "content": "Complete the configuration system end-to-end: ensure config.ts exports a complete Zod-validated Env (DATABASE_URL, NODE_ENV, PORT) via getEnv(), keep .env.example in sync, and replace the global Prisma singleton in database.ts with a proper factory createDatabase(env: Env) that returns { prisma, connectDatabase, disconnectDatabase } using the validated config. Wire the factory into infrastructure/index.ts exports and any existing call sites. Use only ESM imports with .js extensions and unknown + type guards (no any). ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "36660c54-2829-4abe-9c68-edc39cd59d06",
+    "rev": 1,
+    "createdAt": 1779907051950,
+    "updatedAt": 1779907051950
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Zod-validated config + DB connection factory",
+    "content": "## Implementation\n\nThe configuration system is complete end-to-end: Zod-validated env via `getEnv()`, a database factory driven by that config, infrastructure exports updated, and the server startup path wired to connect/disconnect through the factory.\n\n## Changes Made\n\n### `src/infrastructure/config.ts`\n- Zod schema validates `DATABASE_URL`, `NODE_ENV` (`development` | `production` | `test`), and `PORT` (coerced positive integer, default `3000`)\n- `getEnv()` parses and caches env\n- `resetEnvCache()` added for test isolation\n\n### `src/infrastructure/database.ts`\n- Removed global Prisma singleton\n- Added `createDatabase(env: Env): Database` returning `{ prisma, connectDatabase, disconnectDatabase }`\n- Prisma uses validated `env.DATABASE_URL` and `env.NODE_ENV` for logging\n\n### `src/infrastructure/index.ts`\n- Exports `getEnv`, `resetEnvCache`, `Env`, `createDatabase`, `Database`, `registerErrorHandler`\n- Removed direct `prisma` / `connectDatabase` / `disconnectDatabase` singleton exports\n\n### `src/server.ts`\n- `start()` calls `createDatabase(getEnv())`, `connectDatabase()` before listen, and `disconnectDatabase()` on `SIGINT`/`SIGTERM` after `app.close()`\n- `buildServer()` unchanged for tests (no DB connection required for `/health`)\n\n### Tests\n- `src/infrastructure/config.test.ts` — validation, defaults, error cases\n- `src/infrastructure/database.test.ts` — factory shape (no live DB required)\n- `tests/setup.ts` — sets `PORT` for test env consistency\n\n### `.env.example`\n- Already aligned with schema (`DATABASE_URL`, `PORT`, `NODE_ENV`); no changes needed\n\n## Verification\n\n- `npm test` — 8 tests passing\n- `npx tsc --noEmit` — clean\n- `npm run lint` — clean\n\n## Next Steps\n\nDownstream agents can import `createDatabase(getEnv())` from `src/infrastructure/index.js` and attach `database.prisma` to Fastify (e.g. `app.decorate`) when routes need DB access. `start()` already connects on boot when running `npm run dev` / `npm start` with Postgres available.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "440e18a8-ce59-4332-80cf-ff4289f16811",
+    "rev": 1,
+    "createdAt": 1779907117460,
+    "updatedAt": 1779907117460
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "849f28fb-12f3-41de-a104-e28f5b3f47bc",
+    "rev": 2,
+    "createdAt": 1779907302771,
+    "updatedAt": 1779915701979
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "eadd76f8-2b48-4752-b06c-9ae34e41ff1b",
+    "rev": 2,
+    "createdAt": 1779907333575,
+    "updatedAt": 1779917648361
+  },
+  {
+    "type": "task",
+    "title": "Add JWT + password hashing dependencies",
+    "content": "Install jsonwebtoken, @types/jsonwebtoken, and argon2. Update package.json and run postinstall. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "016be614-3d1a-4b30-848b-d426eaa64c2b",
+    "rev": 1,
+    "createdAt": 1779907362418,
+    "updatedAt": 1779907362418
+  },
+  {
+    "type": "task",
+    "title": "Implement domain auth entities and value objects",
+    "content": "Create src/domain/auth/ with User entity, Password value object, AuthTokenClaims, and domain errors. Use strict types only. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "40b42759-7901-4845-a15f-80c2b5a4f1c2",
+    "rev": 1,
+    "createdAt": 1779907362419,
+    "updatedAt": 1779907362419
+  },
+  {
+    "type": "task",
+    "title": "Build infrastructure auth services and rate limiter",
+    "content": "Create JWT signer/verifier (RS256 via keys from config), Argon2 password hasher, custom fixed-window rate limiter middleware, and Prisma user repository. Wire early rate-limit check before body parsing. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "613c3afc-6fc6-4534-8980-76aa51c658d8",
+    "rev": 1,
+    "createdAt": 1779907362419,
+    "updatedAt": 1779907362419
+  },
+  {
+    "type": "task",
+    "title": "Implement application auth use cases",
+    "content": "Create register, login, logout, refresh use cases + DTOs with Zod validation in src/application/auth/. Depend only on domain + infra interfaces. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "7b11a2b9-c6d0-4faa-881c-e2cad5e16c6b",
+    "rev": 1,
+    "createdAt": 1779907362420,
+    "updatedAt": 1779907362420
+  },
+  {
+    "type": "task",
+    "title": "Wire auth routes, controllers, and rate limiting",
+    "content": "Create src/adapters/auth/ controllers and src/routes/auth.ts exporting FastifyPluginCallback. Register all four endpoints with Zod validation + early rate limiting. Wire into server.ts. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "99e32386-3968-4aba-b6da-4d798cb33425",
+    "rev": 1,
+    "createdAt": 1779907362420,
+    "updatedAt": 1779907362420
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for auth domain and application logic",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite ≤8 unit test files covering domain entities, password hashing, JWT claims, and use-case business logic only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "ed02e448-3e1e-4a27-9f3d-410dcdf217de",
+    "rev": 1,
+    "createdAt": 1779907362421,
+    "updatedAt": 1779907362421
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for auth endpoints + rate limiting",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite ≤8 integration test files using buildServer() + app.inject() for register/login/logout/refresh flows and rate-limit behavior. Cover error cases and no-enumeration leaks.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "48e65767-31a6-4bf9-94f0-89f3e2c30884",
+    "rev": 1,
+    "createdAt": 1779907362421,
+    "updatedAt": 1779907362421
+  },
+  {
+    "type": "task",
+    "title": "Execute full auth test suite",
+    "content": "Run `npm test` after both test-author tasks complete. Report full pass/fail matrix, coverage, and any flaky tests. Do not modify implementation.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "644556e6-970a-4506-bce2-633c1c48ebdc",
+    "rev": 1,
+    "createdAt": 1779907362422,
+    "updatedAt": 1779907362422
+  },
+  {
+    "type": "result",
+    "title": "Result: Add JWT + password hashing dependencies",
+    "content": "## Implementation\n\nJWT and password-hashing dependencies are installed and verified. `postinstall` (Prisma client generation) completed successfully.\n\n## Changes Made\n\n### `package.json` — new dependencies\n\n| Package | Version | Scope | Purpose |\n|---------|---------|-------|---------|\n| `jsonwebtoken` | `^9.0.3` | `dependencies` | JWT signing/verification |\n| `argon2` | `^0.44.0` | `dependencies` | Password hashing |\n| `@types/jsonwebtoken` | `^9.0.10` | `devDependencies` | TypeScript types for jsonwebtoken |\n\n### Verification\n\n- `npm run postinstall` — Prisma Client generated successfully\n- ESM imports — `jsonwebtoken` and `argon2` import correctly under `\"type\": \"module\"`\n- `npm test` — all 8 existing tests pass (3 files)\n\n## Next Steps\n\nDownstream agents can proceed with:\n\n1. **Domain auth entities** — `User`, `Password`, `AuthTokenClaims`, domain errors\n2. **Infrastructure auth services** — JWT signer/verifier (RS256), Argon2 hasher, rate limiter, Prisma user repository\n3. **Application use cases** — register, login, logout, refresh with Zod DTOs\n\n**Note for JWT implementation agents:** Every signed access token must include a unique `jti` claim via `crypto.randomUUID()` to support refresh-token rotation and replay detection.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "f9dc49cc-976d-49a6-9ec1-d778e43a54e3",
+    "rev": 1,
+    "createdAt": 1779907392445,
+    "updatedAt": 1779907392445
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement domain auth entities and value objects",
+    "content": "## Implementation\n\nThe auth domain layer is in place under `src/domain/auth/`, with strict TypeScript types, no `any`, and barrel exports for downstream agents (application use cases, infrastructure JWT signer, Prisma repository).\n\n## Changes Made\n\n### `src/domain/errors.ts`\n- Base `DomainError` with a stable `code` string for mapping to HTTP responses in upper layers.\n\n### `src/domain/auth/errors.ts`\nAuth-specific domain errors:\n\n| Error | Code | Purpose |\n|-------|------|---------|\n| `InvalidCredentialsError` | `AUTH_INVALID_CREDENTIALS` | Login failures (no enumeration) |\n| `UserAlreadyExistsError` | `AUTH_USER_ALREADY_EXISTS` | Duplicate registration |\n| `InvalidPasswordError` | `AUTH_INVALID_PASSWORD` | Plaintext policy violations |\n| `InvalidRefreshTokenError` | `AUTH_INVALID_REFRESH_TOKEN` | Refresh/logout token issues |\n| `UserNotFoundError` | `AUTH_USER_NOT_FOUND` | Internal lookup failures |\n| `InvalidEmailError` | `AUTH_INVALID_EMAIL` | Email format validation |\n| `InvalidNameError` | `AUTH_INVALID_NAME` | Name validation |\n\n### `src/domain/auth/password.ts`\n- `Password` value object wrapping **hashed** values only (hashing stays in infrastructure/argon2).\n- `Password.validatePlaintext()` — enforces 8–128 chars, at least one letter and one number.\n- `Password.fromHash()` — reconstitutes from persisted hash.\n\n### `src/domain/auth/user.ts`\n- `User` entity with `create()` (new users) and `reconstitute()` (from persistence).\n- Normalizes email (trim, lowercase) and name (trim, length bounds).\n- `toProps()` for repository mapping back to persistence.\n\n### `src/domain/auth/auth-token-claims.ts`\n- `AccessTokenClaims` — `sub`, `email`, **`jti`**, `type: 'access'`, `iat`, `exp`.\n- `RefreshTokenClaims` — `sub`, **`jti`**, `family` (rotation), `type: 'refresh'`, `iat`, `exp`.\n- Factories `createAccessTokenClaims()` / `createRefreshTokenClaims()` with validation (non-empty `jti`, expiry after issue time).\n- Type guards `isAccessTokenClaims()` / `isRefreshTokenClaims(\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "3b3e74f5-4eb1-4406-b172-65416f3a5d1d",
+    "rev": 1,
+    "createdAt": 1779907424080,
+    "updatedAt": 1779907424080
+  },
+  {
+    "type": "result",
+    "title": "Result: Build infrastructure auth services and rate limiter",
+    "content": "## Implementation\n\nAuth infrastructure is implemented end-to-end: JWT (RS256), Argon2 password hashing, fixed-window rate limiting with early `/auth/*` hook, and a Prisma user repository. Config, server wiring, and tests are updated.\n\n## Changes Made\n\n### Configuration (`src/infrastructure/config.ts`, `.env.example`, `tests/setup.ts`)\n\nAdded Zod-validated env vars:\n\n| Variable | Purpose |\n|----------|---------|\n| `JWT_PRIVATE_KEY` / `JWT_PUBLIC_KEY` | RS256 PEM keys (supports `\\n` escaping) |\n| `JWT_ACCESS_TOKEN_TTL_SECONDS` | Default 900 (15 min) |\n| `JWT_REFRESH_TOKEN_TTL_SECONDS` | Default 604800 (7 days) |\n| `RATE_LIMIT_WINDOW_MS` | Default 60000 |\n| `RATE_LIMIT_MAX_REQUESTS` | Default 10 |\n\n### Auth infrastructure (`src/infrastructure/auth/`)\n\n| Module | Responsibility |\n|--------|----------------|\n| `jwt-service.ts` | RS256 sign/verify; **`jti` via `crypto.randomUUID()`** on every access/refresh token |\n| `password-hasher.ts` | Argon2id hash + verify |\n| `rate-limiter.ts` | Fixed-window limiter, `createNoOpRateLimiter()`, `registerEarlyRateLimit()` hook |\n| `user-repository.ts` | Prisma CRUD: `findByEmail`, `findById`, `save`, `existsByEmail` |\n| `create-auth-infrastructure.ts` | Factory composing all services |\n| `types.ts` | Interfaces for downstream use cases |\n\n### Server wiring (`src/server.ts`)\n\n- `registerEarlyRateLimit()` runs in **`onRequest`** (before body parsing) for `/auth/*`\n- Returns `429` JSON with `Retry-After` — no `req.destroy()`\n- `buildServer({ rateLimiter? })` accepts an optional limiter for tests (`createNoOpRateLimiter()`)\n\n### Exports (`src/infrastructure/index.ts`)\n\nAll auth factories, interfaces, and `JwtVerificationError` are exported for application/adapters layers.\n\n### Tests\n\n- `src/infrastructure/auth/auth-services.test.ts` — JWT jti uniqueness, Argon2, rate limiter\n- `src/server.auth-rate-limit.test.ts` — early rate limit on `/auth/*`, bypass on `/health`\n- Updated `config.test.ts` for new env fields\n\n**Verification:** `npm tes\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "de27ab7a-d985-43cd-a735-f3fedfef9804",
+    "rev": 1,
+    "createdAt": 1779907533241,
+    "updatedAt": 1779907533241
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement application auth use cases",
+    "content": "## Implementation\n\nAuth application use cases are implemented end-to-end under `src/application/auth/`, with Zod-validated DTOs and dependency injection via domain + infrastructure interfaces. A `RefreshTokenRepository` was also added to infrastructure (in-memory store) because logout and refresh rotation require server-side token tracking — it was missing from the prior infra task.\n\n## Changes Made\n\n### Application layer (`src/application/auth/`)\n\n| Module | Responsibility |\n|--------|----------------|\n| `dto/` | Zod schemas for register, login, logout, refresh inputs and auth response shapes |\n| `register.use-case.ts` | Duplicate check → `Password.validatePlaintext()` → hash → `User.create()` → issue tokens |\n| `login.use-case.ts` | Lookup by email → verify password → generic `InvalidCredentialsError` on failure |\n| `logout.use-case.ts` | Verify refresh JWT → revoke active token (idempotent) |\n| `refresh.use-case.ts` | Verify JWT → rotation with family replay detection → new token pair |\n| `token-pair.ts` | Shared helper to sign access + refresh tokens and persist refresh `jti` |\n| `create-auth-use-cases.ts` | Factory wiring all four use cases with Zod parsing at the boundary |\n| `types.ts` | `AuthUseCases`, `AuthUseCaseDependencies`, `AuthTokenSettings` |\n| `index.ts` + `src/application/index.ts` | Barrel exports |\n\n### Infrastructure addition (required for refresh/logout)\n\n| Module | Responsibility |\n|--------|----------------|\n| `infrastructure/auth/types.ts` | `RefreshTokenRepository` interface + `RefreshTokenRecord` type |\n| `infrastructure/auth/refresh-token-repository.ts` | In-memory implementation with family revocation |\n| `create-auth-infrastructure.ts` | Wires `refreshTokenRepository` into `AuthInfrastructure` |\n\n### Use case behavior\n\n- **Register** — `existsByEmail` → `Password.validatePlaintext()` → Argon2 hash → save user → new token family\n- **Login** — same error for missing user / wrong password (no enumeration)\n- **Logout** — invalid token → `In\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "00718f87-bb09-4d96-8646-8d053572cfbe",
+    "rev": 1,
+    "createdAt": 1779907634553,
+    "updatedAt": 1779907634553
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "5116e66b-43cd-4002-8cf3-d0e0d9c47bf5",
+    "rev": 1,
+    "createdAt": 1779909559840,
+    "updatedAt": 1779909559840
+  },
+  {
+    "type": "task",
+    "title": "Create domain auth entities and value objects",
+    "content": "Implement src/domain/auth/ (User entity, Password value object, AuthTokenClaims, domain errors). Use strict types only, no any. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "fff48b63-0a17-4240-a5a4-8a1476d0623f",
+    "rev": 1,
+    "createdAt": 1779909594438,
+    "updatedAt": 1779909594438
+  },
+  {
+    "type": "task",
+    "title": "Build JWT service and password hasher (infra)",
+    "content": "Create RS256 JWT signer/verifier (keys from config) and Argon2 password hasher in src/infrastructure/auth/. Export via factory. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "c80fc49d-941f-4b63-b78e-2ff494e46b65",
+    "rev": 1,
+    "createdAt": 1779909594439,
+    "updatedAt": 1779909594439
+  },
+  {
+    "type": "task",
+    "title": "Implement rate limiter middleware (infra)",
+    "content": "Build custom fixed-window rate limiter in src/infrastructure/auth/rate-limiter.ts with early check before body parsing. Support per-IP and per-user keys. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "4c2b1183-1310-4baa-8027-219bf6810ebe",
+    "rev": 1,
+    "createdAt": 1779909594439,
+    "updatedAt": 1779909594439
+  },
+  {
+    "type": "task",
+    "title": "Implement Prisma user repository (infra)",
+    "content": "Create src/infrastructure/auth/user-repository.ts implementing the repository interface using Prisma. Wire via factory. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "a4c4e970-d864-4244-ae83-5ee4d18405a6",
+    "rev": 1,
+    "createdAt": 1779909594440,
+    "updatedAt": 1779909594440
+  },
+  {
+    "type": "task",
+    "title": "Implement register and login use cases",
+    "content": "Build register.use-case.ts and login.use-case.ts + DTOs with Zod in src/application/auth/. Depend only on domain + infra interfaces. Emit secure error messages (no enumeration). ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "f5076f88-5b50-4fef-8deb-67b0f0a23fba",
+    "rev": 1,
+    "createdAt": 1779909594441,
+    "updatedAt": 1779909594441
+  },
+  {
+    "type": "task",
+    "title": "Implement logout and refresh use cases",
+    "content": "Build logout.use-case.ts and refresh.use-case.ts + DTOs with Zod and token rotation in src/application/auth/. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "0c617d06-1a02-42de-a299-4679e4fcd485",
+    "rev": 1,
+    "createdAt": 1779909594441,
+    "updatedAt": 1779909594441
+  },
+  {
+    "type": "task",
+    "title": "Wire auth routes, controllers and rate limiting",
+    "content": "Create src/adapters/auth controllers and src/routes/auth.ts exporting FastifyPluginCallback. Register all four endpoints with early rate limiting and Zod validation. Ensure buildServer() registers the plugin. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "cce67975-b0f4-4e7c-8dbf-3955964e7581",
+    "rev": 1,
+    "createdAt": 1779909594442,
+    "updatedAt": 1779909594442
+  },
+  {
+    "type": "task",
+    "title": "Write domain unit tests for auth",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite unit tests (≤10 files) for Password value object, User entity, and domain errors only. Use Vitest, strict types, no any.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "d505c388-9170-446a-a2cb-e5df0ffccc18",
+    "rev": 1,
+    "createdAt": 1779909594443,
+    "updatedAt": 1779909594443
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for auth endpoints + rate limiting",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite integration tests using buildServer() + app.inject() for register/login/logout/refresh + rate-limit behavior (≤10 files). Cover early rate-limit checks and secure error responses.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-9"
+    ],
+    "relatedIds": [],
+    "id": "dc3ad992-2dd6-4271-8c5d-874ad15732d3",
+    "rev": 1,
+    "createdAt": 1779909594443,
+    "updatedAt": 1779909594443
+  },
+  {
+    "type": "task",
+    "title": "Execute full auth test suite",
+    "content": "Run `npm test` after all test-author tasks complete. Report pass/fail with full fidelity, including rate-limit and rotation scenarios. Fail the wave on any regression.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-10"
+    ],
+    "relatedIds": [],
+    "id": "e1b07fa5-a728-4053-a5c3-5267934090ef",
+    "rev": 1,
+    "createdAt": 1779909594444,
+    "updatedAt": 1779909594444
+  },
+  {
+    "type": "task",
+    "title": "Update architecture and decision docs for auth",
+    "content": "Append JWT auth decisions (RS256, jti, rate limiting, token rotation, no enumeration) to DECISIONS.md and ARCHITECTURE.md with clear rationale and consequences.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "low",
+    "tags": [
+      "dispatched",
+      "task-11"
+    ],
+    "relatedIds": [],
+    "id": "e0c143b2-0a6d-426e-8dd3-c84ec960a938",
+    "rev": 1,
+    "createdAt": 1779909594445,
+    "updatedAt": 1779909594445
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Prisma user repository (infra)",
+    "content": "## Implementation\n\nThe Prisma user repository is implemented and wired through the auth infrastructure factory. I verified the implementation against the `UserRepository` interface, confirmed factory wiring, and ran the full test suite and build — both pass.\n\n## Changes Made\n\n### `src/infrastructure/auth/user-repository.ts`\n\nFactory function `createPrismaUserRepository(prisma)` implements all four repository methods:\n\n| Method | Behavior |\n|--------|----------|\n| `findByEmail` | Looks up by normalized email (`trim` + `toLowerCase`), maps Prisma record → domain `User` |\n| `findById` | Looks up by `id`, maps to domain `User` |\n| `save` | Persists a new user via `prisma.user.create`, returns reconstituted domain entity |\n| `existsByEmail` | Checks existence with normalized email via `prisma.user.count` |\n\nDomain mapping uses `User.reconstitute()` and `Password.fromHash()` so callers receive fully typed domain entities, not raw Prisma rows.\n\n### Factory wiring\n\nThe repository is connected through the auth infrastructure factory chain:\n\n```22:22:src/infrastructure/auth/create-auth-infrastructure.ts\n    userRepository: createPrismaUserRepository(prisma),\n```\n\nExports are available from both `src/infrastructure/auth/index.ts` and `src/infrastructure/index.ts`.\n\n### Downstream consumption\n\nUse cases consume the repository via dependency injection:\n\n- **Register** — `existsByEmail` + `save`\n- **Login** — `findByEmail`\n- **Refresh** — `findById`\n\n`createAuthUseCasesFromInfrastructure()` accepts `userRepository` from `AuthInfrastructure`, completing the wiring from Prisma → factory → use cases.\n\n## Verification\n\n- `npm run build` — passes (Prisma generate + TypeScript compile)\n- `npm test` — 15/15 tests pass\n\n## Next Steps\n\nAuth route wiring (`src/routes/auth.ts` + `server.ts` registration) is still pending — that task will make the repository reachable over HTTP. The repository layer itself is complete and ready for the route-wiring agent.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "ef375cea-7589-4093-a43e-23b90fb31275",
+    "rev": 1,
+    "createdAt": 1779909627478,
+    "updatedAt": 1779909627478
+  },
+  {
+    "type": "result",
+    "title": "Result: Build JWT service and password hasher (infra)",
+    "content": "## Implementation\n\nRS256 JWT signing/verification and Argon2 password hashing are implemented under `src/infrastructure/auth/`, exported through factory functions, and wired into the auth application layer. All 15 tests pass and the TypeScript build succeeds.\n\n## Changes Made\n\n### `src/infrastructure/auth/jwt-service.ts`\n\n- **`createJwtService(env: Env)`** — factory that reads `JWT_PRIVATE_KEY` / `JWT_PUBLIC_KEY` from validated config\n- **RS256 signing** for access and refresh tokens via `jsonwebtoken`\n- **Unique `jti`** on every token via `crypto.randomUUID()` when not explicitly provided\n- **Verification** with strict claim validation (type, sub, email/jti/family, iat, exp)\n- **`JwtVerificationError`** for invalid/expired tokens\n\n### `src/infrastructure/auth/password-hasher.ts`\n\n- **`createArgon2PasswordHasher()`** — factory returning a `PasswordHasher` interface\n- Uses **Argon2id** for hashing\n- Returns domain `Password` value objects; verify returns `false` on mismatch (no enumeration)\n\n### Factory wiring\n\n| Export | Location | Purpose |\n|--------|----------|---------|\n| `createJwtService` | `jwt-service.ts` | Standalone JWT factory |\n| `createArgon2PasswordHasher` | `password-hasher.ts` | Standalone hasher factory |\n| `createAuthInfrastructure` | `create-auth-infrastructure.ts` | Composes JWT + hasher + rate limiter + repositories |\n\nAll three are re-exported from `src/infrastructure/auth/index.ts` and `src/infrastructure/index.ts`.\n\n### End-to-end wiring (verified)\n\n```\ncreateAuthInfrastructure(env, prisma)\n  ├── jwtService  → register/login (via issueTokenPair), logout, refresh\n  └── passwordHasher → register (hash), login (verify)\n```\n\n- **`token-pair.ts`** — signs access/refresh tokens through `jwtService`\n- **`register.use-case.ts`** — hashes passwords via `passwordHasher`\n- **`login.use-case.ts`** — verifies passwords via `passwordHasher`\n- **`logout.use-case.ts` / `refresh.use-case.ts`** — verify refresh tokens via `jwtService`\n\n### Tests (`auth-services\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "55b0b7ba-ea2b-4c17-b3e3-065f12022eea",
+    "rev": 1,
+    "createdAt": 1779909628751,
+    "updatedAt": 1779909628751
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement rate limiter middleware (infra)",
+    "content": "## Implementation\n\nThe fixed-window rate limiter is implemented end-to-end with per-IP and per-user key support, early `/auth/*` enforcement before body parsing, and server wiring.\n\n## Changes Made\n\n### `src/infrastructure/auth/rate-limiter.ts`\n\n| Export | Purpose |\n|--------|---------|\n| `buildIpRateLimitKey(ip)` | Namespaced key: `ip:{ip}` |\n| `buildUserRateLimitKey(userId)` | Namespaced key: `user:{userId}` |\n| `createFixedWindowRateLimiter()` | Fixed-window store with `check()` and atomic `checkMany()` |\n| `createNoOpRateLimiter()` | Test double with both methods |\n| `getClientIp()` | Resolves client IP (`X-Forwarded-For` or `request.ip`) |\n| `getUserIdFromAuthorizationHeader()` | Extracts `sub` from Bearer JWT without verification (for early per-user limiting) |\n| `resolveAuthRateLimitKeys()` | Default resolver: always IP; adds user key when Bearer token is present |\n| `sendRateLimitExceeded()` | Sends `429` JSON + `Retry-After` (no `req.destroy()`) |\n| `registerEarlyRateLimit()` | `onRequest` hook for `/auth/*` — runs before body parsing |\n\n**Multi-key behavior:** `checkMany()` peeks all keys first; if any bucket is exhausted it returns `429` without incrementing the others. When allowed, all keys are incremented atomically.\n\n### `src/infrastructure/auth/types.ts`\n\nExtended `RateLimiter` with `checkMany(keys: readonly string[])`.\n\n### Wiring\n\n- `src/server.ts` — `registerEarlyRateLimit(app, { rateLimiter, pathPrefix: '/auth' })` uses the default `resolveAuthRateLimitKeys` (IP + user when Bearer present).\n- `src/infrastructure/index.ts` and `src/infrastructure/auth/index.ts` — new exports for downstream auth route wiring.\n- `.env.example` — comment updated to reflect per-IP + per-user limiting.\n\n### Tests\n\n- `auth-services.test.ts` — independent IP/user buckets, atomic `checkMany`, Bearer key resolution (5 new tests).\n- `server.auth-rate-limit.test.ts` — mock limiters updated with `checkMany`.\n\n**Verification:** `npm test` — 20/20 passing.\n\n## Next Steps\n\nDowns\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "ca68e071-4c04-45d4-b24c-818992331b99",
+    "rev": 1,
+    "createdAt": 1779909659714,
+    "updatedAt": 1779909659714
+  },
+  {
+    "type": "result",
+    "title": "Result: Create domain auth entities and value objects",
+    "content": "## Implementation\n\nThe auth domain layer under `src/domain/auth/` is **complete**, strictly typed (no `any`), and **wired into downstream layers**. Domain unit tests were added to lock in behavior for the PM and test-author wave.\n\n## Changes Made\n\n### Domain layer (already in place — verified)\n\n| Module | Responsibility |\n|--------|----------------|\n| `errors.ts` | Seven auth-specific `DomainError` subclasses with stable `code` values |\n| `password.ts` | `Password` value object — `validatePlaintext()`, `fromHash()`, `getHash()` |\n| `user.ts` | `User` entity — `create()`, `reconstitute()`, `toProps()`; email/name normalization |\n| `auth-token-claims.ts` | `AccessTokenClaims` / `RefreshTokenClaims` with required **`jti`**, factories, type guards |\n| `index.ts` + `src/domain/index.ts` | Barrel exports for application and infrastructure |\n\n### Domain unit tests (added)\n\n| File | Coverage |\n|------|----------|\n| `password.test.ts` | Policy rules + hash wrapping |\n| `user.test.ts` | Normalization, validation, `toProps()` |\n| `auth-token-claims.test.ts` | Claim factories, `jti`, type guards, expiry validation |\n| `errors.test.ts` | Stable error codes and default messages |\n\n### End-to-end wiring verification\n\n| Consumer | Uses domain |\n|----------|-------------|\n| `register.use-case.ts` | `Password.validatePlaintext`, `User.create`, `UserAlreadyExistsError` |\n| `login.use-case.ts` | `InvalidCredentialsError` |\n| `refresh.use-case.ts` / `logout.use-case.ts` | `InvalidRefreshTokenError` |\n| `jwt-service.ts` | `createAccessTokenClaims` / `createRefreshTokenClaims`; **`jti` via `randomUUID()`** when signing |\n| `password-hasher.ts` | `Password.fromHash` / `getHash` |\n| `user-repository.ts` | `User.reconstitute` / `toProps` |\n\n**Note:** HTTP auth routes/controllers are not wired yet (separate executor task). Domain + application + infrastructure layers are connected; routes are the remaining gap for full HTTP E2E.\n\n### Test run\n\n```\nTest Files  9 passed (9)\nTests       43 passe\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "53ffb4e0-2499-44d9-911d-91762c5c1120",
+    "rev": 1,
+    "createdAt": 1779909678966,
+    "updatedAt": 1779909678966
+  },
+  {
+    "type": "result",
+    "title": "Result: Write domain unit tests for auth",
+    "content": "## Test Author Deliverable\n\nExpanded the existing domain unit tests under `src/domain/auth/` for **Password**, **User**, and **auth domain errors** only (3 files). Left `auth-token-claims.test.ts` unchanged — out of scope for this task.\n\n### Files updated\n\n| File | Coverage added |\n|------|----------------|\n| `password.test.ts` | Min/max length boundaries (8 & 128), specific error messages, `AUTH_INVALID_PASSWORD` code, hash trim/empty rejection, immutability via `beforeEach` |\n| `user.test.ts` | Custom `createdAt`, email edge cases (no TLD, whitespace), name max (255/256), `reconstitute` validation paths, timestamp preservation, normalized `toProps`; fresh `Password` per test |\n| `errors.test.ts` | All 7 errors: `DomainError` + `Error` hierarchy, `error.name`, custom messages, stable codes; table-driven `it.each` |\n\n### ESM / isolation compliance\n\n- ESM imports with `.js` extensions throughout\n- No `require`, `vi.spyOn` on Node built-ins, or `__dirname`/`__filename`\n- No module-level shared mutable state; `passwordHash` created in `beforeEach` per describe block\n\n### Setup requirements\n\nNo extra infrastructure — Vitest + `tests/setup.ts` env stubs only.\n\n### For test-executor\n\n```bash\nnpm test\n```\n\nExpect **3 domain test files** (plus existing suite files elsewhere). New/expanded cases should align with current implementations in `password.ts`, `user.ts`, and `errors.ts`.\n\n### Out of scope (per PM)\n\n- `auth-token-claims.test.ts` — already covered by executor\n- Application / integration / HTTP auth tests — separate test-author task",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "8e538f46-e359-4361-9bcf-d982c9f379f1",
+    "rev": 1,
+    "createdAt": 1779909721507,
+    "updatedAt": 1779909721507
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement register and login use cases",
+    "content": "## Implementation\n\nRegister and login use cases with Zod DTOs are implemented end-to-end in the application layer. They depend only on domain types/errors and infrastructure interfaces (`PasswordHasher`, `UserRepository`, `JwtService`, `RefreshTokenRepository`), and are wired through `createAuthUseCases()` / `createAuthUseCasesFromInfrastructure()`.\n\n## Changes Made\n\n### Use cases\n\n| File | Behavior |\n|------|----------|\n| `register.use-case.ts` | Checks email uniqueness → validates password via domain `Password.validatePlaintext()` → hashes with Argon2 → persists user → issues token pair with unique `jti` via `issueTokenPair()` |\n| `login.use-case.ts` | Looks up user by email → throws `InvalidCredentialsError` for missing user **and** wrong password (no enumeration) → issues token pair on success |\n\nBoth use cases accept typed DTOs (`RegisterInputDto`, `LoginInputDto`) and return `AuthResultDto`.\n\n### DTOs (Zod)\n\n| File | Validation |\n|------|------------|\n| `dto/register.dto.ts` | Email format, name length, password length **plus** letter/number complexity (aligned with domain policy) |\n| `dto/login.dto.ts` | Email + password required only — no `.email()` on login to avoid format hints that differ from credential errors |\n\nZod parsing is applied at the facade boundary in `create-auth-use-cases.ts` before use case execution.\n\n### Unit tests (new)\n\n| File | Coverage |\n|------|----------|\n| `register.use-case.test.ts` | Happy path, duplicate email, weak password |\n| `login.use-case.test.ts` | Happy path, missing user, wrong password with **identical** error code/message |\n| `auth-dto.test.ts` | Register complexity rules, login accepts non-email strings |\n\n### Build fix\n\nAdded missing `RateLimitBlocked` import in `rate-limiter.ts` (unblocked `npm run build`).\n\n## Wiring verification\n\n```\ncreateAuthInfrastructure(env, prisma)\n  └── createAuthUseCasesFromInfrastructure(auth, tokenSettings)\n        ├── register() → registerInputSchema.parse → createRegisterUseCase\n      \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "afebb8c2-4a7c-4453-bb05-bdb4a6b469cc",
+    "rev": 1,
+    "createdAt": 1779909768103,
+    "updatedAt": 1779909768103
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement logout and refresh use cases",
+    "content": "## Implementation\n\nLogout and refresh use cases are implemented end-to-end under `src/application/auth/`, with Zod DTOs, refresh token rotation, replay detection, and factory wiring. Application-layer unit tests were added to lock in rotation behavior.\n\n## Changes Made\n\n### Use cases (already in place — verified)\n\n**`logout.use-case.ts`**\n- Verifies the refresh JWT via `jwtService`\n- Revokes the token record when status is `active`\n- Idempotent when already revoked (no error)\n- Throws `InvalidRefreshTokenError` on invalid JWT\n\n**`refresh.use-case.ts`**\n- Verifies refresh JWT and checks family revocation state\n- Rejects missing, revoked, or already-rotated tokens\n- On replay (reusing a rotated token): revokes the entire token family\n- Marks the current token as `rotated`, then issues a new pair via `issueTokenPair()` with the same `family`\n- New access tokens get a unique `jti` via `jwtService.signAccessToken()` → `randomUUID()`\n\n### DTOs (Zod-validated)\n\n| File | Schema |\n|------|--------|\n| `dto/logout.dto.ts` | `logoutInputSchema` — non-empty trimmed `refreshToken` |\n| `dto/refresh.dto.ts` | `refreshInputSchema` — non-empty trimmed `refreshToken` |\n\nBoth are parsed in `createAuthUseCases()` before invoking the use cases.\n\n### Factory wiring\n\n```38:48:src/application/auth/create-auth-use-cases.ts\nexport function createAuthUseCasesFromInfrastructure(\n  auth: Pick<\n    AuthUseCaseDependencies,\n    'jwtService' | 'passwordHasher' | 'userRepository' | 'refreshTokenRepository'\n  >,\n  tokenSettings: AuthUseCaseDependencies['tokenSettings'],\n): AuthUseCases {\n  return createAuthUseCases({\n    ...auth,\n    tokenSettings,\n  });\n}\n```\n\n### Tests added\n\n| File | Coverage |\n|------|----------|\n| `auth-use-cases.test.ts` | Logout revoke/idempotency; refresh rotation with unique `jti`; family revocation on replay; revoked token rejection |\n| `auth-dto.test.ts` | Logout/refresh input schema validation |\n\n## Verification\n\n```\nnpm test   → 86/86 passed\nnpm run build → success\n```\n\n\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "c7b6346b-b18b-4a99-ac0d-30dc0382dc20",
+    "rev": 1,
+    "createdAt": 1779909783732,
+    "updatedAt": 1779909783732
+  },
+  {
+    "type": "task",
+    "title": "Wire auth routes/controllers to existing use cases",
+    "content": "Create src/adapters/auth/ controllers and src/routes/auth.ts. Mount the four auth routes (register, login, logout, refresh) onto the Fastify instance using the already-implemented use cases from createAuthUseCasesFromInfrastructure(). Wire the rate-limiter middleware in front of these routes exactly as specified in task-3's constraints. Do NOT modify the use-case layer. Ensure ESM .js imports and that a developer hitting the endpoints now receives the expected success/error responses.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "spawned",
+      "task-7a"
+    ],
+    "relatedIds": [],
+    "id": "06a25116-64ce-4268-8044-1d6e871133fa",
+    "rev": 1,
+    "createdAt": 1779909789408,
+    "updatedAt": 1779909789408
+  },
+  {
+    "type": "result",
+    "title": "Result: Wire auth routes, controllers and rate limiting",
+    "content": "## Implementation\n\nAuth HTTP layer is wired end-to-end: four `/auth/*` endpoints, controllers, Zod validation, layered rate limiting, and `buildServer()` registration.\n\n## Changes Made\n\n### `src/adapters/auth/` — controllers and error mapping\n\n| File | Purpose |\n|------|---------|\n| `auth-controller.ts` | Factory `createAuthControllers()` with handlers for register, login, logout, refresh |\n| `handle-auth-error.ts` | Maps `ZodError` → 400 and `DomainError` → appropriate HTTP status |\n| `map-domain-error.ts` | Maps auth error codes (401, 409, 422, etc.) to status codes |\n| `index.ts` | Barrel exports |\n\n**Controller flow:**\n1. Zod validation on request body (register/login/logout/refresh schemas)\n2. Post-body email rate limit on **register/login** via `checkMany([ip, normalizedEmail])`\n3. Delegate to `AuthUseCases`\n4. Success responses: `201` register, `200` login/refresh, `204` logout\n\n### `src/routes/auth.ts`\n\nExports `authRoutes` as a `FastifyPluginCallback` registering:\n- `POST /auth/register`\n- `POST /auth/login`\n- `POST /auth/logout`\n- `POST /auth/refresh`\n\n### `src/server.ts`\n\n- Creates auth infrastructure + use cases from env/Prisma (or accepts injected `authUseCases` / `database` for tests)\n- Registers `authRoutes` with the **same** `rateLimiter` instance used by the early `/auth/*` hook\n- `start()` passes its `database` into `buildServer()` so production uses one Prisma client\n- Auto-disconnects Prisma on `app.close()` when the server owns the database\n\n### Rate limiting (two layers)\n\n| Layer | Where | Keys |\n|-------|-------|------|\n| Early (pre-body) | `registerEarlyRateLimit` in `server.ts` | IP + Bearer `sub` (when present) |\n| Post-body | Register/login controllers | IP + normalized email |\n\n## Wiring verification\n\n```\nbuildServer()\n  ├── registerEarlyRateLimit(rateLimiter)     → all /auth/*\n  ├── createAuthInfrastructure(env, prisma)\n  ├── createAuthUseCasesFromInfrastructure()\n  └── app.register(authRoutes, { authUseCases, rateLimiter })\n        └── \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "eb6e370f-b1e9-449b-8f1d-7fa610f89959",
+    "rev": 1,
+    "createdAt": 1779909857125,
+    "updatedAt": 1779909857125
+  },
+  {
+    "type": "result",
+    "title": "Result: Wire auth routes/controllers to existing use cases",
+    "content": "## Implementation\n\nAuth HTTP routes are wired end-to-end: controllers call the existing use cases, post-body rate limiting runs on register/login, and the early `/auth/*` hook stays in place.\n\n## Changes Made\n\n### `src/adapters/auth/`\n\n| File | Responsibility |\n|------|----------------|\n| `map-auth-error.ts` | Maps `ZodError` and domain errors to HTTP status codes (400/401/409) |\n| `send-auth-error.ts` | Sends consistent JSON error payloads |\n| `auth-controller.ts` | Handlers for all four endpoints; Zod parse → email rate limit (register/login) → use case |\n| `index.ts` | Barrel exports |\n\n### `src/routes/auth.ts`\n\nFastify plugin registering:\n\n| Route | Handler | Success |\n|-------|---------|---------|\n| `POST /auth/register` | `controller.register` | `201` + `{ user, tokens }` |\n| `POST /auth/login` | `controller.login` | `200` + `{ user, tokens }` |\n| `POST /auth/logout` | `controller.logout` | `204` (empty body) |\n| `POST /auth/refresh` | `controller.refresh` | `200` + `{ accessToken, refreshToken, expiresIn }` |\n\n### `src/server.ts`\n\n- `BuildServerOptions` extended with optional `authUseCases`\n- Default path: `createDatabase` → `createAuthInfrastructure` → `createAuthUseCasesFromInfrastructure`\n- Same `rateLimiter` instance used for early hook and auth controllers\n- `start()` reuses one auth stack (no duplicate DB/auth factories)\n\n### Rate limiting (task-3 constraints)\n\n1. **Early** — `registerEarlyRateLimit` on `/auth/*` (IP + Bearer `sub` when present), already in `buildServer`\n2. **Post-body** — register/login call `checkMany([ip, user:normalizedEmail])` after Zod validation, before use cases\n\n### Error mapping\n\n| Error | HTTP |\n|-------|------|\n| `ZodError` | 400 `VALIDATION_ERROR` |\n| `InvalidCredentialsError` | 401 |\n| `UserAlreadyExistsError` | 409 |\n| `InvalidPasswordError` | 400 |\n| `InvalidRefreshTokenError` | 401 |\n| Other `DomainError` | 400 |\n\nUse-case layer was not modified.\n\n## Test Results\n\n```\nnpm run build → success\nnpm test      → 13 files, 86\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-7a"
+    ],
+    "relatedIds": [],
+    "id": "8a204134-cada-4f6b-bbc2-0e59669160fc",
+    "rev": 1,
+    "createdAt": 1779909954430,
+    "updatedAt": 1779909954430
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for auth endpoints + rate limiting",
+    "content": "Create integration tests using Supertest that exercise the full HTTP path for all four /auth/* endpoints (register, login, logout, refresh). Tests must cover: successful flows, validation errors (400), auth failures (401), conflict errors (409), and rate-limit enforcement (429) on register/login. Run against a real Fastify instance via buildServer(). Ensure tests prove the wired controller → use case → infra path works end-to-end.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "spawned",
+      "task-9"
+    ],
+    "relatedIds": [],
+    "id": "6fbcfb2d-ccda-442e-93da-fb440ea1c01d",
+    "rev": 1,
+    "createdAt": 1779909979960,
+    "updatedAt": 1779909979960
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "c15ad095-c259-44c1-9402-b556cce6c66c",
+    "rev": 1,
+    "createdAt": 1779910028830,
+    "updatedAt": 1779910028830
+  },
+  {
+    "type": "task",
+    "title": "Install JWT + password + rate-limit dependencies",
+    "content": "Install jsonwebtoken, @types/jsonwebtoken, argon2. Run postinstall. Update package.json. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "cbf1cb94-1fc2-40c0-90e9-d2ec48fde568",
+    "rev": 1,
+    "createdAt": 1779910046981,
+    "updatedAt": 1779910046981
+  },
+  {
+    "type": "task",
+    "title": "Implement domain auth entities and value objects",
+    "content": "Create src/domain/auth/ with User entity, Password value object, AuthTokenClaims, and domain errors. Use strict types only, no any. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response... 2. Always include a unique `jti`... ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "397d9568-a092-4f9c-b81e-ee88ef559109",
+    "rev": 1,
+    "createdAt": 1779910046982,
+    "updatedAt": 1779910046982
+  },
+  {
+    "type": "task",
+    "title": "Build infrastructure auth services and rate limiter",
+    "content": "Create JWT signer/verifier (RS256 via keys from config), Argon2 password hasher, custom fixed-window rate limiter middleware (early check before body parsing), and Prisma user repository. Wire rate-limit keys. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy()... 2. Always include a unique `jti`... ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. Depends on task-1 and task-2.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "d24ffd0c-fd06-46e9-8f32-cf0f43321507",
+    "rev": 1,
+    "createdAt": 1779910046983,
+    "updatedAt": 1779910046983
+  },
+  {
+    "type": "task",
+    "title": "Implement application auth use cases",
+    "content": "Create register, login, logout, refresh use cases + DTOs with Zod validation in src/application/auth/. Depend only on domain + infra interfaces. No enumeration leaks. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy()... 2. Always include a unique `jti`... ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. Depends on task-2 and task-3.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "bc8a103f-84c1-4c49-8ba0-711ea67d3841",
+    "rev": 1,
+    "createdAt": 1779910046984,
+    "updatedAt": 1779910046984
+  },
+  {
+    "type": "task",
+    "title": "Wire auth routes, controllers, and rate limiting",
+    "content": "Create src/adapters/auth/ controllers and src/routes/auth.ts exporting FastifyPluginCallback. Register all four endpoints with early rate limiting and Zod validation. Ensure consistent secure error responses. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy()... 2. Always include a unique `jti`... ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. Depends on task-4.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "56b8049d-a89c-450b-9829-e36530be9f78",
+    "rev": 1,
+    "createdAt": 1779910046985,
+    "updatedAt": 1779910046985
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for auth domain and use cases",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite unit tests for Password value object, User entity, and the four auth use cases. ≤10 files. Cover domain errors and validation.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "aeeda7ed-b8ba-4d88-a4fb-9d2ebb161485",
+    "rev": 1,
+    "createdAt": 1779910046986,
+    "updatedAt": 1779910046986
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for auth endpoints + rate limiting",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite integration tests using buildServer() + app.inject() for register/login/logout/refresh flows and rate-limit behavior. ≤10 files. Cover early rate limiting and secure error responses.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "68a57ccd-3957-4b4e-82b0-c1797a0c0ba4",
+    "rev": 1,
+    "createdAt": 1779910046987,
+    "updatedAt": 1779910046987
+  },
+  {
+    "type": "task",
+    "title": "Execute full auth test suite",
+    "content": "Run the complete test suite after all test-author tasks. Report pass/fail with full fidelity. Depends on task-6 and task-7.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "3ef067f8-b308-453b-8cd7-50f5026f5a74",
+    "rev": 1,
+    "createdAt": 1779910046987,
+    "updatedAt": 1779910046987
+  },
+  {
+    "type": "task",
+    "title": "Document auth implementation decisions",
+    "content": "Update ARCHITECTURE.md and DECISIONS.md with the JWT auth design, rate-limiting approach, token rotation strategy, and any trade-offs. Include examples of endpoint contracts.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "low",
+    "tags": [
+      "dispatched",
+      "task-9"
+    ],
+    "relatedIds": [],
+    "id": "00277c7a-46fe-4dbf-b6c8-834d85428e1e",
+    "rev": 1,
+    "createdAt": 1779910046988,
+    "updatedAt": 1779910046988
+  },
+  {
+    "type": "result",
+    "title": "Result: Install JWT + password + rate-limit dependencies",
+    "content": "## Implementation\n\nJWT and password-hashing dependencies are already present in `package.json` and installed. I re-ran `npm install`, `npm run postinstall`, and verified end-to-end wiring — no package changes were required.\n\n## Changes Made\n\n### `package.json` — dependencies (already present)\n\n| Package | Version | Scope | Purpose |\n|---------|---------|-------|---------|\n| `jsonwebtoken` | `^9.0.3` | `dependencies` | JWT signing/verification |\n| `argon2` | `^0.44.0` | `dependencies` | Password hashing |\n| `@types/jsonwebtoken` | `^9.0.10` | `devDependencies` | TypeScript types for jsonwebtoken |\n\n### Verification\n\n- **`npm install`** — 333 packages audited, 0 vulnerabilities\n- **`npm run postinstall`** — Prisma Client generated successfully\n- **ESM imports** — `jsonwebtoken` and `argon2` import correctly under `\"type\": \"module\"`\n- **End-to-end wiring** — dependencies are used by production code:\n  - `jsonwebtoken` → `src/infrastructure/auth/jwt-service.ts`, `src/infrastructure/auth/rate-limiter.ts`\n  - `argon2` → `src/infrastructure/auth/password-hasher.ts`\n  - **`jti` claim** — every signed token gets a unique `jti` via `crypto.randomUUID()` in `jwt-service.ts`\n- **`npm test`** — 13 test files, **86 tests passed**\n\n## Next Steps\n\nDownstream auth work (domain, infrastructure, use cases, routes) is already built on these dependencies. No further action needed for this task.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "e186f220-fded-47a0-95b1-d7871ddb61c2",
+    "rev": 1,
+    "createdAt": 1779910072720,
+    "updatedAt": 1779910072720
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement domain auth entities and value objects",
+    "content": "## Implementation\n\nThe auth domain layer under `src/domain/auth/` is **complete**, strictly typed (no `any`), and **wired end-to-end** through application use cases and infrastructure services. No code changes were required — I verified the existing implementation against the task requirements.\n\n## Changes Made\n\nNo new files or edits. The layer was already in place from prior work:\n\n| Module | File | Responsibility |\n|--------|------|----------------|\n| **User entity** | `src/domain/auth/user.ts` | Factory methods (`create`, `reconstitute`), email/name normalization, `toProps()` snapshot |\n| **Password value object** | `src/domain/auth/password.ts` | Plaintext policy validation (8–128 chars, letter + number), hash wrapping via `fromHash()` |\n| **AuthTokenClaims** | `src/domain/auth/auth-token-claims.ts` | Access/refresh claim types with required `jti`, factory functions, type guards |\n| **Domain errors** | `src/domain/auth/errors.ts` | Seven auth-specific `DomainError` subclasses with stable codes |\n| **Barrel exports** | `src/domain/auth/index.ts`, `src/domain/index.ts` | Re-exports for downstream layers |\n\n### Domain errors (all extend `DomainError`)\n\n- `InvalidCredentialsError` — `AUTH_INVALID_CREDENTIALS`\n- `UserAlreadyExistsError` — `AUTH_USER_ALREADY_EXISTS`\n- `InvalidPasswordError` — `AUTH_INVALID_PASSWORD`\n- `InvalidRefreshTokenError` — `AUTH_INVALID_REFRESH_TOKEN`\n- `UserNotFoundError` — `AUTH_USER_NOT_FOUND`\n- `InvalidEmailError` — `AUTH_INVALID_EMAIL`\n- `InvalidNameError` — `AUTH_INVALID_NAME`\n\n### AuthTokenClaims — `jti` requirement\n\nBoth access and refresh claim types require a non-empty `jti`. The JWT service generates a UUID when none is supplied and validates `jti` on verification:\n\n```56:70:src/infrastructure/auth/jwt-service.ts\n    signAccessToken(input: SignAccessTokenInput): SignedAccessToken {\n      const jti = input.jti ?? randomUUID();\n      const claims = createAccessTokenClaims({ ...input, jti });\n      // ...\n    },\n\n    signRefreshToken(in\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "8fbedadf-c311-4dee-974f-04a464e980bf",
+    "rev": 1,
+    "createdAt": 1779910082743,
+    "updatedAt": 1779910082743
+  },
+  {
+    "type": "result",
+    "title": "Result: Build infrastructure auth services and rate limiter",
+    "content": "## Implementation\n\nAuth infrastructure is **complete and wired end-to-end**. No code changes were required — I verified the existing implementation against all task requirements (RS256 JWT, Argon2, fixed-window rate limiter with early hook, Prisma user repository, rate-limit key wiring).\n\n## Changes Made\n\nNo new files or edits. The layer was already in place from prior work:\n\n| Component | File | Responsibility |\n|-----------|------|----------------|\n| **JWT service** | `src/infrastructure/auth/jwt-service.ts` | RS256 sign/verify using `JWT_PRIVATE_KEY` / `JWT_PUBLIC_KEY` from config; unique `jti` via `crypto.randomUUID()` on every token |\n| **Password hasher** | `src/infrastructure/auth/password-hasher.ts` | Argon2id hash + verify, returns domain `Password` value object |\n| **Rate limiter** | `src/infrastructure/auth/rate-limiter.ts` | Fixed-window limiter with `check` / `checkMany`; IP + user key builders; early `onRequest` hook before body parsing |\n| **User repository** | `src/infrastructure/auth/user-repository.ts` | Prisma-backed `UserRepository` (findByEmail, findById, save, existsByEmail) |\n| **Factory** | `src/infrastructure/auth/create-auth-infrastructure.ts` | Composes all services from `Env` + `PrismaClient` |\n| **Barrel exports** | `src/infrastructure/auth/index.ts`, `src/infrastructure/index.ts` | Public API for downstream layers |\n\n### Rate-limit key wiring\n\n| Layer | Keys used |\n|-------|-----------|\n| **Early hook** (`registerEarlyRateLimit` in `server.ts`) | `ip:{clientIp}` + `user:{sub}` (from Bearer JWT decode, no verify) via `resolveAuthRateLimitKeys` |\n| **Register/login controllers** | `ip:{clientIp}` + `user:{normalizedEmail}` via `buildIpRateLimitKey` / `buildUserRateLimitKey` |\n\nBoth layers share the same `RateLimiter` instance from `createAuthInfrastructure`.\n\n### End-to-end flow\n\n```\nHTTP /auth/* \n  → early onRequest rate limit (before body parse)\n  → auth controller (post-body rate limit on register/login)\n  → use cases\n  → jwtService | \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "8402ee6c-49d0-4b66-be12-51cf75dc4171",
+    "rev": 1,
+    "createdAt": 1779910110494,
+    "updatedAt": 1779910110494
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement application auth use cases",
+    "content": "## Implementation\n\nThe auth application layer is **complete and wired end-to-end**. All four use cases, Zod DTOs, token issuance with unique `jti`, and the factory wrapper are in place and consumed by HTTP controllers and `buildServer()`. No code changes were required — I verified behavior against the task requirements and ran the full test suite.\n\n## Changes Made\n\nNo new files or edits. Prior work already satisfies the task:\n\n| Component | File | Responsibility |\n|-----------|------|----------------|\n| **Register** | `register.use-case.ts` | Email uniqueness check, domain password policy, user persistence, token pair issuance |\n| **Login** | `login.use-case.ts` | Same `InvalidCredentialsError` for missing user and wrong password (no enumeration) |\n| **Logout** | `logout.use-case.ts` | Verify refresh JWT, revoke active token by `jti`, idempotent when already revoked |\n| **Refresh** | `refresh.use-case.ts` | Rotation with replay detection (family revoke on reused rotated token) |\n| **Token pair** | `token-pair.ts` | Signs access + refresh tokens, persists refresh metadata with unique `jti` |\n| **DTOs** | `dto/*.ts` | Zod schemas for all inputs and response shapes |\n| **Factory** | `create-auth-use-cases.ts` | Parses `unknown` input through Zod before delegating to use cases |\n| **Types** | `types.ts` | `AuthUseCases` contract and dependency injection types |\n\n### Zod DTOs\n\n| Schema | Validates |\n|--------|-----------|\n| `registerInputSchema` | Email, name (1–255), password (8–128, letter + number) |\n| `loginInputSchema` | Non-empty email + password (no `.email()` — avoids format-based enumeration) |\n| `logoutInputSchema` / `refreshInputSchema` | Non-empty trimmed refresh token |\n| `authTokensSchema` / `authResultSchema` | Typed response contracts |\n\n### Security behavior\n\n- **Login:** `InvalidCredentialsError` (`AUTH_INVALID_CREDENTIALS`) for both unknown email and wrong password, with identical message/code (tested in `login.use-case.test.ts`).\n- **Refresh:** Reused\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "7ca8193c-e8a3-4b00-9ba9-3bd60b61a674",
+    "rev": 1,
+    "createdAt": 1779910151963,
+    "updatedAt": 1779910151963
+  },
+  {
+    "type": "result",
+    "title": "Result: Wire auth routes, controllers, and rate limiting",
+    "content": "## Implementation\n\nAuth HTTP routes and controllers are **already implemented and wired end-to-end**. I verified the full request path from `buildServer()` through early rate limiting, route registration, controller validation, use cases, and secure error mapping. No code changes were required.\n\n## Changes Made\n\nNo new files or edits. Prior work satisfies the task:\n\n| Component | File | Responsibility |\n|-----------|------|----------------|\n| **Routes plugin** | `src/routes/auth.ts` | Exports `FastifyPluginCallback`; registers `POST /auth/register`, `/login`, `/logout`, `/refresh` |\n| **Controller factory** | `src/adapters/auth/auth-controller.ts` | Zod validation, per-email rate limiting on register/login, use-case delegation |\n| **Error mapping** | `src/adapters/auth/map-auth-error.ts` | Maps Zod/domain errors to consistent HTTP responses (no credential enumeration) |\n| **Error sender** | `src/adapters/auth/send-auth-error.ts` | Uniform `{ statusCode, error, message, code? }` shape |\n| **Barrel export** | `src/adapters/auth/index.ts` | Re-exports controller + error helpers |\n| **Server wiring** | `src/server.ts` | Early `/auth/*` rate limit hook + `authRoutes` registration with shared `rateLimiter` |\n\n### End-to-end request flow\n\n```\nPOST /auth/register|login|logout|refresh\n  → registerEarlyRateLimit (onRequest, before body parse)\n  → authRoutes → createAuthController\n  → Zod parse (registerInputSchema | loginInputSchema | logoutInputSchema | refreshInputSchema)\n  → enforceEmailRateLimit (register/login only — IP + normalized email keys)\n  → authUseCases.register | login | logout | refresh\n  → sendMappedAuthError on failure\n```\n\n### Security behavior\n\n- **Early rate limiting:** `registerEarlyRateLimit(app, { rateLimiter, pathPrefix: '/auth' })` runs on `onRequest` before body parsing (confirmed by test sending malformed JSON and still getting 429).\n- **Layered limits on register/login:** Additional per-IP + per-email checks after Zod validation.\n- **Secure errors:\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "450383cb-a08c-434f-98a2-542510e6dd09",
+    "rev": 1,
+    "createdAt": 1779910205629,
+    "updatedAt": 1779910205629
+  },
+  {
+    "type": "result",
+    "title": "Result: Write unit tests for auth domain and use cases",
+    "content": "## Test Author Deliverable\n\nUnit tests for the auth domain and application layers are in place. Domain tests were already solid; application coverage is expanded with two new use-case files and stronger register/login tests.\n\n### Files in scope (8 test files, ≤10 limit)\n\n| File | Coverage |\n|------|----------|\n| `src/domain/auth/password.test.ts` | Policy validation (8–128 chars, letter + number), `fromHash`, immutability, `InvalidPasswordError` codes |\n| `src/domain/auth/user.test.ts` | `create` / `reconstitute` normalization, email/name validation, `toProps()` |\n| `src/domain/auth/errors.test.ts` | All 7 auth domain errors — stable codes, default/custom messages, hierarchy |\n| `src/application/auth/register.use-case.test.ts` | Happy path, duplicate email, domain password/email/name errors, hash-before-save, existence-check ordering |\n| `src/application/auth/login.use-case.test.ts` | Happy path, missing user, wrong password, no-enumeration (same code/message), no spurious persistence |\n| `src/application/auth/logout.use-case.test.ts` | **New** — revoke active token, idempotency (revoked/missing/rotated records), invalid JWT |\n| `src/application/auth/refresh.use-case.test.ts` | **New** — rotation happy path, invalid JWT, revoked family, missing record, rotated reuse + family revoke, revoked record, missing user |\n| `src/application/auth/auth-dto.test.ts` | Zod validation for register/login/logout/refresh DTOs |\n\n`src/application/auth/auth-use-cases.test.ts` remains for factory + real JWT integration-style flows (rotation, family revoke, Zod at the boundary).\n\n### ESM & isolation compliance\n\n- All imports use ESM `.js` extensions; no `require`, `__dirname`, or `vi.spyOn` on Node built-ins.\n- Stateful deps (`JwtService`, repositories, use case instances) are created fresh in `beforeEach` or per test via factory functions.\n- Login/register tests build new mock repositories and use cases per test case.\n\n### New / expanded scenarios\n\n**Register**\n- Domain `InvalidEmailEr\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "ef545e26-455f-45f6-ad5a-40e935ce677c",
+    "rev": 1,
+    "createdAt": 1779910229184,
+    "updatedAt": 1779910229184
+  },
+  {
+    "type": "result",
+    "title": "Result: Document auth implementation decisions",
+    "content": "## Documentation\n\nJWT authentication is documented in [ARCHITECTURE.MD](ARCHITECTURE.MD) and [DECISIONS.MD](DECISIONS.MD), aligned with the implemented code.\n\n### ARCHITECTURE.MD\n\nAdded an **Authentication** section covering:\n\n- **Token model** — RS256 access/refresh tokens, unique `jti`, refresh families, state machine (`active` → `rotated` / `revoked`), Argon2id hashing\n- **Request flow** — early rate limit → controller → Zod → layered limits → use cases → error mapping\n- **Rate limiting** — two-layer table (early hook vs controller hook), defaults, `429` + `Retry-After`\n- **HTTP error shape** — consistent `{ statusCode, error, message, code? }` contract\n- **Endpoint contracts** — full request/response examples for all four `/auth/*` routes with status codes and error codes\n- **Auth folder layout** — layer-to-directory mapping\n- **Known trade-offs** — in-memory refresh store, in-process rate limiter, fixed-window boundary bursts\n\n### DECISIONS.MD\n\nAppended **9 ADRs** (expanded the existing auth/rate-limit entries):\n\n| ADR | Topic |\n|-----|-------|\n| JWT Signing Algorithm (RS256) | Asymmetric PEM keys from config |\n| JWT Claims and Unique jti | Typed claims, per-token identity |\n| Refresh Token Rotation | Family replay detection on reuse |\n| In-Memory Refresh Token Repository (MVP) | Interim store; production debt noted |\n| Password Hashing (Argon2id) | Domain validation + infra hasher |\n| No Credential Enumeration | Same `401` for unknown user / wrong password |\n| Layered Auth Rate Limiting | Early hook + email-keyed controller limits |\n| Auth HTTP Error Contract | Centralized `mapAuthError` mapping |\n| Auth Endpoint Contracts | Table of four POST endpoints and schemas |\n\n## Summary\n\nBoth files now give downstream agents and reviewers a single source of truth for auth design, security behavior, API contracts, and explicit trade-offs (especially the in-memory refresh token store). No code changes were required — documentation reflects the wired implementation verif\n…(truncated)",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-9"
+    ],
+    "relatedIds": [],
+    "id": "7461a895-3d57-4e6a-b94d-dee9ae880b0d",
+    "rev": 1,
+    "createdAt": 1779910259583,
+    "updatedAt": 1779910259583
+  },
+  {
+    "type": "result",
+    "title": "Result: Write integration tests for auth endpoints + rate limiting",
+    "content": "## Test Author Deliverable\n\nIntegration tests for all four `/auth/*` endpoints are in place, using `buildServer()` + `app.inject()` with in-memory repositories (no PostgreSQL required).\n\n### Files created\n\n| File | Purpose |\n|------|---------|\n| `tests/helpers/in-memory-user-repository.ts` | In-memory `UserRepository` for isolated HTTP tests |\n| `tests/helpers/create-auth-test-app.ts` | Factory: fresh auth stack + `buildServer()` per test |\n| `tests/helpers/auth-http.ts` | Shared HTTP helpers and valid payloads |\n| `tests/auth-endpoints.integration.test.ts` | Register, login, logout, refresh flows + E2E |\n| `tests/auth-rate-limit.integration.test.ts` | Early rate limiting, exhaustion, malformed JSON |\n\n### Coverage\n\n**`POST /auth/register`**\n- 201 success with user + tokens (JWTs verified)\n- 400 validation (missing fields, invalid email, weak password)\n- 409 duplicate email with `AUTH_USER_ALREADY_EXISTS`\n\n**`POST /auth/login`**\n- 200 success after registration\n- 400 validation\n- 401 with identical body for unknown user vs wrong password (no enumeration)\n\n**`POST /auth/logout`**\n- 204 empty body on success\n- 400 / 401 validation and invalid token paths\n\n**`POST /auth/refresh`**\n- 200 token rotation\n- 400 / 401 validation and invalid token paths\n- 401 after logout revocation\n- Token family revocation on replay (HTTP-level)\n\n**Rate limiting**\n- 429 before body parsing when early hook blocks (malformed JSON still gets 429)\n- `/health` unaffected by auth rate limiter\n- 429 after repeated login attempts exhaust the shared fixed-window limiter\n- 429 on register when prior auth traffic exhausted the limit\n- Malformed JSON returns 400 when rate limiting is disabled (no-op limiter)\n\n### Isolation patterns\n\n- Fresh `createAuthTestApp()` in every `beforeEach`\n- Fresh `createFixedWindowRateLimiter()` when `rateLimitMaxRequests` is set\n- Custom blocking rate limiters created inline per test (not shared at module level)\n- `afterEach` closes the Fastify instance\n\n### Setup note fo\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "a5b64947-a2a5-43bf-bf14-6f3c34daeee4",
+    "rev": 1,
+    "createdAt": 1779910300685,
+    "updatedAt": 1779910300685
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "fbd65256-35b2-4507-843e-18ab8e6f02a6",
+    "rev": 1,
+    "createdAt": 1779910876836,
+    "updatedAt": 1779910876836
+  },
+  {
+    "type": "task",
+    "title": "Add JWT + password hashing dependencies",
+    "content": "Install jsonwebtoken, @types/jsonwebtoken, and argon2. Update package.json and run postinstall. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "dde6ab07-7b18-4b51-afca-405fc732b729",
+    "rev": 1,
+    "createdAt": 1779910901469,
+    "updatedAt": 1779910901469
+  },
+  {
+    "type": "task",
+    "title": "Implement domain auth entities and value objects",
+    "content": "Create src/domain/auth/ with User entity, Password value object, AuthTokenClaims, and domain errors. Use strict types only. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "445425f7-6922-4247-9f2d-2551a334aefe",
+    "rev": 1,
+    "createdAt": 1779910901471,
+    "updatedAt": 1779910901471
+  },
+  {
+    "type": "task",
+    "title": "Build infrastructure auth services and rate limiter",
+    "content": "Create JWT signer/verifier (RS256 via keys from config), Argon2 password hasher, custom fixed-window rate limiter middleware, and Prisma user repository. Wire early rate-limit check before body parsing. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "5c68518e-8471-4a65-b660-77c6c71bbf29",
+    "rev": 1,
+    "createdAt": 1779910901472,
+    "updatedAt": 1779910901472
+  },
+  {
+    "type": "task",
+    "title": "Implement application auth use cases",
+    "content": "Create register, login, logout, refresh use cases + DTOs with Zod validation in src/application/auth/. Depend only on domain + infra interfaces. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "9f814b94-8828-41d3-9c4f-8a9323671925",
+    "rev": 1,
+    "createdAt": 1779910901473,
+    "updatedAt": 1779910901473
+  },
+  {
+    "type": "task",
+    "title": "Wire auth routes, controllers, and rate limiting",
+    "content": "Create src/adapters/auth/ controllers and src/routes/auth.ts exporting FastifyPluginCallback. Register early rate-limit hook in server.ts and add per-email rate limiting after Zod. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "dc4ed1cd-717a-4481-8864-07636e63c2f5",
+    "rev": 1,
+    "createdAt": 1779910901474,
+    "updatedAt": 1779910901474
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for auth domain and services",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite unit tests (max 8-10 files) for domain entities, password value object, JWT service, and rate-limiter logic. Cover happy paths, errors, and replay detection.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "a6073af6-31f6-45e1-bad5-dbb7a99d3bd7",
+    "rev": 1,
+    "createdAt": 1779910901475,
+    "updatedAt": 1779910901475
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for auth endpoints + rate limiting",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite integration tests using buildServer() + app.inject() for register/login/logout/refresh flows plus early + email rate limiting. One cohesive endpoint layer only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "c342cbca-4e14-46b0-b137-0340ba7edaf7",
+    "rev": 1,
+    "createdAt": 1779910901476,
+    "updatedAt": 1779910901476
+  },
+  {
+    "type": "task",
+    "title": "Execute full auth test suite",
+    "content": "Run the complete test suite after both test-author tasks finish. Report pass/fail with full fidelity, including any rate-limit or rotation failures.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "d511c170-933c-41af-98f3-1b390ad3f76e",
+    "rev": 1,
+    "createdAt": 1779910901477,
+    "updatedAt": 1779910901477
+  },
+  {
+    "type": "result",
+    "title": "Result: Add JWT + password hashing dependencies",
+    "content": "## Implementation\n\nJWT and password-hashing dependencies were already declared in `package.json`. I re-ran install and postinstall, confirmed ESM imports, and verified production code uses these packages end-to-end. No `package.json` changes were required.\n\n## Changes Made\n\n### `package.json` — dependencies (already present)\n\n| Package | Version | Scope | Purpose |\n|---------|---------|-------|---------|\n| `jsonwebtoken` | `^9.0.3` | `dependencies` | JWT signing/verification |\n| `argon2` | `^0.44.0` | `dependencies` | Password hashing (Argon2id) |\n| `@types/jsonwebtoken` | `^9.0.10` | `devDependencies` | TypeScript types for `jsonwebtoken` |\n\n### Verification\n\n- **`npm install`** — 333 packages audited, 0 vulnerabilities\n- **`npm run postinstall`** — Prisma Client generated successfully\n- **Installed versions** — `jsonwebtoken@9.0.3`, `argon2@0.44.0`, `@types/jsonwebtoken@9.0.10`\n- **ESM imports** — both packages import correctly under `\"type\": \"module\"`\n- **End-to-end wiring** — dependencies are used by production code, not orphaned:\n  - `jsonwebtoken` → `src/infrastructure/auth/jwt-service.ts` (RS256 sign/verify), `src/infrastructure/auth/rate-limiter.ts` (decode bearer for per-user keys)\n  - `argon2` → `src/infrastructure/auth/password-hasher.ts` (Argon2id hash/verify)\n- **Unique `jti`** — `jwt-service.ts` assigns `randomUUID()` on every access and refresh token when `jti` is not provided, satisfying the rotation/replay constraint\n\n### Test status (dependency-related)\n\n- `src/infrastructure/auth/auth-services.test.ts` — **9/9 pass** (includes Argon2 hash/verify)\n- Auth integration and rate-limit tests — **mostly pass**; 5 failures are unrelated to package install (validation message text and register use-case ordering)\n\n## Next Steps\n\nNo dependency work remains for this task. Downstream agents can rely on `jsonwebtoken`, `argon2`, and `@types/jsonwebtoken` being installed and wired. The 5 failing tests above are validation/DTO messaging issues for the test-author\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "e611fcc6-060e-4eac-b2ab-3186614c2674",
+    "rev": 1,
+    "createdAt": 1779910936416,
+    "updatedAt": 1779910936416
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement domain auth entities and value objects",
+    "content": "## Implementation\n\nThe auth domain layer under `src/domain/auth/` is **complete**, strictly typed (no `any`), and **wired end-to-end** through application use cases, infrastructure services, and HTTP routes. I verified existing files against the task spec and added **`User.validateEmail()` / `User.validateName()`** so the register use case can run domain validation before expensive Argon2 hashing.\n\n## Changes Made\n\n### Domain layer (`src/domain/auth/`)\n\n| File | Purpose |\n|------|---------|\n| `user.ts` | `User` entity with `create`, `reconstitute`, `toProps`, email/name normalization, and new **`validateEmail` / `validateName`** for early validation |\n| `password.ts` | `Password` value object — `validatePlaintext`, `fromHash`, `getHash` |\n| `auth-token-claims.ts` | `AccessTokenClaims`, `RefreshTokenClaims`, factories, type guards; **`jti` required** in access claims |\n| `errors.ts` | Seven auth-specific `DomainError` subclasses with stable `AUTH_*` codes |\n| `index.ts` | Barrel exports for downstream layers |\n\n### Small wiring fix (register ordering)\n\n`register.use-case.ts` now calls `User.validateEmail` / `User.validateName` **before** `Password.validatePlaintext` and hashing, matching domain invariants and fixing the failing register unit test.\n\n### Domain tests\n\nAdded 4 tests for `validateEmail` / `validateName` in `user.test.ts` (18 tests total in that file). All domain test files pass:\n\n- `password.test.ts` — 14/14\n- `user.test.ts` — 18/18\n- `errors.test.ts` — 16/16\n- `auth-token-claims.test.ts` — 4/4\n\n## End-to-end wiring verified\n\n| Consumer | Domain types used |\n|----------|-------------------|\n| `register.use-case.ts` | `User`, `Password`, `UserAlreadyExistsError`, `InvalidEmailError`, `InvalidNameError` |\n| `login.use-case.ts` | `InvalidCredentialsError` |\n| `logout.use-case.ts` / `refresh.use-case.ts` | `InvalidRefreshTokenError` |\n| `jwt-service.ts` | `createAccessTokenClaims`, `createRefreshTokenClaims`, token type constants |\n| `password-hasher.ts` | `\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "ec227dd7-3922-4354-91fa-dc5c405e0bc4",
+    "rev": 1,
+    "createdAt": 1779910982838,
+    "updatedAt": 1779910982838
+  },
+  {
+    "type": "result",
+    "title": "Result: Build infrastructure auth services and rate limiter",
+    "content": "## Implementation\n\nAuth infrastructure is **complete and wired end-to-end**. I verified every component against the task spec; no code changes were required.\n\n## Changes Made\n\nAll deliverables already exist under `src/infrastructure/auth/`:\n\n| Component | File | Status |\n|-----------|------|--------|\n| RS256 JWT signer/verifier | `jwt-service.ts` | Keys from `getEnv()` (`JWT_PRIVATE_KEY` / `JWT_PUBLIC_KEY`); `randomUUID()` for unique `jti` on every access token |\n| Argon2 password hasher | `password-hasher.ts` | Argon2id hash/verify via `Password` value object |\n| Fixed-window rate limiter | `rate-limiter.ts` | Per-IP (`ip:`) and per-user (`user:`) keys; `checkMany()` with most-restrictive blocking |\n| Early rate-limit hook | `rate-limiter.ts` → `server.ts` | `registerEarlyRateLimit()` on `onRequest` for `/auth/*` **before body parsing** |\n| Prisma user repository | `user-repository.ts` | `findByEmail`, `findById`, `save`, `existsByEmail` |\n| Factory wiring | `create-auth-infrastructure.ts` | Assembles all services; consumed by `buildServer()` and `start()` |\n\n### Constraint compliance\n\n1. **No `req.destroy()`** — Grep confirms zero usages. The global error handler explicitly sends the full JSON response first:\n\n```41:47:src/infrastructure/error-handler.ts\n    // Always send the full JSON response first; never destroy the request stream\n    // before the client receives the error payload.\n    void reply.status(statusCode).send({\n      statusCode,\n      error: getErrorName(statusCode),\n      message: getClientMessage(error, statusCode),\n    });\n```\n\n2. **Unique `jti` on every access token** — Enforced in `signAccessToken`:\n\n```56:61:src/infrastructure/auth/jwt-service.ts\n    signAccessToken(input: SignAccessTokenInput): SignedAccessToken {\n      const jti = input.jti ?? randomUUID();\n      const claims = createAccessTokenClaims({ ...input, jti });\n      const token = jwt.sign(claims, privateKey, { algorithm: 'RS256' });\n\n      return { token, claims };\n```\n\n### End-t\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "58983f06-9655-4e95-ae96-77fb2804dbb0",
+    "rev": 1,
+    "createdAt": 1779911021015,
+    "updatedAt": 1779911021015
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement application auth use cases",
+    "content": "## Implementation\n\nThe auth application layer is **complete and wired end-to-end**. All four use cases, Zod DTOs, token issuance, and factory wiring were already in place. I verified them against the task spec and fixed the one gap blocking integration tests: **missing-field validation messages** in the DTO schemas.\n\n## Changes Made\n\n### Application use cases (`src/application/auth/`)\n\n| File | Purpose |\n|------|---------|\n| `register.use-case.ts` | Register user, hash password, issue token pair; domain validation before hashing |\n| `login.use-case.ts` | Authenticate by email/password; generic `InvalidCredentialsError` (no enumeration) |\n| `logout.use-case.ts` | Verify refresh token, revoke active record (idempotent) |\n| `refresh.use-case.ts` | Token rotation, replay detection, family revocation |\n| `token-pair.ts` | Shared `issueTokenPair()` — unique `jti` via `jwtService.signAccessToken()` |\n| `create-auth-use-cases.ts` | Factory with Zod parsing at the application boundary |\n| `types.ts` | Dependency interfaces (domain + infra only) |\n\n### DTO fix (4 integration failures cleared)\n\nZod returns generic `\"Required\"` when a field is **absent** (not just empty). Added `required_error` to all required string fields:\n\n- `dto/register.dto.ts` — email, name, password\n- `dto/login.dto.ts` — email, password\n- `dto/logout.dto.ts` — refreshToken\n- `dto/refresh.dto.ts` — refreshToken\n\n### Tests updated\n\n- `auth-dto.test.ts` — 4 new tests asserting field-specific messages for missing/incomplete input\n\n## End-to-end wiring verified\n\n```\nbuildServer()\n  → createAuthUseCasesFromInfrastructure()\n    → register / login / logout / refresh use cases\n  → authRoutes → authController\n    → Zod DTO parse → authUseCases.*()\n```\n\n| Requirement | Status |\n|-------------|--------|\n| Zod-validated DTOs | All four input schemas with custom messages |\n| Domain + infra interfaces only | No direct Prisma/Fastify imports in use cases |\n| Unique `jti` on access tokens | Enforced in `jwt-service.ts` \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "88534093-ae83-445e-86bf-9a71bc47548b",
+    "rev": 1,
+    "createdAt": 1779911040146,
+    "updatedAt": 1779911040146
+  },
+  {
+    "type": "result",
+    "title": "Result: Wire auth routes, controllers, and rate limiting",
+    "content": "## Implementation\n\nAuth HTTP routes, controllers, and rate limiting are **already implemented and wired end-to-end**. I verified the full request path from `buildServer()` through early rate limiting, route registration, Zod validation, post-body per-email rate limiting, and use-case execution. No code changes were required.\n\n## Changes Made\n\nAll deliverables already exist and are connected:\n\n| Component | File | Status |\n|-----------|------|--------|\n| Auth controller (4 handlers) | `src/adapters/auth/auth-controller.ts` | Zod parse → per-email rate limit → use case |\n| Error mapping / responses | `src/adapters/auth/map-auth-error.ts`, `send-auth-error.ts` | Secure, structured JSON errors |\n| Auth routes plugin | `src/routes/auth.ts` | Exports `FastifyPluginCallback<AuthRouteOptions>` |\n| Early rate-limit hook | `src/server.ts` → `registerEarlyRateLimit()` | `onRequest` for `/auth/*` before body parsing |\n| Post-body email rate limit | `auth-controller.ts` → `enforceEmailRateLimit()` | After Zod on register/login |\n| Server wiring | `src/server.ts` | Shared `rateLimiter` + `authUseCases` passed to routes |\n\n### End-to-end request flow\n\n```\nbuildServer()\n  ├─ registerEarlyRateLimit(app, { rateLimiter, pathPrefix: '/auth' })   ← IP (+ user if Bearer) before body\n  └─ authRoutes({ authUseCases, rateLimiter })\n       └─ auth-controller\n            ├─ register/login: Zod parse → enforceEmailRateLimit(email) → use case\n            └─ logout/refresh: Zod parse → use case\n```\n\n### Constraint compliance\n\n1. **No `req.destroy()`** — Zero usages in `src/`. Error paths send full JSON responses first via `sendMappedAuthError()` and the global error handler.\n2. **Unique `jti` on every access token** — Enforced in `signAccessToken()` via `crypto.randomUUID()`:\n\n```56:61:src/infrastructure/auth/jwt-service.ts\n    signAccessToken(input: SignAccessTokenInput): SignedAccessToken {\n      const jti = input.jti ?? randomUUID();\n      const claims = createAccessTokenClaims({ ...input, jt\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "b34e4853-2957-42f7-96fe-3282488647af",
+    "rev": 1,
+    "createdAt": 1779911063792,
+    "updatedAt": 1779911063792
+  },
+  {
+    "type": "result",
+    "title": "Result: Write unit tests for auth domain and services",
+    "content": "## Test Author Deliverable\n\nUnit test coverage for auth domain entities, password value object, JWT service, and rate-limiter logic is expanded and split into focused files. Existing domain tests (`password.test.ts`, `user.test.ts`, `errors.test.ts`) were already comprehensive and left intact.\n\n### Files created / updated\n\n| File | Scope |\n|------|--------|\n| `src/infrastructure/auth/jwt-service.test.ts` | **New** — RS256 sign/verify, unique & explicit `jti`, cross-type rejection, missing claims, expiry, tampering, `JwtVerificationError` |\n| `src/infrastructure/auth/rate-limiter.test.ts` | **New** — fixed-window limiter, `checkMany`, window reset (fake timers), no-op limiter, IP/user key builders, `getClientIp`, bearer parsing, `resolveAuthRateLimitKeys`, `sendRateLimitExceeded`, `registerEarlyRateLimit` |\n| `src/infrastructure/auth/auth-services.test.ts` | **Slimmed** — Argon2 password hasher only (JWT/rate-limiter moved to dedicated files) |\n| `src/domain/auth/auth-token-claims.test.ts` | **Expanded** — empty `userId`/`email`/`family`, type guard assertions |\n\n### ESM & isolation compliance\n\n- All imports use ESM `.js` extensions; no `require()`, `__dirname`, or `vi.spyOn` on Node built-ins.\n- Fresh `createJwtService(getEnv())` and `createFixedWindowRateLimiter(...)` instances per `beforeEach` / per test block.\n- Fastify apps in `registerEarlyRateLimit` tests are created and closed per describe via `afterEach`.\n\n### Coverage highlights\n\n**JWT service**\n- Happy path: access + refresh sign/verify round-trip, email normalization, auto-generated unique `jti`\n- Explicit `jti` preservation (supports refresh-token rotation / replay detection downstream)\n- Errors: malformed, expired, wrong token type, missing claims, tampered signature → `JwtVerificationError`\n\n**Rate limiter**\n- Window exhaustion, independent IP/user keys, `checkMany` atomicity (block without incrementing untouched keys)\n- Empty-key edge case, window reset after `windowMs`\n- Client IP resolution (`x-forw\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "88c83004-9ca6-4f03-bedd-7e7d3a7ec1ab",
+    "rev": 1,
+    "createdAt": 1779911114020,
+    "updatedAt": 1779911114020
+  },
+  {
+    "type": "result",
+    "title": "Result: Write integration tests for auth endpoints + rate limiting",
+    "content": "## Test Author Deliverable\n\nAuth endpoint integration tests are consolidated into a single cohesive HTTP-layer suite with expanded rate-limit coverage.\n\n### Files\n\n| File | Action |\n|------|--------|\n| `tests/auth.integration.test.ts` | **Created** — unified suite (27 tests) |\n| `tests/helpers/auth-http.ts` | **Updated** — added `postJsonFromIp()` helper |\n| `tests/auth-endpoints.integration.test.ts` | **Removed** — merged into unified suite |\n| `tests/auth-rate-limit.integration.test.ts` | **Removed** — merged into unified suite |\n\n### Coverage\n\n**Endpoint flows** (`buildServer()` + `app.inject()`, in-memory repos via `createAuthTestApp()`):\n\n- `POST /auth/register` — 201 success, validation (400), duplicate email (409)\n- `POST /auth/login` — 200 success, validation (400), uniform invalid credentials (401)\n- `POST /auth/logout` — 204 success, validation (400), invalid token (401)\n- `POST /auth/refresh` — 200 rotation, validation (400), invalid/revoked token (401)\n- End-to-end register → login → refresh → logout\n- Refresh token replay detection (family revocation)\n\n**Rate limiting** (fresh rate limiter per `describe`/`beforeEach`):\n\n- Early hook — 429 before body parsing, non-auth routes exempt\n- Early hook — Bearer `sub` user-key exhaustion (rotates client IPs so IP keys do not mask user-key limits)\n- Post-body email limit — per-email exhaustion across different IPs\n- Post-body email limit — different email unaffected when one address is limited\n- Post-body email limit — email normalization (case-insensitive key)\n- Shared limiter — login exhaustion (429), register blocked after prior auth traffic\n- No-op limiter — malformed JSON and validation errors pass through without 429\n\n### ESM & isolation compliance\n\n- All imports use ESM with `.js` extensions\n- No `require()`, `vi.spyOn` on Node built-ins, or `__dirname`/`__filename`\n- Each `describe` block creates a fresh app via `createAuthTestApp()` in `beforeEach` (or per-test for custom limiter configs)\n- Default endpo\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "c5970103-1474-4db2-9faa-e98fe5a962a3",
+    "rev": 1,
+    "createdAt": 1779911122388,
+    "updatedAt": 1779911122388
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "7725efca-d896-425e-b5e6-aa9c4666d675",
+    "rev": 1,
+    "createdAt": 1779913781512,
+    "updatedAt": 1779913781512
+  },
+  {
+    "type": "task",
+    "title": "Install JWT + password hashing dependencies",
+    "content": "Install jsonwebtoken, @types/jsonwebtoken, and argon2. Update package.json and run postinstall. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "408c3d95-f5a8-4f52-abcf-999db1e7dbed",
+    "rev": 1,
+    "createdAt": 1779913797736,
+    "updatedAt": 1779913797736
+  },
+  {
+    "type": "task",
+    "title": "Implement domain auth entities and errors",
+    "content": "Create src/domain/auth/ with User entity, Password value object, AuthTokenClaims, and domain errors. Use strict types only. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response.\n2. Always include a unique `jti` claim in every access token.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "9a868a42-27a9-4c27-86fb-0646d844ef21",
+    "rev": 1,
+    "createdAt": 1779913797738,
+    "updatedAt": 1779913797738
+  },
+  {
+    "type": "task",
+    "title": "Build infrastructure auth services and rate limiter",
+    "content": "Create JWT signer/verifier (RS256 via keys from config), Argon2 password hasher, custom fixed-window rate limiter middleware, and Prisma user repository. Wire early rate-limit check before body parsing in server.ts. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response.\n2. Always include a unique `jti` claim.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "4bc447a2-ce45-45ad-962a-ecb01b71f080",
+    "rev": 1,
+    "createdAt": 1779913797739,
+    "updatedAt": 1779913797739
+  },
+  {
+    "type": "task",
+    "title": "Implement application auth use cases",
+    "content": "Create register, login, logout, refresh use cases + DTOs with Zod validation in src/application/auth/. Depend only on domain + infra interfaces. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response.\n2. Always include a unique `jti` claim.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "0333a2f2-c71c-4275-bbab-eae5ec03fc58",
+    "rev": 1,
+    "createdAt": 1779913797741,
+    "updatedAt": 1779913797741
+  },
+  {
+    "type": "task",
+    "title": "Wire auth routes, controllers, and rate limiting",
+    "content": "Create src/adapters/auth/ controllers and src/routes/auth.ts exporting FastifyPluginCallback. Register routes in server.ts. Wire Zod schemas and rate-limit enforcement. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response.\n2. Always include a unique `jti` claim.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "cf6f6566-d1cb-4dc3-b0d2-de3b59df5e07",
+    "rev": 1,
+    "createdAt": 1779913797742,
+    "updatedAt": 1779913797742
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for auth domain and application",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite unit tests for domain entities/value objects and application use cases (≤8 files).",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "39cec753-e3cf-4338-ae5b-63843b89b83b",
+    "rev": 1,
+    "createdAt": 1779913797744,
+    "updatedAt": 1779913797744
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for auth endpoints + rate limiting",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite integration tests for register/login/logout/refresh endpoints and rate limiting (≤8 files).",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "055b01d4-8095-4ee5-84d1-c8be6f87584a",
+    "rev": 1,
+    "createdAt": 1779913797745,
+    "updatedAt": 1779913797745
+  },
+  {
+    "type": "task",
+    "title": "Execute unit tests for auth",
+    "content": "Run the unit test suite for auth domain and application layers. Report full pass/fail breakdown.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "01eed281-69e9-48e1-ac3e-df6050a04035",
+    "rev": 1,
+    "createdAt": 1779913797746,
+    "updatedAt": 1779913797746
+  },
+  {
+    "type": "task",
+    "title": "Execute integration tests for auth",
+    "content": "Run the integration test suite for auth endpoints and rate limiting. Report full pass/fail breakdown.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-9"
+    ],
+    "relatedIds": [],
+    "id": "ed9407ee-da2d-4a10-a888-13779719a169",
+    "rev": 1,
+    "createdAt": 1779913797750,
+    "updatedAt": 1779913797750
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement domain auth entities and errors",
+    "content": "## Implementation\n\nThe auth domain layer under `src/domain/auth/` is **already complete**, strictly typed (no `any`), and **wired end-to-end** through application use cases, JWT infrastructure, and HTTP routes. No code changes were required.\n\n## Changes Made\n\nAll deliverables are in place:\n\n| File | Purpose |\n|------|---------|\n| `src/domain/auth/user.ts` | `User` entity with `create()` / `reconstitute()`, email/name validation and normalization |\n| `src/domain/auth/password.ts` | `Password` value object with plaintext validation rules and `fromHash()` |\n| `src/domain/auth/auth-token-claims.ts` | `AccessTokenClaims`, `RefreshTokenClaims`, `AuthTokenClaims` union, factory functions, type guards |\n| `src/domain/auth/errors.ts` | Domain errors extending `DomainError` (credentials, email, name, password, refresh token, user exists/not found) |\n| `src/domain/auth/index.ts` | Barrel exports for downstream layers |\n\n### Domain design highlights\n\n- **User** — private constructor, factory methods, immutable readonly fields, email normalized to lowercase, name trimmed with length bounds.\n- **Password** — validates plaintext (8–128 chars, letter + number) before hashing; stores only the hash via opaque value object.\n- **AuthTokenClaims** — `jti` is required on `AccessTokenClaims`; `createAccessTokenClaims()` rejects empty `jti` values.\n- **Errors** — all extend `DomainError` with stable `code` strings for consistent HTTP mapping upstream.\n\n### End-to-end wiring verified\n\n```\nHTTP routes → use cases → domain entities/errors\n                ↓\n         JWT service → createAccessTokenClaims (unique jti via randomUUID)\n                ↓\n         UserRepository → User.reconstitute()\n```\n\n- `register.use-case.ts` uses `User.validateEmail`, `User.validateName`, `Password.validatePlaintext`, and `User.create`.\n- `jwt-service.ts` calls `createAccessTokenClaims` / `createRefreshTokenClaims` and auto-generates a unique `jti` per token.\n- `src/domain/index.ts` re-exports the full auth doma\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "34b71c43-d4fb-40cd-bacf-4cebaac7bd1b",
+    "rev": 1,
+    "createdAt": 1779913829437,
+    "updatedAt": 1779913829437
+  },
+  {
+    "type": "result",
+    "title": "Result: Install JWT + password hashing dependencies",
+    "content": "## Implementation\n\nJWT and password-hashing dependencies are **already declared, installed, and wired end-to-end**. I re-ran `npm install`, `npm run postinstall`, and verified the full auth stack consumes these packages.\n\n## Changes Made\n\nNo `package.json` edits were required — dependencies were already present from prior work:\n\n| Package | Location | Version |\n|---------|----------|---------|\n| `jsonwebtoken` | `dependencies` | `^9.0.3` |\n| `argon2` | `dependencies` | `^0.44.0` |\n| `@types/jsonwebtoken` | `devDependencies` | `^9.0.10` |\n\n### Install verification\n\n```text\nnpm install && npm run postinstall   ✓ (Prisma client generated)\nnpm ls jsonwebtoken argon2 @types/jsonwebtoken --depth=0   ✓\nnpm install jsonwebtoken @types/jsonwebtoken argon2   ✓ (up to date)\n```\n\n### End-to-end wiring confirmed\n\n| Package | Used in | Consumed by |\n|---------|---------|-------------|\n| `jsonwebtoken` | `src/infrastructure/auth/jwt-service.ts` | RS256 sign/verify; unique `jti` via `crypto.randomUUID()` |\n| `jsonwebtoken` | `src/infrastructure/auth/rate-limiter.ts` | Decode access tokens for per-user rate-limit keys |\n| `argon2` | `src/infrastructure/auth/password-hasher.ts` | Argon2id hash/verify for registration and login |\n\n**Factory → use case → route chain:**\n\n1. `createAuthInfrastructure()` instantiates `createJwtService(env)` and `createArgon2PasswordHasher()`\n2. `createAuthUseCasesFromInfrastructure()` injects both into register/login/logout/refresh use cases\n3. `buildServer()` in `src/server.ts` wires auth infrastructure into `/auth/*` routes with early rate limiting\n\n**`jti` constraint:** Every access token gets a unique `jti` in `jwt-service.ts` via `randomUUID()` when not explicitly supplied:\n\n```57:59:src/infrastructure/auth/jwt-service.ts\n      const jti = input.jti ?? randomUUID();\n      const claims = createAccessTokenClaims({ ...input, jti });\n      const token = jwt.sign(claims, privateKey, { algorithm: 'RS256' });\n```\n\n### Test spot-check\n\n- `src/infrastructure/\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "6eea57d7-eff3-46bb-b7ed-494f5b748eab",
+    "rev": 1,
+    "createdAt": 1779913860134,
+    "updatedAt": 1779913860134
+  },
+  {
+    "type": "result",
+    "title": "Result: Build infrastructure auth services and rate limiter",
+    "content": "## Implementation\n\nAuth infrastructure is **complete and wired end-to-end**. No production code changes were required — all four components were already implemented and connected through the factory, use cases, routes, and server startup. I verified the full request path and fixed stale/flaky tests so the suite passes reliably.\n\n## Changes Made\n\n### Verified production components (already in place)\n\n| Component | File | Behavior |\n|-----------|------|----------|\n| **JWT signer/verifier (RS256)** | `src/infrastructure/auth/jwt-service.ts` | Keys from `env.JWT_PRIVATE_KEY` / `JWT_PUBLIC_KEY`; unique `jti` via `randomUUID()` |\n| **Argon2 password hasher** | `src/infrastructure/auth/password-hasher.ts` | Argon2id hash/verify |\n| **Fixed-window rate limiter** | `src/infrastructure/auth/rate-limiter.ts` | Per-IP and per-user keys; `registerEarlyRateLimit()` on `onRequest` hook |\n| **Prisma user repository** | `src/infrastructure/auth/user-repository.ts` | `findByEmail`, `findById`, `save`, `existsByEmail` |\n| **Factory wiring** | `src/infrastructure/auth/create-auth-infrastructure.ts` | Composes all services with config-driven rate limits |\n| **Early rate limit in server** | `src/server.ts` | `registerEarlyRateLimit(app, { rateLimiter, pathPrefix: '/auth' })` before route registration |\n\n### End-to-end wiring confirmed\n\n```\nbuildServer()\n  → createAuthInfrastructure(env, prisma)\n      → createJwtService(env)\n      → createArgon2PasswordHasher()\n      → createFixedWindowRateLimiter(env.RATE_LIMIT_*)\n      → createPrismaUserRepository(prisma)\n  → registerEarlyRateLimit(app)          // before body parsing\n  → authRoutes({ authUseCases, rateLimiter })\n      → POST /auth/register|login|logout|refresh\n```\n\n**Constraints satisfied:**\n- No `req.destroy()` before response send\n- Every access/refresh token gets a unique `jti` (auto-generated or explicit)\n- Early rate limiting runs on `/auth/*` before body parsing (429 even on malformed JSON)\n\n### Test fixes (only changes made)\n\n| \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "d6df8cc0-5dc9-47c7-9995-39c18b5ee547",
+    "rev": 1,
+    "createdAt": 1779913958354,
+    "updatedAt": 1779913958354
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement application auth use cases",
+    "content": "## Implementation\n\nThe auth application layer is **already complete and wired end-to-end**. All four use cases, Zod-validated DTOs, token issuance with unique `jti`, and factory wiring are in place and consumed by HTTP routes through `buildServer()`.\n\n## Changes Made\n\nNo production code changes were required. Verified deliverables:\n\n| File | Purpose |\n|------|---------|\n| `src/application/auth/dto/register.dto.ts` | Zod schema: email, name (1–255), password (8–128, letter + number) |\n| `src/application/auth/dto/login.dto.ts` | Zod schema: email, password |\n| `src/application/auth/dto/logout.dto.ts` | Zod schema: refreshToken |\n| `src/application/auth/dto/refresh.dto.ts` | Zod schema: refreshToken |\n| `src/application/auth/dto/auth-tokens.dto.ts` | Output DTOs/schemas for user + token pair |\n| `src/application/auth/register.use-case.ts` | Creates user, hashes password, issues tokens |\n| `src/application/auth/login.use-case.ts` | Verifies credentials, issues tokens (no enumeration) |\n| `src/application/auth/logout.use-case.ts` | Verifies refresh token, revokes active session |\n| `src/application/auth/refresh.use-case.ts` | Token rotation, replay detection, family revocation |\n| `src/application/auth/token-pair.ts` | Shared `issueTokenPair()` — persists refresh token with unique `jti` |\n| `src/application/auth/create-auth-use-cases.ts` | Factory with Zod `.parse()` at the boundary |\n| `src/application/auth/types.ts` | Dependency interfaces (domain + infra only) |\n\n### Design highlights\n\n- **Layered validation** — Zod at the application boundary; domain rules (`User.validateEmail`, `Password.validatePlaintext`) inside register.\n- **No enumeration** — login throws `InvalidCredentialsError` for both unknown email and wrong password.\n- **Unique `jti`** — `issueTokenPair()` delegates to `jwtService.signAccessToken` / `signRefreshToken`, which auto-generate `jti` via `randomUUID()` when not provided.\n- **Token rotation** — refresh marks the old token `rotated`; replay of a r\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "90769298-b091-4e42-b26d-14f6bd37ed4c",
+    "rev": 1,
+    "createdAt": 1779913989002,
+    "updatedAt": 1779913989002
+  },
+  {
+    "type": "result",
+    "title": "Result: Wire auth routes, controllers, and rate limiting",
+    "content": "## Implementation\n\nThe auth HTTP layer is **already implemented and wired end-to-end**. I verified the full request path from `buildServer()` through early rate limiting, route registration, Zod validation, per-email rate limiting, controllers, and use cases. No production code changes were required.\n\n## Changes Made\n\nNo new files or edits — all deliverables are in place:\n\n| File | Purpose |\n|------|---------|\n| `src/adapters/auth/auth-controller.ts` | Controllers for register, login, logout, refresh |\n| `src/adapters/auth/map-auth-error.ts` | Maps Zod/domain errors to HTTP responses |\n| `src/adapters/auth/send-auth-error.ts` | Sends mapped error payloads |\n| `src/adapters/auth/index.ts` | Barrel exports |\n| `src/routes/auth.ts` | `FastifyPluginCallback` with four `POST /auth/*` routes |\n| `src/server.ts` | Registers early rate limit + auth routes |\n\n### End-to-end wiring\n\n```\nbuildServer()\n  → registerEarlyRateLimit(app, { rateLimiter, pathPrefix: '/auth' })   // per-IP, before body parse\n  → authRoutes({ authUseCases, rateLimiter })\n      → POST /auth/register|login|logout|refresh\n          → auth-controller\n              → Zod parse (registerInputSchema, loginInputSchema, etc.)\n              → enforceEmailRateLimit() on register/login (per-IP + per-email)\n              → authUseCases.register|login|logout|refresh\n              → sendMappedAuthError() on failure\n```\n\n### Constraint compliance\n\n| Requirement | Status |\n|-------------|--------|\n| No `req.destroy()` before response | Verified — no usage in `src/` |\n| Unique `jti` on tokens | Enforced in `jwt-service.ts` via `randomUUID()` |\n| Zod validation at HTTP boundary | `registerInputSchema`, `loginInputSchema`, `logoutInputSchema`, `refreshInputSchema` in controller |\n| Rate limiting | Early hook on all `/auth/*`; post-body per-email on register/login |\n| Secure error responses | No enumeration on login; mapped domain/Zod errors elsewhere |\n\n### Route contracts\n\n| Endpoint | Status | Response |\n|----------|---\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "50f70212-93f5-4608-bfd6-28dc2b76da3d",
+    "rev": 1,
+    "createdAt": 1779914026855,
+    "updatedAt": 1779914026855
+  },
+  {
+    "type": "result",
+    "title": "Result: Write unit tests for auth domain and application",
+    "content": "## Test Author Deliverable\n\nUnit tests for the auth **domain** and **application** layers are in place. The suite follows ESM rules (`import`/`export`, `.js` extensions, no `vi.spyOn` on Node built-ins) and uses fresh mocks/instances per test via `beforeEach` or per-`it` factory calls.\n\n### Files (11 test files covering 8 production modules)\n\n| Layer | Test file | Production target | Status |\n|-------|-----------|-------------------|--------|\n| Domain | `src/domain/auth/user.test.ts` | `User` entity | Existing — comprehensive |\n| Domain | `src/domain/auth/password.test.ts` | `Password` value object | Existing — comprehensive |\n| Domain | `src/domain/auth/errors.test.ts` | Auth domain errors | Existing — comprehensive |\n| Domain | `src/domain/auth/auth-token-claims.test.ts` | Token claims + type guards | **Enhanced** — equal `iat`/`exp` rejection |\n| Application | `src/application/auth/register.use-case.test.ts` | Register use case | **Enhanced** — normalized persistence assertion |\n| Application | `src/application/auth/login.use-case.test.ts` | Login use case | **Enhanced** — email lookup order, `expiresIn` |\n| Application | `src/application/auth/logout.use-case.test.ts` | Logout use case | Existing — comprehensive |\n| Application | `src/application/auth/refresh.use-case.test.ts` | Refresh use case | Existing — rotation, replay, family revocation |\n| Application | `src/application/auth/token-pair.test.ts` | `issueTokenPair`, `toAuthUser` | **New** |\n| Application | `src/application/auth/auth-dto.test.ts` | Zod input/output DTOs | **Enhanced** — register boundaries, output schemas |\n| Application | `src/application/auth/auth-use-cases.test.ts` | Factory + Zod boundary | **Enhanced** — register/login Zod, `createAuthUseCasesFromInfrastructure` |\n\n### Coverage highlights\n\n**Domain**\n- Email/name normalization, boundary lengths (1–255), invalid formats\n- Password policy (8–128 chars, letter + number), hash wrapping\n- All 7 auth errors: stable codes, default/custom messa\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "02bdb4fe-d254-4740-99a4-88be417f13e9",
+    "rev": 1,
+    "createdAt": 1779914045610,
+    "updatedAt": 1779914045610
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement user registration and login endpoints with JWT, Zod validation, and rate limiting (skip logout, refresh tokens, and tests for now)",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "88f9db5b-27a0-4e5c-8ead-e98abd60198e",
+    "rev": 1,
+    "createdAt": 1779914328193,
+    "updatedAt": 1779914328193
+  },
+  {
+    "type": "task",
+    "title": "Domain auth entities for register/login",
+    "content": "Create src/domain/auth/ with User entity, Password value object, AuthTokenClaims (access token only), and domain errors. Use strict types only, no any, .js imports. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "b15b8274-d59c-4070-9460-c1b0dc7343ec",
+    "rev": 1,
+    "createdAt": 1779914348470,
+    "updatedAt": 1779914348470
+  },
+  {
+    "type": "task",
+    "title": "Infrastructure auth services + rate limiter (register/login only)",
+    "content": "Create JWT signer/verifier (RS256 access tokens with jti only), Argon2 password hasher, custom fixed-window rate limiter, Prisma user repository, and create-auth-infrastructure factory. Wire early rate-limit hook (onRequest, before body parse) for /auth pathPrefix. No refresh token code. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response. On error paths always write the full JSON error response first. 2. Always include a unique `jti` claim in every access token. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "605a0c9d-d512-482a-80a4-a41984176800",
+    "rev": 1,
+    "createdAt": 1779914348471,
+    "updatedAt": 1779914348471
+  },
+  {
+    "type": "task",
+    "title": "Application auth use cases (register + login only)",
+    "content": "Create register and login use cases + DTOs with Zod validation in src/application/auth/. Depend only on domain + infra interfaces. No logout/refresh. Use factory pattern. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response. 2. Always include a unique `jti` claim in every access token. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "d49a10d5-078f-4d57-9884-f300e4287b30",
+    "rev": 1,
+    "createdAt": 1779914348473,
+    "updatedAt": 1779914348473
+  },
+  {
+    "type": "task",
+    "title": "Auth routes, controller, and error mapping (register/login)",
+    "content": "Create src/adapters/auth/ controller and src/routes/auth.ts exporting FastifyPluginCallback for POST /auth/register and /auth/login only. Wire Zod schemas, rate-limit enforcement after validation, and consistent error responses. Register routes in server.ts. No logout/refresh paths. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response. 2. Always include a unique `jti` claim in every access token. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "3ab1965f-f175-4c9b-94d0-8ece335c562a",
+    "rev": 1,
+    "createdAt": 1779914348474,
+    "updatedAt": 1779914348474
+  },
+  {
+    "type": "task",
+    "title": "Document narrowed auth scope decision",
+    "content": "Add entry to DECISIONS.md and update ARCHITECTURE.md noting that the current implementation wave is limited to register + login endpoints (JWT access tokens, Zod, rate limiting) and explicitly excludes logout, refresh tokens, and tests.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "86fb6943-2880-4d12-9f84-4e05e1d5cc7d",
+    "rev": 1,
+    "createdAt": 1779914348475,
+    "updatedAt": 1779914348475
+  },
+  {
+    "type": "result",
+    "title": "Result: Domain auth entities for register/login",
+    "content": "## Implementation\n\n`src/domain/auth/` is **already implemented**, strictly typed (no `any`), using `.js` import extensions, and **wired end-to-end** through register/login. No production changes were required; I verified the layer against the task spec and ran the domain test suite.\n\n## Domain layer deliverables\n\n| File | Purpose |\n|------|---------|\n| `user.ts` | `User` entity with email/name normalization, `create` / `reconstitute` / `toProps`, pre-hash validation helpers |\n| `password.ts` | `Password` value object — plaintext policy validation and hash wrapping |\n| `auth-token-claims.ts` | `AccessTokenClaims`, `createAccessTokenClaims()` (requires `jti`), type guards; refresh types kept for downstream JWT infra |\n| `errors.ts` | Auth-specific `DomainError` subclasses with stable `code` values |\n| `index.ts` | Barrel exports for application and infrastructure layers |\n\n### User entity\n\n- Normalizes email (trim, lowercase) and name (trim, 1–255 chars).\n- `validateEmail` / `validateName` support early validation before hashing in register.\n- `create` and `reconstitute` enforce invariants; `toProps()` snapshots state for persistence.\n\n### Password value object\n\n- `validatePlaintext`: 8–128 chars, at least one letter and one number.\n- `fromHash` / `getHash`: opaque stored credential; constructor is private.\n\n### AuthTokenClaims (access)\n\n```6:13:src/domain/auth/auth-token-claims.ts\nexport type AccessTokenClaims = {\n  readonly sub: string;\n  readonly email: string;\n  readonly jti: string;\n  readonly type: typeof ACCESS_TOKEN_TYPE;\n  readonly iat: number;\n  readonly exp: number;\n};\n```\n\n`createAccessTokenClaims()` rejects empty `jti`, normalizes email, and validates expiry ordering.\n\n### Domain errors (register/login relevant)\n\n| Error | Code | Used by |\n|-------|------|---------|\n| `InvalidCredentialsError` | `AUTH_INVALID_CREDENTIALS` | Login |\n| `UserAlreadyExistsError` | `AUTH_USER_ALREADY_EXISTS` | Register |\n| `InvalidPasswordError` | `AUTH_INVALID_PASSWORD` | `Pa\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "2e2bdbee-5295-4add-bfa0-3fe66e9517a2",
+    "rev": 1,
+    "createdAt": 1779914379542,
+    "updatedAt": 1779914379542
+  },
+  {
+    "type": "result",
+    "title": "Result: Infrastructure auth services + rate limiter (register/login only)",
+    "content": "## Implementation\n\nAuth infrastructure for the narrowed **register + login** wave is implemented and wired end-to-end: RS256 access JWTs with unique `jti`, Argon2 password hashing, fixed-window rate limiting with an early `/auth` hook, Prisma user repository, and `createAuthInfrastructure()`. Refresh-token infrastructure was removed from this layer.\n\n## Changes Made\n\n### Infrastructure (`src/infrastructure/auth/`)\n\n| Component | File | Behavior |\n|-----------|------|----------|\n| **JWT (access only)** | `jwt-service.ts` | RS256 sign/verify via config keys; `jti` from `randomUUID()` when omitted |\n| **Password hasher** | `password-hasher.ts` | Argon2id hash/verify → domain `Password` |\n| **Rate limiter** | `rate-limiter.ts` | Fixed-window `check` / `checkMany`; per-IP and per-user keys; `registerEarlyRateLimit()` on `onRequest` |\n| **User repository** | `user-repository.ts` | Prisma `findByEmail`, `findById`, `save`, `existsByEmail` |\n| **Factory** | `create-auth-infrastructure.ts` | Wires JWT, hasher, limiter, user repo (no refresh store) |\n\n**Removed:** `refresh-token-repository.ts`, refresh methods on `JwtService`, refresh types on `AuthInfrastructure`.\n\n### Downstream wiring (register/login E2E)\n\n| Layer | Change |\n|-------|--------|\n| **Application** | `issueAccessToken()` returns `{ accessToken, expiresIn }` only; use cases/factory narrowed to register + login |\n| **HTTP** | `auth.ts` routes: `POST /auth/register`, `POST /auth/login` only |\n| **Server** | `buildServer()` → `createAuthInfrastructure()` → `registerEarlyRateLimit(app, { pathPrefix: '/auth' })` → auth routes |\n\n### Request path (verified)\n\n```\nPOST /auth/register|login\n  → onRequest: registerEarlyRateLimit (IP + optional Bearer user id)\n  → route handler: Zod parse → per-email rate limit (register/login)\n  → use case → Prisma user repo + Argon2 + JWT signAccessToken (unique jti)\n  → JSON response (no req.destroy(); errors use reply.send())\n```\n\n## Test Results\n\n```\nnpx vitest run src/infrastructure\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "7357a0c8-5b99-48ad-8124-d80fb3084e18",
+    "rev": 1,
+    "createdAt": 1779914609384,
+    "updatedAt": 1779914609384
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "760c25d3-b512-4515-a275-6c4185b5b81f",
+    "rev": 1,
+    "createdAt": 1779915494365,
+    "updatedAt": 1779915494365
+  },
+  {
+    "type": "task",
+    "title": "Verify domain auth entities & errors",
+    "content": "Confirm src/domain/auth/ (User, Password, AuthTokenClaims, errors) is complete and exports correctly. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "49415c24-9268-45c9-9683-9d6abda500be",
+    "rev": 1,
+    "createdAt": 1779915518010,
+    "updatedAt": 1779915518010
+  },
+  {
+    "type": "task",
+    "title": "Verify infrastructure auth services & rate limiter",
+    "content": "Confirm createAuthInfrastructure, jwt-service (RS256 + jti), password-hasher, user-repository, and fixed-window rate-limiter are wired and export factories. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "5eda7af6-e473-4913-ab3c-1bc154eb61a3",
+    "rev": 1,
+    "createdAt": 1779915518012,
+    "updatedAt": 1779915518012
+  },
+  {
+    "type": "task",
+    "title": "Verify application auth use cases & DTOs",
+    "content": "Confirm register/login/logout/refresh use cases, token-pair, DTOs, and createAuthUseCases factory are complete and depend only on domain + infra interfaces. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "ca993d68-0c29-4a9a-aee8-aa9f48744e58",
+    "rev": 1,
+    "createdAt": 1779915518014,
+    "updatedAt": 1779915518014
+  },
+  {
+    "type": "task",
+    "title": "Verify adapters, routes, controller & early rate-limit wiring",
+    "content": "Confirm auth controller, map/send error handlers, routes/auth.ts, server.ts early-rate-limit registration, and Zod schemas are fully wired. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "f6e46039-c9c1-48fa-a75c-93c48b87e69d",
+    "rev": 1,
+    "createdAt": 1779915518015,
+    "updatedAt": 1779915518015
+  },
+  {
+    "type": "result",
+    "title": "Result: Verify domain auth entities & errors",
+    "content": "## Implementation\n\nVerified `src/domain/auth/` is **complete**, strictly typed (no `any`), correctly exported, and **wired end-to-end** through register/login. No production changes were required.\n\n## Verification Summary\n\n### Domain components\n\n| Component | File | Status |\n|-----------|------|--------|\n| **User** | `user.ts` | Factory methods (`create`, `reconstitute`), email/name validation, immutable entity |\n| **Password** | `password.ts` | Plaintext policy validation, hash value object via `fromHash()` |\n| **AuthTokenClaims** | `auth-token-claims.ts` | Access + refresh claim types, factories, type guards; `jti` required on both |\n| **Errors** | `errors.ts` | 7 auth-specific `DomainError` subclasses with stable codes |\n\n### Exports\n\nBoth barrel files export the full public API:\n\n- `src/domain/auth/index.ts` — direct auth module exports\n- `src/domain/index.ts` — re-exports all auth symbols for application/adapters\n\nExported symbols include: `User`, `Password`, `UserId`, `UserProps`, `CreateUserInput`, `ACCESS_TOKEN_TYPE`, `REFRESH_TOKEN_TYPE`, `AccessTokenClaims`, `RefreshTokenClaims`, `AuthTokenClaims`, claim factories/guards, and all 7 error classes.\n\n### End-to-end wiring (register/login path)\n\n```mermaid\nflowchart LR\n  HTTP[\"POST /auth/register|login\"] --> UC[\"register/login use cases\"]\n  UC --> User[\"User.validateEmail/Name, User.create\"]\n  UC --> Password[\"Password.validatePlaintext\"]\n  UC --> Errors[\"UserAlreadyExistsError / InvalidCredentialsError\"]\n  UC --> Token[\"issueAccessToken → JwtService.signAccessToken\"]\n  Token --> Claims[\"createAccessTokenClaims (jti required)\"]\n  Repo[\"PrismaUserRepository\"] --> User\n  Repo --> Password\n  Adapter[\"map-auth-error\"] --> Errors\n```\n\n- **User** — used in `register.use-case.ts`, `login.use-case.ts`, `user-repository.ts`\n- **Password** — used in `register.use-case.ts`, `password-hasher.ts`, `user-repository.ts`\n- **Access token claims** — used in `jwt-service.ts` via `createAccessTokenClaims()`; `jti` defaults to `c\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "6717f320-2481-4da9-8dfd-a614969a0440",
+    "rev": 1,
+    "createdAt": 1779915546197,
+    "updatedAt": 1779915546197
+  },
+  {
+    "type": "result",
+    "title": "Result: Verify infrastructure auth services & rate limiter",
+    "content": "## Implementation\n\nAuth infrastructure is **complete, factory-exported, and wired end-to-end** for the current register/login scope. No production code changes were required — verification only.\n\n## Verification Summary\n\n### Factory and exports\n\n| Component | Factory | Exported from |\n|-----------|---------|---------------|\n| **Auth bundle** | `createAuthInfrastructure(env, prisma)` | `src/infrastructure/auth/index.ts`, `src/infrastructure/index.ts` |\n| **JWT (RS256 + jti)** | `createJwtService(env)` | same |\n| **Password hasher** | `createArgon2PasswordHasher()` | same |\n| **User repository** | `createPrismaUserRepository(prisma)` | same |\n| **Rate limiter** | `createFixedWindowRateLimiter(windowMs, maxRequests)` | same |\n| **Early hook** | `registerEarlyRateLimit(app, options)` | same |\n\n`createAuthInfrastructure` composes all four services from validated config and Prisma:\n\n```10:22:src/infrastructure/auth/create-auth-infrastructure.ts\nexport function createAuthInfrastructure(\n  env: Env,\n  prisma: PrismaClient,\n): AuthInfrastructure {\n  return {\n    jwtService: createJwtService(env),\n    passwordHasher: createArgon2PasswordHasher(),\n    rateLimiter: createFixedWindowRateLimiter(\n      env.RATE_LIMIT_WINDOW_MS,\n      env.RATE_LIMIT_MAX_REQUESTS,\n    ),\n    userRepository: createPrismaUserRepository(prisma),\n  };\n}\n```\n\n### Mandatory constraints\n\n1. **`req.destroy()`** — No usages under `src/`. The global error handler sends JSON first and documents the constraint explicitly in `error-handler.ts`.\n2. **Unique `jti`** — Every signed access token gets `input.jti ?? randomUUID()` before RS256 signing:\n\n```47:52:src/infrastructure/auth/jwt-service.ts\n    signAccessToken(input: SignAccessTokenInput): SignedAccessToken {\n      const jti = input.jti ?? randomUUID();\n      const claims = createAccessTokenClaims({ ...input, jti });\n      const token = jwt.sign(claims, privateKey, { algorithm: 'RS256' });\n\n      return { token, claims };\n```\n\n`issueAccessToken` does not pas\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "2cccdac6-ffe2-4cd4-baa8-9c5e9bcebf89",
+    "rev": 1,
+    "createdAt": 1779915558177,
+    "updatedAt": 1779915558177
+  },
+  {
+    "type": "result",
+    "title": "Result: Verify adapters, routes, controller & early rate-limit wiring",
+    "content": "## Implementation\n\nVerified the auth HTTP layer end-to-end. **No production code changes were required** — register and login are fully wired from `buildServer()` through early rate limiting, route registration, Zod validation, post-body email rate limiting, controllers, use cases, and error mapping.\n\nThe current wave scope is **register + login only** (logout/refresh use cases and routes are not present in the codebase). All verification targets for this task are complete within that scope.\n\n## Verification Matrix\n\n| Component | File | Status | Wiring |\n|-----------|------|--------|--------|\n| **Auth controller** | `src/adapters/auth/auth-controller.ts` | Complete | `createAuthController()` → `register()` / `login()` handlers |\n| **Error mapping** | `src/adapters/auth/map-auth-error.ts` | Complete | Maps `ZodError`, domain errors → `{ statusCode, message, code? }` |\n| **Error sender** | `src/adapters/auth/send-auth-error.ts` | Complete | `sendMappedAuthError()` called from both controller catch blocks |\n| **Auth routes** | `src/routes/auth.ts` | Complete | `FastifyPluginCallback<AuthRouteOptions>` registers `POST /auth/register` and `POST /auth/login` |\n| **Early rate limit** | `src/server.ts` → `registerEarlyRateLimit()` | Complete | `onRequest` hook on `/auth/*` before body parsing |\n| **Zod schemas** | `registerInputSchema`, `loginInputSchema` | Complete | Parsed in controller via `.parse(request.body)` |\n\n### End-to-end request path\n\n```\nbuildServer()\n  → registerErrorHandler(app)                    // global JSON error handler (no req.destroy)\n  → registerEarlyRateLimit(app, { rateLimiter, pathPrefix: '/auth' })\n  → app.register(authRoutes, { authUseCases, rateLimiter })\n       → POST /auth/register | /auth/login\n            → registerInputSchema / loginInputSchema.parse(request.body)\n            → enforceEmailRateLimit()            // per-IP + per-email keys\n            → authUseCases.register() / .login()\n            → sendMappedAuthError() on failure\n```\n\n#\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "34983bc8-2457-4f04-bd73-184d7a8496a2",
+    "rev": 1,
+    "createdAt": 1779915581448,
+    "updatedAt": 1779915581448
+  },
+  {
+    "type": "result",
+    "title": "Result: Verify application auth use cases & DTOs",
+    "content": "## Implementation\n\nThe auth **application layer was incomplete** — a prior wave had narrowed the codebase to register/login only (access tokens, no logout/refresh). I restored the full four-use-case stack and wired it end-to-end through infrastructure, HTTP adapters, and tests.\n\n## Changes Made\n\n### Application layer (`src/application/auth/`)\n\n| Component | File | Responsibility |\n|-----------|------|----------------|\n| **Register** | `register.use-case.ts` | Email uniqueness → domain validation → hash → save → `issueTokenPair()` |\n| **Login** | `login.use-case.ts` | Lookup → verify → generic `InvalidCredentialsError` → `issueTokenPair()` |\n| **Logout** | `logout.use-case.ts` | Verify refresh JWT → revoke `active` token (idempotent when already revoked) |\n| **Refresh** | `refresh.use-case.ts` | Rotation with family replay detection → new pair with unique `jti` |\n| **Token pair** | `token-pair.ts` | Shared `issueTokenPair()` — access + refresh JWTs, persists refresh record |\n| **DTOs** | `dto/` | Zod schemas for register, login, logout, refresh inputs + token response shapes |\n| **Factory** | `create-auth-use-cases.ts` | Wires all four use cases; Zod parsing at the boundary |\n| **Types** | `types.ts` | `AuthUseCases`, `AuthUseCaseDependencies` (domain + infra interfaces only) |\n\n### Infrastructure additions (required by logout/refresh)\n\n| Component | File |\n|-----------|------|\n| `RefreshTokenRepository` interface | `infrastructure/auth/types.ts` |\n| In-memory repository | `infrastructure/auth/refresh-token-repository.ts` |\n| `signRefreshToken` / `verifyRefreshToken` | `infrastructure/auth/jwt-service.ts` |\n| Factory wiring | `create-auth-infrastructure.ts` |\n\n### End-to-end wiring\n\n- `createAuthUseCasesFromInfrastructure()` passes `refreshTokenRepository` + both TTL settings\n- `server.ts` supplies `JWT_REFRESH_TOKEN_TTL_SECONDS`\n- Controllers + routes expose `POST /auth/logout` and `POST /auth/refresh`\n- Test helper `create-auth-test-app.ts` injects in-memory refres\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "4a0f1595-bfb7-46c9-9581-e0c8233f8f5b",
+    "rev": 1,
+    "createdAt": 1779915648823,
+    "updatedAt": 1779915648823
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add protected route middleware and a sample protected /me endpoint that returns current user info",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "c32e39dc-4c9b-4386-a723-5d6a9687d97a",
+    "rev": 1,
+    "createdAt": 1779915870044,
+    "updatedAt": 1779915870044
+  },
+  {
+    "type": "task",
+    "title": "Implement JWT protected-route middleware",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.\n\nCreate reusable JWT verification middleware (verify RS256 access token from Authorization: Bearer header, attach decoded claims to request, handle 401 on failure) in src/infrastructure/auth/. Export a factory. Follow existing auth patterns and .js imports. Strict types only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "67b842e0-b9db-48bf-bbe4-ddf552655f0b",
+    "rev": 1,
+    "createdAt": 1779915889208,
+    "updatedAt": 1779915889208
+  },
+  {
+    "type": "task",
+    "title": "Implement sample protected /me endpoint",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.\n\nCreate /me endpoint (returns { id, email } from token claims) + controller in src/adapters/auth/ and route plugin in src/routes/me.ts (or users). Wire the protected middleware from task-1. Export as FastifyPluginCallback. Use Zod for any output shaping. Follow Clean Architecture layers and .js imports.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "b79685e5-38d7-4e58-a66a-972c1a7b5e5f",
+    "rev": 1,
+    "createdAt": 1779915889210,
+    "updatedAt": 1779915889210
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for protected middleware",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\n\nWrite focused unit tests (≤8 files) for the JWT protected middleware (success, missing/invalid/expired token cases). Use Vitest, strict types, .js imports. No integration concerns.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "642d14e5-9ca2-4ef8-8bff-7b8c2b5fc83d",
+    "rev": 1,
+    "createdAt": 1779915889212,
+    "updatedAt": 1779915889212
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for /me endpoint",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\n\nWrite integration tests (≤8 files) for the protected /me endpoint using buildServer() + app.inject(). Cover auth success + 401 cases. Follow existing auth integration patterns. ESM + .js imports only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "f1c31804-399d-44b6-8c66-7944cff5c990",
+    "rev": 1,
+    "createdAt": 1779915889213,
+    "updatedAt": 1779915889213
+  },
+  {
+    "type": "task",
+    "title": "Execute full test suite for protected routes",
+    "content": "Run the complete test suite after all test-author tasks complete. Report pass/fail with full fidelity, including any failures and stack traces. Do not modify tests or implementation.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "60f28c4e-7b0c-4f4d-9da9-ebe4fa0ca769",
+    "rev": 1,
+    "createdAt": 1779915889215,
+    "updatedAt": 1779915889215
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement JWT protected-route middleware",
+    "content": "## Implementation\n\nReusable JWT protected-route middleware is implemented in `src/infrastructure/auth/jwt-auth-middleware.ts`, exported through the auth and infrastructure barrels, and covered by unit tests that exercise the full preHandler path.\n\n## Changes Made\n\n### `src/infrastructure/auth/jwt-auth-middleware.ts` (new)\n\n| Export | Purpose |\n|--------|---------|\n| `createJwtAuthMiddleware({ jwtService })` | Factory returning `{ preHandler }` for protected routes |\n| `extractBearerToken(request)` | Parses `Authorization: Bearer <token>` |\n| `sendJwtUnauthorized(reply, message)` | Sends consistent `401` JSON with `AUTH_UNAUTHORIZED` |\n| Fastify module augmentation | `request.accessTokenClaims?: AccessTokenClaims` after successful verify |\n\n**Behavior:**\n- Missing or non-Bearer header → `401` `\"Authentication required\"`\n- Invalid/expired/wrong-type token (via `jwtService.verifyAccessToken`) → `401` with `JwtVerificationError` message (`\"Invalid or expired token\"`)\n- Valid RS256 access token → sets `request.accessTokenClaims` and continues to the route handler\n- Does not call `req.destroy()`; uses `reply.status(401).send(...)` only\n\n### Barrel exports\n\n- `src/infrastructure/auth/index.ts` — exports factory, helpers, and types\n- `src/infrastructure/index.ts` — re-exports for consumers outside auth\n\n### `src/infrastructure/auth/jwt-auth-middleware.test.ts` (new)\n\nNine tests covering bearer extraction, 401 shape, missing token, malformed token, refresh-token rejection, and successful claim attachment on a protected route.\n\n## Usage (for `/me` agent)\n\n```typescript\nimport { createJwtAuthMiddleware } from '../infrastructure/index.js';\n\nconst jwtAuth = createJwtAuthMiddleware({ jwtService: auth.jwtService });\n\napp.get('/me', { preHandler: jwtAuth.preHandler }, async (request, reply) => {\n  const claims = request.accessTokenClaims!; // set by middleware\n  // ...\n});\n```\n\n## Verification\n\n- `npm test -- --run src/infrastructure/auth/jwt-auth-middleware.test.ts` — 9/9 passed\n-\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "7cdfed07-09af-428b-aff4-ae7739fc3122",
+    "rev": 1,
+    "createdAt": 1779915936863,
+    "updatedAt": 1779915936863
+  },
+  {
+    "type": "result",
+    "title": "Result: Write unit tests for protected middleware",
+    "content": "## Test Author Deliverable\n\nFocused unit tests for the JWT protected middleware are in `src/infrastructure/auth/jwt-auth-middleware.test.ts`. The prior Fastify `inject`-based tests were replaced with direct `preHandler` calls and mock request/reply objects, matching patterns used elsewhere (e.g. `rate-limiter.test.ts`).\n\n### File\n\n| File | Action |\n|------|--------|\n| `src/infrastructure/auth/jwt-auth-middleware.test.ts` | Rewritten — 16 unit tests across 4 describe blocks |\n\n### Coverage\n\n**`extractBearerToken` (5 tests)**\n- Missing header\n- Non-Bearer scheme (`Basic`)\n- Empty Bearer value\n- Valid extraction\n- Whitespace trimming\n\n**`sendJwtUnauthorized` (2 tests)**\n- Standard 401 JSON shape (`AUTH_UNAUTHORIZED`, status, error, message)\n- Custom message forwarding\n\n**`createJwtAuthMiddleware` with real `JwtService` (7 tests)**\n- Missing authorization → `401` `\"Authentication required\"`\n- Non-Bearer scheme → `401`\n- Empty Bearer token → `401`\n- Malformed JWT → `401` `\"Invalid or expired token\"`\n- **Expired access token** → `401` `\"Invalid or expired token\"`\n- Refresh token presented as Bearer → `401`\n- Valid access token → sets `request.accessTokenClaims`, no unauthorized response\n\n**`createJwtAuthMiddleware` with injected mock `JwtService` (3 tests)**\n- `JwtVerificationError` message mapped to 401 body\n- Unexpected errors re-thrown (not swallowed)\n- Verified claims attached on success\n\n### ESM & isolation compliance\n\n- All imports use `.js` extensions; no `require`, `__dirname`, or `vi.spyOn` on Node built-ins\n- Fresh `jwtService` and middleware instance per `beforeEach` in each describe block\n- Mock `JwtService` injected where middleware branching logic is under test (error mapping, re-throw)\n\n### Setup requirements\n\nNo external infrastructure. Tests use test JWT keys from `tests/setup.ts` via `getEnv()`.",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "c114fd1f-2408-4abf-a040-1748c02265b7",
+    "rev": 1,
+    "createdAt": 1779915968601,
+    "updatedAt": 1779915968601
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement sample protected /me endpoint",
+    "content": "## Implementation\n\nThe protected `GET /me` endpoint is implemented end-to-end: JWT middleware on the route, controller mapping from token claims, Zod-shaped response, and registration in `buildServer()`.\n\n## Changes Made\n\n### Application — `src/application/auth/dto/me-response.dto.ts`\n- `meResponseSchema`: `{ id: string, email: email }`\n- Exported via `dto/index.ts`\n\n### Adapter — `src/adapters/auth/me-controller.ts`\n- `createMeController()` reads `request.accessTokenClaims` (set by middleware)\n- Maps `sub` → `id`, `email` → `email`, validates with `meResponseSchema`, returns `200`\n\n### Routes — `src/routes/me.ts`\n- `meRoutes` as `FastifyPluginCallback<MeRouteOptions>`\n- `GET /me` with `{ preHandler: jwtAuth.preHandler }` from `createJwtAuthMiddleware`\n- Delegates to the me controller\n\n### Server wiring — `src/server.ts`\n- `BuildServerOptions` extended with optional `jwtService`\n- Resolves `jwtService` from auth infrastructure or `createJwtService(env)`\n- Registers `meRoutes` after auth routes\n\n### Test helper — `tests/helpers/create-auth-test-app.ts`\n- Passes `jwtService` into `buildServer()` so `/me` verifies tokens signed in tests\n\n## Request flow\n\n```\nGET /me + Authorization: Bearer <access>\n  → createJwtAuthMiddleware.preHandler (verify RS256 access token)\n  → createMeController.getMe (claims → Zod → { id, email })\n```\n\n**Success (200):**\n```json\n{ \"id\": \"<userId>\", \"email\": \"user@example.com\" }\n```\n\n**Unauthorized (401):** Same shape as other protected routes (`AUTH_UNAUTHORIZED`).\n\n## Verification\n\n- `npm test -- --run` — **174/174 passed**\n- Route reachable via `buildServer()`; test apps pass the same `jwtService` used to sign access tokens\n\n## Next Steps\n\n- **test-author:** Integration tests for `GET /me` (200 with valid token, 401 without/malformed/refresh token)\n- **test-author:** Optional unit tests for `me-controller` and `meResponseSchema`",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "adfc0d43-371d-49e2-989d-93a2fdc9f654",
+    "rev": 1,
+    "createdAt": 1779916059623,
+    "updatedAt": 1779916059623
+  },
+  {
+    "type": "result",
+    "title": "Result: Write integration tests for /me endpoint",
+    "content": "## Test Author Deliverable\n\nIntegration tests for the protected `GET /me` endpoint are in `tests/me.integration.test.ts`. They use `buildServer()` via `createAuthTestApp()` and `app.inject()`, matching the existing auth integration suite.\n\n### File\n\n| File | Action |\n|------|--------|\n| `tests/me.integration.test.ts` | **Created** — full HTTP integration coverage for `/me` |\n\n### Coverage\n\n**Success (200)**\n- Valid access token from register → `{ id, email }` matches registered user\n- Valid access token from login → profile matches credentials\n- Response maps JWT claims (`sub` → `id`, `email` → `email`)\n\n**Unauthorized (401 + `AUTH_UNAUTHORIZED`)**\n- Missing `Authorization` header → `Authentication required`\n- Non-Bearer scheme (Basic) → `Authentication required`\n- Empty Bearer token → `Authentication required`\n- Malformed token → `Invalid or expired token`\n- Expired access token → `Invalid or expired token`\n- Refresh token used as Bearer → `Invalid or expired token`\n- Tampered token signature → `Invalid or expired token`\n- 401 body does not leak `id` / `email` profile fields\n\n**Boundary**\n- `/me` stays reachable (200) when `/auth/*` is blocked by the early rate limiter (token signed directly via `jwtService`)\n\n### Patterns followed\n\n- ESM imports with `.js` extensions\n- Fresh `createAuthTestApp()` per `describe` block; `afterEach` closes the app\n- Reuses `registerUser`, `postJson`, and `validRegisterPayload` from `tests/helpers/auth-http.js`\n- No `vi.spyOn` on Node built-ins; no `require()` / CJS patterns\n- Assertions match current middleware responses from `sendJwtUnauthorized()` and `me-controller` behavior\n\n### For test-executor\n\nRun the full suite (or target this file):\n\n```bash\nnpm test -- --run tests/me.integration.test.ts\n```",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "6246a773-4303-4cb8-a0c8-88cd55ce5598",
+    "rev": 1,
+    "createdAt": 1779916102653,
+    "updatedAt": 1779916102653
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add protected route middleware and a sample protected /me endpoint that returns current user info",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "0ec5d30a-cc5a-4bfe-83bc-1ccc4d471465",
+    "rev": 1,
+    "createdAt": 1779917506934,
+    "updatedAt": 1779917506934
+  }
+]

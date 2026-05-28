@@ -7848,5 +7848,288 @@
     "rev": 1,
     "createdAt": 1779993378583,
     "updatedAt": 1779993378583
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Rewrite the entire FlowForge application from Node.js to .NET 10 using ASP.NET Core, Entity Framework Core, and SQL Server. Use Clean Architecture with Domain, Application, Infrastructure, and API layers. Include JWT authentication, project and task CRUD with ownership authorization, and full test coverage.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "9baacc7d-1176-480c-8e4b-55ae554a426c",
+    "rev": 1,
+    "createdAt": 1779994289477,
+    "updatedAt": 1779994289477
+  },
+  {
+    "type": "task",
+    "title": "Design .NET Clean Architecture mapping",
+    "content": "Produce a detailed mapping of the existing Clean Architecture layers to .NET 10 equivalents (Domain, Application, Infrastructure, API). Define project structure, dependency rules, DI strategy (Microsoft.Extensions.DependencyInjection), and how repository interfaces, use cases, and DTOs will translate. Output ARCHITECTURE-DOTNET.md with diagrams and layer responsibilities. Keep under 150 words in final doc.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "architect",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "f0eabf08-ccef-4528-bb78-273b21318cbc",
+    "rev": 1,
+    "createdAt": 1779994345238,
+    "updatedAt": 1779994345238
+  },
+  {
+    "type": "task",
+    "title": "Explore current codebase for migration inventory",
+    "content": "Map all current domain entities, use cases, adapters, infrastructure components, auth flows, and test files. Produce a concise inventory document listing every module that must be reimplemented in .NET. Highlight any Node-specific patterns that have no direct equivalent.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "explore",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "5bd9b86e-453f-45c6-9b7d-4a483a417cb3",
+    "rev": 1,
+    "createdAt": 1779994345244,
+    "updatedAt": 1779994345244
+  },
+  {
+    "type": "task",
+    "title": "Define long-term .NET technology choices",
+    "content": "Evaluate and document .NET 10, EF Core, SQL Server, ASP.NET Core, JWT libraries, testing frameworks (xUnit + Testcontainers), and CI approach. Record decisions in DECISIONS-DOTNET.md aligned with existing architecture principles.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "vision",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "253869d2-f73d-44cd-ae25-54d6e321e6dc",
+    "rev": 1,
+    "createdAt": 1779994345250,
+    "updatedAt": 1779994345250
+  },
+  {
+    "type": "task",
+    "title": "Create .NET solution skeleton",
+    "content": "Initialize a new .NET 10 solution with four-layer Clean Architecture projects (Domain, Application, Infrastructure, API). Add basic project references, DI container setup, and a minimal health-check endpoint. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response... 2. Always include a unique `jti`... ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "05b83fc0-be47-47ea-b332-67da7b610edf",
+    "rev": 1,
+    "createdAt": 1779994345255,
+    "updatedAt": 1779994345255
+  },
+  {
+    "type": "task",
+    "title": "Implement JWT authentication domain & application layer",
+    "content": "Create Domain entities for User, RefreshToken, and auth value objects. Implement Application use cases for register, login, logout, refresh. Use ASP.NET Identity or custom JWT with RS256. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy()... 2. Always include a unique `jti`... ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "a00a0ceb-5cee-4b99-bd28-366b48315510",
+    "rev": 1,
+    "createdAt": 1779994345260,
+    "updatedAt": 1779994345260
+  },
+  {
+    "type": "task",
+    "title": "Implement project CRUD with ownership authorization",
+    "content": "Build Project aggregate in Domain, ProjectUseCases in Application, EF Core repository in Infrastructure, and API controllers with JWT + ownership checks. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY... ⚠️ COMPLETENESS CHECK...",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "40dc4378-497c-4208-b11e-7f5ad80887d1",
+    "rev": 1,
+    "createdAt": 1779994345265,
+    "updatedAt": 1779994345265
+  },
+  {
+    "type": "task",
+    "title": "Implement task CRUD with ownership authorization",
+    "content": "Build Task aggregate, TaskUseCases, EF repository, and API endpoints scoped to project ownership. Include status transitions and validation. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY... ⚠️ COMPLETENESS CHECK...",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "0091f2fe-1a52-4b37-aa77-ece4fd1bac7c",
+    "rev": 1,
+    "createdAt": 1779994345270,
+    "updatedAt": 1779994345270
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for auth use cases (.NET)",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require()... Always create fresh instances of rate limiters... Write unit tests for register/login/refresh use cases using xUnit and mocks. One test file per operation. Scope limited to Application layer only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "f3f14935-089e-42d4-852c-9bc0da0053b4",
+    "rev": 1,
+    "createdAt": 1779994345277,
+    "updatedAt": 1779994345277
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for project and task use cases",
+    "content": "⚠️ ESM PROJECT — MANDATORY... Write unit tests for ProjectUseCases and TaskUseCases (ownership guards, CRUD). Separate files per operation. Application layer only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-9"
+    ],
+    "relatedIds": [],
+    "id": "3be5cf7f-9d0e-4fce-b395-54b7981be1a9",
+    "rev": 1,
+    "createdAt": 1779994345282,
+    "updatedAt": 1779994345282
+  },
+  {
+    "type": "task",
+    "title": "Execute all .NET unit tests",
+    "content": "Run the full unit test suite produced by tasks 8 and 9. Report pass/fail with full fidelity and coverage summary.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-10"
+    ],
+    "relatedIds": [],
+    "id": "39808552-e4a5-41ab-849c-562d2840ed4a",
+    "rev": 1,
+    "createdAt": 1779994345287,
+    "updatedAt": 1779994345287
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for auth and CRUD endpoints",
+    "content": "⚠️ ESM PROJECT — MANDATORY... Write integration tests (API layer + EF Core with Testcontainers) for auth flows and project/task CRUD with ownership checks. One layer only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-11"
+    ],
+    "relatedIds": [],
+    "id": "ef0536a7-4959-43fa-adbf-a3aa3da8f06f",
+    "rev": 1,
+    "createdAt": 1779994345292,
+    "updatedAt": 1779994345292
+  },
+  {
+    "type": "task",
+    "title": "Execute integration test suite",
+    "content": "Run integration tests from task 11. Provide complete pass/fail report.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-12"
+    ],
+    "relatedIds": [],
+    "id": "4eef6316-4a91-4a12-8568-e2362f72e7d6",
+    "rev": 1,
+    "createdAt": 1779994345297,
+    "updatedAt": 1779994345297
+  },
+  {
+    "type": "result",
+    "title": "Result: Explore current codebase for migration inventory",
+    "content": "## FlowForge → .NET 10 Migration Inventory\n\nComplete inventory of the current Node.js/TypeScript codebase as of this scan. **No .NET projects exist yet** — this is a greenfield port of a working Fastify + Prisma backend.\n\n---\n\n### Executive Summary\n\n| Metric | Count |\n|--------|-------|\n| **Domain aggregates** | 3 (User, Project, Task) |\n| **Application use cases** | 16 (4 auth + 5 project + 7 task) |\n| **HTTP route modules** | 5 (+ health) |\n| **Repository interfaces** | 4 (User, RefreshToken, Project, Task) |\n| **Prisma models** | 3 (+ TaskStatus enum) |\n| **Test files** | 55 (`src/**/*.test.ts` + `tests/**/*.test.ts`) |\n| **Production TS modules** (excl. tests) | ~107 |\n\n**Authorization model:** JWT RS256 access tokens; refresh tokens with rotation/replay detection (in-memory store). Project-owner-only access for tasks; assignee has no auth rights in MVP.\n\n---\n\n## 1. Domain Layer (`src/domain/`)\n\nReimplement as **FlowForge.Domain** — pure C# classes, no framework dependencies.\n\n### 1.1 Shared\n\n| Module | .NET Target | Notes |\n|--------|-------------|-------|\n| `errors.ts` → `DomainError` | `DomainException` base | All domain errors extend this |\n\n### 1.2 Auth (`src/domain/auth/`)\n\n| Entity / VO | Key Members | Domain Errors |\n|-------------|-------------|-----------------|\n| `User` | `id`, `email`, `name`, `password`, `createdAt`, `updatedAt`; `create()`, `reconstitute()`, `update()` | — |\n| `Password` | Opaque hash VO; `validatePlaintext()`, `fromHash()`, `getHash()` | `InvalidPasswordError` |\n| `AuthTokenClaims` | `AccessTokenClaims`, `RefreshTokenClaims`; `createAccessTokenClaims()`, `createRefreshTokenClaims()`, type guards | — |\n| — | — | `InvalidCredentialsError`, `UserAlreadyExistsError`, `InvalidRefreshTokenError`, `UserNotFoundError`, `InvalidEmailError`, `InvalidNameError` |\n\n### 1.3 Project (`src/domain/project/`)\n\n| Entity | Key Members | Domain Errors |\n|--------|-------------|---------------|\n| `Project` | `id`, `name`, `description`, `ownerId`, tim\n…(truncated)",
+    "status": "done",
+    "author": "explore",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "4a211d66-38e2-4ff0-bcd0-da2826bd1eb3",
+    "rev": 1,
+    "createdAt": 1779994387087,
+    "updatedAt": 1779994387087
+  },
+  {
+    "type": "result",
+    "title": "Result: Design .NET Clean Architecture mapping",
+    "content": "## Plan\n\nDelivered [ARCHITECTURE-DOTNET.md](ARCHITECTURE-DOTNET.md) — a ≤150-word reference with solution layout, dependency diagram, layer table, DI entry point, and Node→.NET mapping. Detailed guidance for executors is below.\n\n## Approach\n\n### Current Node.js layout (source of truth)\n\n| Layer | Path | Role |\n|-------|------|------|\n| Domain | `src/domain/{auth,project,task}/` | Immutable entities, VOs, domain errors |\n| Application | `src/application/{auth,project,task}/` | Factory-wired use cases, Zod DTOs, `task-access.ts` |\n| Adapters | `src/adapters/*`, `src/routes/*` | Controllers, error mapping, route registration |\n| Infrastructure | `src/infrastructure/*` | Prisma repos, JWT, Argon2, rate limiter |\n| Composition | `src/server.ts` `buildServer()` | Wires repos → use cases → routes |\n\n**Notable deviation:** repository interfaces live in `src/infrastructure/*/types.ts` but are consumed by Application. The .NET rewrite should **move interfaces to Application** (`Abstractions/`) — standard Clean Architecture and removes Application→Infrastructure coupling.\n\n### .NET 10 solution structure\n\n```\nFlowForge/\n├── src/\n│   ├── FlowForge.Domain/\n│   │   ├── Auth/          User.cs, Password.cs, AuthErrors.cs\n│   │   ├── Projects/      Project.cs, ProjectErrors.cs\n│   │   └── Tasks/         Task.cs, TaskStatus.cs, TaskErrors.cs\n│   ├── FlowForge.Application/\n│   │   ├── Abstractions/    ITaskRepository, IProjectRepository, IUserRepository, IJwtTokenService, IPasswordHasher\n│   │   ├── Auth/            RegisterUseCase, LoginUseCase, LogoutUseCase, RefreshUseCase + DTOs/validators\n│   │   ├── Projects/        CRUD use cases + ownership checks\n│   │   ├── Tasks/           7 use cases + TaskAccessService\n│   │   └── DependencyInjection.cs   AddApplication()\n│   ├── FlowForge.Infrastructure/\n│   │   ├── Persistence/     AppDbContext, EF configs, *Repository.cs\n│   │   ├── Auth/            JwtTokenService, Argon2PasswordHasher, RateLimiter\n│   │   └── DependencyInjection.cs   \n…(truncated)",
+    "status": "done",
+    "author": "architect",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "e2b9ed7b-b9ab-4885-b4ac-5abe86d29734",
+    "rev": 1,
+    "createdAt": 1779994391513,
+    "updatedAt": 1779994391513
+  },
+  {
+    "type": "result",
+    "title": "Result: Define long-term .NET technology choices",
+    "content": "## Documentation\n\nCreated [DECISIONS-DOTNET.md](DECISIONS-DOTNET.md) — a full ADR log for the Node.js → .NET 10 rewrite, aligned with [DECISIONS.md](DECISIONS.md) and [ARCHITECTURE-DOTNET.md](ARCHITECTURE-DOTNET.md).\n\n### Summary\n\n| Area | Decision | Rationale |\n|------|----------|-----------|\n| **Runtime** | .NET 10 LTS (`net10.0`, C# 14) | Co-versioned with ASP.NET Core 10 / EF Core 10; support through Nov 2028 |\n| **Structure** | 4 projects + 4 test projects | Clean Architecture; repository interfaces move to **Application** (fix vs Node) |\n| **Database** | EF Core 10 + SQL Server 2022 | Team mandate; Testcontainers maturity on 2022 image |\n| **Auth** | Custom JWT RS256 + Argon2id — **not** ASP.NET Identity | Preserves Node contracts, rotation, replay detection |\n| **Refresh tokens** | SQL Server persistence | Closes Node in-memory MVP debt |\n| **Validation** | FluentValidation | Zod equivalent at Application + Api boundaries |\n| **Rate limiting** | ASP.NET Core built-in Rate Limiting | Fixed-window; IP + email partitions on `/auth/*` |\n| **API host** | Minimal hosting + Controllers | Maps from Fastify adapters/routes; `Program.cs` = `buildServer()` |\n| **Unit tests** | xUnit + FluentAssertions + Moq + in-memory fakes | Same fast pattern as Node Vitest suite |\n| **Integration tests** | `WebApplicationFactory` (in-memory) + Testcontainers.MsSql (EF) | Replaces SQLite Prisma tests with real SQL Server |\n| **CI** | GitHub Actions: split build / unit / integration jobs | Integration job requires Docker for Testcontainers |\n\n### Key divergences from Node (intentional)\n\n1. **PostgreSQL → SQL Server** — team goal; same relational model.\n2. **Refresh tokens persisted in SQL** — supersedes Node in-memory interim ADR for .NET only.\n3. **Repository interfaces in Application** — correct Clean Architecture dependency direction.\n4. **Authorization rules unchanged** — project-owner-only task access, JWT `sub` only.\n\n### Open questions flagged for PM\n\n- API versioning (`/v1` vs \n…(truncated)",
+    "status": "done",
+    "author": "vision",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "c7dfac4f-7aeb-4cad-9f73-fc64ea925e79",
+    "rev": 1,
+    "createdAt": 1779994435886,
+    "updatedAt": 1779994435886
   }
 ]

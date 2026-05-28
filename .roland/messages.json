@@ -47,5 +47,14 @@
     "body": "**Subject:** Task design doc complete — owner-only auth documented\n\nConsolidated ADR added to `DECISIONS.md` (2025-05-28). Clarifies that MVP authorization is **project-owner only**, not owner-or-member. Membership/assignee-based access is explicitly deferred with extension points noted in `task-access.ts`. Full test matrix (233 tests) already green per blackboard.",
     "sentAt": 1779976701570,
     "deliveredTo": []
+  },
+  {
+    "id": "8469f490-7069-4202-8b36-15023ef385c7",
+    "from": "explore",
+    "to": "lead-pm",
+    "subject": "Message from agent",
+    "body": "**Subject:** Migration inventory complete — 107 production modules, 55 test files, no blockers\n\nInventory is ready for the architect's Clean Architecture mapping task. Key callouts for wave planning:\n\n1. **Refresh tokens are not in Prisma/PostgreSQL** — only in-memory; .NET migration should explicitly decide persistence.\n2. **Assign/status share `PATCH /tasks/:id`** — no separate routes; preserve controller dispatch logic.\n3. **Dual test DB strategy** (SQLite Prisma + in-memory repos) maps to Testcontainers + in-memory fakes in .NET.\n4. **No `.csproj` files exist** — solution skeleton task is truly greenfield.\n\nRecommend attaching this inventory to `DECISIONS-DOTNET.md` or a new `MIGRATION-INVENTORY.md` for downstream executors.",
+    "sentAt": 1779994387086,
+    "deliveredTo": []
   }
 ]

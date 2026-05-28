@@ -1,35 +1,112 @@
 {
-  "runId": "185a80c4",
-  "goal": "Update ARCHITECTURE.md and DECISIONS.md with full Task CRUD implementation details",
-  "startedAt": 1779993309765,
-  "updatedAt": 1779993415301,
-  "status": "done",
-  "currentWave": 1,
-  "totalTasks": 2,
-  "completedTasks": 2,
+  "runId": "f0d4802f",
+  "goal": "Rewrite the entire FlowForge application from Node.js to .NET 10 using ASP.NET Core, Entity Framework Core, and SQL Server. Use Clean Architecture with Domain, Application, Infrastructure, and API layers. Include JWT authentication, project and task CRUD with ownership authorization, and full test coverage.",
+  "startedAt": 1779994289459,
+  "updatedAt": 1779994446382,
+  "status": "running",
+  "currentWave": 2,
+  "totalTasks": 12,
+  "completedTasks": 3,
   "tasks": [
     {
       "id": "task-1",
-      "title": "Update ARCHITECTURE.md with full Task CRUD details",
-      "agent": "doc-writer",
+      "title": "Design .NET Clean Architecture mapping",
+      "agent": "architect",
       "wave": 1,
       "status": "done",
-      "startedAt": 1779993335373,
-      "completedAt": 1779993378589,
+      "startedAt": 1779994345310,
+      "completedAt": 1779994391518,
       "hadBlocker": false,
-      "outputPreview": "…application use cases, repository pattern, Zod validation, JWT integration, request flows, API contracts, folder layout, and testing — all aligned with the implemented code in `src/domain/task/`, `src/application/task/`, `src/adapters/task/`, `src/infrastructure/task/`, and `src/routes/tasks.ts`."
+      "outputPreview": "…E-DOTNET.md](ARCHITECTURE-DOTNET.md) is ready for the solution-skeleton executor. Next agent should scaffold the four projects, add `AddApplication`/`AddInfrastructure` extension methods, and port Domain entities first (no behavior change), then Application abstractions before EF implementations."
     },
     {
       "id": "task-2",
-      "title": "Update DECISIONS.md with Task CRUD architecture decisions",
-      "agent": "doc-writer",
+      "title": "Explore current codebase for migration inventory",
+      "agent": "explore",
       "wave": 1,
       "status": "done",
-      "startedAt": 1779993338378,
-      "completedAt": 1779993359796,
+      "startedAt": 1779994348320,
+      "completedAt": 1779994387094,
       "hadBlocker": false,
-      "outputPreview": "… prior granular entries (e.g. `2025-05-27: Optional Task Assignee`), and documents HTTP error semantics (`403` for unauthorized, `404` for not found to avoid cross-owner leaks).\n\n**File updated:** [DECISIONS.md](DECISIONS.md) — one new entry appended before the footer; no other sections modified."
+      "outputPreview": "… DB strategy** (SQLite Prisma + in-memory repos) maps to Testcontainers + in-memory fakes in .NET.\n4. **No `.csproj` files exist** — solution skeleton task is truly greenfield.\n\nRecommend attaching this inventory to `DECISIONS-DOTNET.md` or a new `MIGRATION-INVENTORY.md` for downstream executors."
+    },
+    {
+      "id": "task-3",
+      "title": "Define long-term .NET technology choices",
+      "agent": "vision",
+      "wave": 1,
+      "status": "done",
+      "startedAt": 1779994387097,
+      "completedAt": 1779994435892,
+      "hadBlocker": false,
+      "outputPreview": "…on with pinned packages from the doc\n- **architect** — can reference ADRs instead of re-deciding stack\n- **test-author** — three-tier test strategy (unit / HTTP in-memory / Testcontainers) is defined\n\nNo blockers — inventory from the explore agent is referenced; no conflicting requirements found."
+    },
+    {
+      "id": "task-4",
+      "title": "Create .NET solution skeleton",
+      "agent": "executor",
+      "wave": 2,
+      "status": "running",
+      "startedAt": 1779994446382
+    },
+    {
+      "id": "task-5",
+      "title": "Implement JWT authentication domain & application layer",
+      "agent": "executor",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-6",
+      "title": "Implement project CRUD with ownership authorization",
+      "agent": "executor",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-7",
+      "title": "Implement task CRUD with ownership authorization",
+      "agent": "executor",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-8",
+      "title": "Write unit tests for auth use cases (.NET)",
+      "agent": "test-author",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-9",
+      "title": "Write unit tests for project and task use cases",
+      "agent": "test-author",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-10",
+      "title": "Execute all .NET unit tests",
+      "agent": "test-executor",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-11",
+      "title": "Write integration tests for auth and CRUD endpoints",
+      "agent": "test-author",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-12",
+      "title": "Execute integration test suite",
+      "agent": "test-executor",
+      "wave": 0,
+      "status": "pending"
     }
   ],
-  "activeTaskIds": []
+  "activeTaskIds": [
+    "task-4"
+  ]
 }

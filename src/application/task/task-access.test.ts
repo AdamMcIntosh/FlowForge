@@ -89,6 +89,21 @@ describe('requireTaskAccessibleByProjectOwner', () => {
     expect(task.projectId).toBe('project-1');
   });
 
+  it('allows project owner access even when the task is assigned to another user', async () => {
+    await seedOwnedProject(deps.projectRepository, { ownerId: 'user-1' });
+    await seedTask(deps.taskRepository, { assigneeId: 'user-2' });
+
+    const task = await requireTaskAccessibleByProjectOwner(
+      deps.taskRepository,
+      deps.projectRepository,
+      'task-1',
+      'user-1',
+    );
+
+    expect(task.assigneeId).toBe('user-2');
+    expect(task.projectId).toBe('project-1');
+  });
+
   it('throws TaskNotFoundError when the task is missing or its parent project does not exist', async () => {
     await seedOwnedProject(deps.projectRepository);
 

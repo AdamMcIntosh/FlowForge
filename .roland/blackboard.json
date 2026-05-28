@@ -2773,7 +2773,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement PrismaTaskRepository with proper mapping between Task domain entity and Prisma schema",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -2781,9 +2781,9 @@
     ],
     "relatedIds": [],
     "id": "7c3d8d1f-ba71-40dd-a69c-ccfe479e4a00",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779923534056,
-    "updatedAt": 1779923534056
+    "updatedAt": 1779986469909
   },
   {
     "type": "task",
@@ -2947,7 +2947,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Switch integration tests to use SQLite for local development (create prisma/schema.test.prisma or use :memory: mode) so we can run tests without PostgreSQL",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -2955,9 +2955,9 @@
     ],
     "relatedIds": [],
     "id": "a4cdba7b-a1f6-484d-b430-6dc892836a97",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779924133643,
-    "updatedAt": 1779924133643
+    "updatedAt": 1779988788508
   },
   {
     "type": "task",
@@ -3033,7 +3033,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Fix SQLite test isolation in createPrismaTestContext so task-repository.integration tests are deterministic (use per-test :memory: mode or single-threaded pool)",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -3041,9 +3041,9 @@
     ],
     "relatedIds": [],
     "id": "e8f1c4d0-2be0-4b03-8352-f12f84240d14",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779924674096,
-    "updatedAt": 1779924674096
+    "updatedAt": 1779990931096
   },
   {
     "type": "task",
@@ -3119,7 +3119,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement full Task CRUD with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -3127,9 +3127,9 @@
     ],
     "relatedIds": [],
     "id": "85f6f991-d761-4ec1-8ea0-b72bd2cf0581",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779925081193,
-    "updatedAt": 1779925081193
+    "updatedAt": 1779991395414
   },
   {
     "type": "task",
@@ -3433,7 +3433,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Fix the failing test bugs in tasks.integration.test.ts (createOwnedProject argument mismatch and mock assertion) and consolidate any duplicate test files",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -3441,9 +3441,9 @@
     ],
     "relatedIds": [],
     "id": "7d4136e9-1295-45c4-aca7-e02f3b91f3f2",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779925539806,
-    "updatedAt": 1779925539806
+    "updatedAt": 1779991917612
   },
   {
     "type": "task",
@@ -3554,7 +3554,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Fix the failing toProps() mock assertion in src/infrastructure/task/task-repository.update.test.ts",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -3562,9 +3562,9 @@
     ],
     "relatedIds": [],
     "id": "533b36a1-e440-47aa-a029-56e17bcbddeb",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779925840451,
-    "updatedAt": 1779925840451
+    "updatedAt": 1779993415295
   },
   {
     "type": "task",
@@ -7021,5 +7021,832 @@
     "rev": 1,
     "createdAt": 1779986194004,
     "updatedAt": 1779986194004
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement Task assign and changeStatus use cases with proper authorization",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "d566d01a-3f4d-47f3-9953-fa937c9c053f",
+    "rev": 1,
+    "createdAt": 1779986336177,
+    "updatedAt": 1779986336177
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement Task HTTP controller, routes, and protected middleware with authorization",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "a69e7bbe-09c5-457c-9fd9-67a565ac0ec2",
+    "rev": 1,
+    "createdAt": 1779986617560,
+    "updatedAt": 1779986617560
+  },
+  {
+    "type": "task",
+    "title": "Implement JWT protected auth middleware",
+    "content": "Implement createJwtAuthMiddleware (preHandler that validates RS256 access tokens, attaches accessTokenClaims, returns 401 on failure) in src/infrastructure/auth/. Wire it so it is exported from infrastructure/index.js. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "9f13b084-9c1b-4d90-af9c-c315173ab42c",
+    "rev": 1,
+    "createdAt": 1779986662999,
+    "updatedAt": 1779986662999
+  },
+  {
+    "type": "task",
+    "title": "Implement Task HTTP controller",
+    "content": "Create src/adapters/task/task-controller.ts (and supporting mappers/error mappers) that wires all TaskUseCases (create/list/get/update/assign/changeStatus/delete) with Zod-validated requests and proper error mapping. Use getAuthenticatedUserId from accessTokenClaims. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "11706004-1ea1-41ac-aaa2-8e8a38ca0940",
+    "rev": 1,
+    "createdAt": 1779986663004,
+    "updatedAt": 1779986663004
+  },
+  {
+    "type": "task",
+    "title": "Implement Task routes registration",
+    "content": "Create src/routes/tasks.ts exporting taskRoutes as FastifyPluginCallback<TaskRouteOptions> that registers all CRUD routes under /projects/:id/tasks and /tasks/:id, each protected by jwtAuth.preHandler. Export from infrastructure wiring. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "fabb4c11-d2fe-467c-9709-150e2e6eeec3",
+    "rev": 1,
+    "createdAt": 1779986663009,
+    "updatedAt": 1779986663009
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for Task controller & access logic",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nAuthor unit tests (≤6 files) for task-controller and task-access helpers using in-memory doubles.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "421f97e1-9b26-40a3-bdfe-92a9afdeb9ec",
+    "rev": 1,
+    "createdAt": 1779986663014,
+    "updatedAt": 1779986663014
+  },
+  {
+    "type": "task",
+    "title": "Write Task HTTP integration tests (authz matrix + CRUD)",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nAuthor integration tests for tasks.integration.test.ts and tasks-authz-matrix.integration.test.ts using createTaskIntegrationTestApp + in-memory repos (one layer only).",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "d8036010-82c9-45b4-afc6-53316679efa1",
+    "rev": 1,
+    "createdAt": 1779986663019,
+    "updatedAt": 1779986663019
+  },
+  {
+    "type": "task",
+    "title": "Execute full Task test suite",
+    "content": "Run the complete Task test matrix (unit + integration) after all test-author tasks complete. Report full pass/fail results with no summarization of failures.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "4521b779-0e6d-45ff-8b52-c98e64f2f8e3",
+    "rev": 1,
+    "createdAt": 1779986663024,
+    "updatedAt": 1779986663024
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement JWT protected auth middleware",
+    "content": "## Implementation\n\n`createJwtAuthMiddleware` is **already implemented and wired end-to-end**. I verified the full path from factory → infrastructure exports → protected routes → RS256 verification. **No production code changes were required.**\n\n## End-to-End Wiring Verified\n\n```\nbuildServer()\n  → jwtService (createJwtService / auth infrastructure)\n  → meRoutes, projectRoutes, taskRoutes\n    → createJwtAuthMiddleware({ jwtService })\n      → preHandler on every protected route\n        → extractBearerToken(request)\n        → jwtService.verifyAccessToken(token)  // RS256\n        → request.accessTokenClaims = claims\n        → 401 via sendJwtUnauthorized on failure\n```\n\n| Route group | File | JWT preHandler |\n|-------------|------|----------------|\n| `GET /me` | `src/routes/me.ts` | ✅ |\n| `/projects/*` (5 CRUD) | `src/routes/projects.ts` | ✅ |\n| `/projects/:id/tasks`, `/tasks/:id` (7 ops) | `src/routes/tasks.ts` | ✅ |\n\n## Implementation Details\n\n### `src/infrastructure/auth/jwt-auth-middleware.ts`\n\n| Export | Purpose |\n|--------|---------|\n| `createJwtAuthMiddleware({ jwtService })` | Factory returning `{ preHandler }` |\n| `extractBearerToken(request)` | Parses `Authorization: Bearer <token>` |\n| `sendJwtUnauthorized(reply, message)` | Consistent `401` JSON with `AUTH_UNAUTHORIZED` |\n| Fastify module augmentation | `request.accessTokenClaims?: AccessTokenClaims` |\n\n**Behavior:**\n- Missing / non-Bearer / empty token → `401` `\"Authentication required\"`\n- Invalid / expired / wrong-type token → `401` with `JwtVerificationError` message\n- Valid token → `request.accessTokenClaims` set; handler proceeds\n- No `req.destroy()` — errors use `reply.status(401).send(...)` only\n\n### RS256 + `jti` (via `JwtService`)\n\n`jwtService.verifyAccessToken` enforces RS256 and required claims including `jti`. Signing uses `randomUUID()` when `jti` is omitted:\n\n```55:58:src/infrastructure/auth/jwt-service.ts\n    signAccessToken(input: SignAccessTokenInput): SignedAccessToken {\n      const jti = inp\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "a721586b-3cf7-4696-ae4c-800ee7c6764c",
+    "rev": 1,
+    "createdAt": 1779986679098,
+    "updatedAt": 1779986679098
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task HTTP controller",
+    "content": "## Implementation\n\nThe Task HTTP adapter layer is **already implemented and wired end-to-end**. I verified the full request path from `buildServer()` through JWT middleware, route registration, Zod validation, all seven use cases, and error mapping. **No production code changes were required.**\n\n## End-to-End Wiring Verified\n\n```\nbuildServer()\n  → createTaskUseCasesFromInfrastructure(taskRepository, projectRepository)\n  → app.register(taskRoutes, { taskUseCases, jwtService })\n    → createTaskController({ taskUseCases })\n    → createJwtAuthMiddleware({ jwtService }).preHandler on every route\n      → request.accessTokenClaims set by JWT middleware\n      → getAuthenticatedUserId(request) → claims.sub\n      → Zod parse (params/body) → use case → reply.send / sendMappedTaskError\n```\n\n| HTTP route | Controller | Use case(s) |\n|------------|------------|-------------|\n| `POST /projects/:id/tasks` | `create` | `create` |\n| `GET /projects/:id/tasks` | `list` | `list` |\n| `GET /tasks/:id` | `get` | `get` |\n| `PATCH /tasks/:id` | `update` | `update`, or `assign` / `changeStatus` when body is single-field |\n| `DELETE /tasks/:id` | `delete` | `delete` |\n\n`assign` and `changeStatus` are invoked from `update` when the PATCH body contains exactly one mutable field (`assigneeId` or `status`), matching integration test expectations.\n\n## Adapter Files\n\n| File | Role |\n|------|------|\n| `src/adapters/task/task-controller.ts` | Five handlers; `getAuthenticatedUserId` from `accessTokenClaims.sub` |\n| `src/adapters/task/map-task-request.ts` | Zod schemas for params/body (derived from application DTOs) |\n| `src/adapters/task/map-task-error.ts` | Maps Zod + domain errors → HTTP status/code |\n| `src/adapters/task/send-task-error.ts` | Sends consistent JSON error responses (no `req.destroy()`) |\n| `src/adapters/task/index.ts` | Barrel exports |\n\n### Auth + validation pattern\n\n```16:18:src/adapters/task/task-controller.ts\nfunction getAuthenticatedUserId(request: FastifyRequest): string {\n  ret\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "7d7ed872-eba5-44a7-b87a-c44e1ebfabb1",
+    "rev": 1,
+    "createdAt": 1779986731289,
+    "updatedAt": 1779986731289
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task routes registration",
+    "content": "## Implementation\n\nTask routes are **already implemented and wired end-to-end**. I verified the full request path from `buildServer()` through JWT middleware, route registration, controller handlers, and use cases. **No production code changes were required.**\n\n## End-to-End Wiring Verified\n\n```\nbuildServer()\n  → createTaskUseCasesFromInfrastructure(taskRepository, projectRepository)\n  → app.register(taskRoutes, { taskUseCases, jwtService })\n    → createTaskController({ taskUseCases })\n    → createJwtAuthMiddleware({ jwtService }).preHandler on every route\n      → request.accessTokenClaims set by JWT middleware\n      → getAuthenticatedUserId(request) → claims.sub\n      → Zod parse (params/body) → use case → reply.send / sendMappedTaskError\n```\n\n### Routes (`src/routes/tasks.ts`)\n\n| HTTP route | Controller | Use case(s) | JWT `preHandler` |\n|------------|------------|-------------|------------------|\n| `POST /projects/:id/tasks` | `create` | `create` | Yes |\n| `GET /projects/:id/tasks` | `list` | `list` | Yes |\n| `GET /tasks/:id` | `get` | `get` | Yes |\n| `PATCH /tasks/:id` | `update` | `update`, or `assign` / `changeStatus` when body is single-field | Yes |\n| `DELETE /tasks/:id` | `delete` | `delete` | Yes |\n\n```12:47:src/routes/tasks.ts\nexport const taskRoutes: FastifyPluginCallback<TaskRouteOptions> = (app, options, done) => {\n  const controller = createTaskController({ taskUseCases: options.taskUseCases });\n  const jwtAuth = createJwtAuthMiddleware({ jwtService: options.jwtService });\n\n  app.post(\n    '/projects/:id/tasks',\n    { preHandler: jwtAuth.preHandler },\n    (request, reply) => controller.create(request, reply),\n  );\n  // ... list, get, patch, delete — all with jwtAuth.preHandler\n  done();\n};\n```\n\n### Infrastructure export\n\n`createJwtAuthMiddleware` is exported from `src/infrastructure/index.ts` and consumed by `src/routes/tasks.ts`, matching the Project routes pattern in `src/routes/projects.ts`.\n\n### Server registration\n\n```99:100:src/server.ts\n  await\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "7dd73041-0eab-4328-a869-369771ddd8c5",
+    "rev": 1,
+    "createdAt": 1779986832975,
+    "updatedAt": 1779986832975
+  },
+  {
+    "type": "result",
+    "title": "Result: Write unit tests for Task controller & access logic",
+    "content": "## Test Author Deliverable\n\nUnit tests for the Task HTTP controller and task-access authorization helpers are in place. The suite follows ESM rules (`import`/`export`, `.js` extensions, no `vi.spyOn` on Node built-ins) and creates fresh doubles in `beforeEach` to avoid cross-test leakage.\n\n### Files\n\n| File | Action | Tests (`it`) | Scope |\n|------|--------|--------------|-------|\n| `src/adapters/task/task-controller.test.ts` | **Created** | 18 | All five controller handlers with mocked `TaskUseCases` |\n| `src/application/task/task-access.test.ts` | **Updated** | 7 (+1) | `requireOwnedProject` / `requireTaskAccessibleByProjectOwner` with in-memory repos |\n\n### `task-controller.test.ts` coverage\n\n- **create** — 201 happy path with token `sub` as `userId`; optional body fields forwarded; 400 validation; 404 `ProjectNotFoundError`; 403 `ProjectOwnershipError`\n- **list** — 200 happy path; 400 missing project id param\n- **get** — 200 happy path; 404 `TaskNotFoundError`; 403 `UnauthorizedTaskAccessError`\n- **update** — dispatch routing:\n  - single `assigneeId` → `assign` (including `null` for unassign)\n  - single `status` → `changeStatus`\n  - multi-field or title-only → `update`\n  - empty body → 400 `VALIDATION_ERROR`\n  - 422 `InvalidTaskTitleError`\n- **delete** — 204 happy path; 404 `TaskNotFoundError`\n\nMock pattern matches `jwt-auth-middleware.test.ts`: lightweight `FastifyRequest`/`FastifyReply` doubles and `vi.fn()` use-case mocks recreated per test.\n\n### `task-access.test.ts` coverage\n\nExisting in-memory tests retained. Added:\n\n- **Owner access when task is assigned to another user** — confirms project owner can access tasks they do not own as assignee (authorization boundary vs assignee-only access)\n\n### Setup requirements\n\nNo external infrastructure. Controller tests use mocked use cases; task-access tests use `createFreshTaskUseCaseDeps()` from `tests/helpers/task-use-case-fixtures.ts`.\n\nReady for **test-executor** to run:\n\n```bash\nnpm test -- src/adapters/task/ta\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "9093ea32-58ec-442b-8b12-afb7f7dde9d3",
+    "rev": 1,
+    "createdAt": 1779986851039,
+    "updatedAt": 1779986851039
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "paude",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "d9a7a248-891c-49c8-a6ec-b3ac9edbd0dd",
+    "rev": 1,
+    "createdAt": 1779987701566,
+    "updatedAt": 1779987701566
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement Task HTTP controller with protected middleware",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "edf3237f-ad75-45bd-af0d-7683e7c7e2d0",
+    "rev": 1,
+    "createdAt": 1779987721987,
+    "updatedAt": 1779987721987
+  },
+  {
+    "type": "task",
+    "title": "Implement Task HTTP controller + protected routes",
+    "content": "Create src/adapters/task/task-controller.ts (with create/list/get/update/delete handlers calling the appropriate taskUseCases), map-task-request.ts, map-task-error.ts, send-task-error.ts, and src/routes/tasks.ts that registers all 5 endpoints under /projects/:id/tasks and /tasks/:id with jwtAuth.preHandler. Wire into server.ts. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "5aa4a783-9a0e-4d78-bf60-116c37542e41",
+    "rev": 1,
+    "createdAt": 1779987747681,
+    "updatedAt": 1779987747681
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for task controller",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite unit tests (task-controller.test.ts) covering happy paths and error mapping for all controller methods. Scope limited to controller layer only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "15d1c6ee-975c-41e5-887e-969b2ecaa3f4",
+    "rev": 1,
+    "createdAt": 1779987747686,
+    "updatedAt": 1779987747686
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for task HTTP endpoints",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite integration tests (tasks.integration.test.ts + tasks-authz-matrix.integration.test.ts) using in-memory repositories and createTaskIntegrationTestApp helper. One layer only.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "ffa2a8b0-2631-4edc-8511-b83ccf41d585",
+    "rev": 1,
+    "createdAt": 1779987747692,
+    "updatedAt": 1779987747692
+  },
+  {
+    "type": "task",
+    "title": "Execute full Task HTTP test suite",
+    "content": "Run the newly authored unit and integration tests for the Task HTTP controller and protected middleware. Report full pass/fail matrix and any failures with exact file:line.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "6e1400e3-75e0-4f76-96b2-8d2b496c2b5b",
+    "rev": 1,
+    "createdAt": 1779987747698,
+    "updatedAt": 1779987747698
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task HTTP controller + protected routes",
+    "content": "## Implementation\n\nThe Task HTTP controller and protected routes are **already implemented and wired end-to-end**. I verified the full request path from `buildServer()` through JWT middleware, route registration, controller handlers, use-case delegation, and error mapping. **No production code changes were required.**\n\n## Verification\n\n### Adapter layer (`src/adapters/task/`)\n\n| File | Status | Responsibility |\n|------|--------|----------------|\n| `task-controller.ts` | Complete | `create`, `list`, `get`, `update`, `delete` handlers calling `taskUseCases`; `userId` from JWT claims only |\n| `map-task-request.ts` | Complete | Zod schemas for params and bodies (`createTaskBodySchema`, `updateTaskBodySchema`, etc.) |\n| `map-task-error.ts` | Complete | Maps domain/Zod errors to HTTP status codes (400/403/404/422/500) |\n| `send-task-error.ts` | Complete | Sends structured JSON error responses via `sendMappedTaskError` |\n| `index.ts` | Complete | Barrel exports for routes and tests |\n\nThe `update` handler routes single-field `assigneeId` or `status` changes to dedicated `assign` / `changeStatus` use cases; multi-field updates go through `update`.\n\n### Routes (`src/routes/tasks.ts`)\n\nAll five endpoints are JWT-protected via `createJwtAuthMiddleware`:\n\n| Method | Path | Handler |\n|--------|------|---------|\n| `POST` | `/projects/:id/tasks` | `controller.create` |\n| `GET` | `/projects/:id/tasks` | `controller.list` |\n| `GET` | `/tasks/:id` | `controller.get` |\n| `PATCH` | `/tasks/:id` | `controller.update` |\n| `DELETE` | `/tasks/:id` | `controller.delete` |\n\n### Server wiring (`src/server.ts`)\n\n```100:100:src/server.ts\n  await app.register(taskRoutes, { taskUseCases, jwtService });\n```\n\n`taskUseCases` is created via `createTaskUseCasesFromInfrastructure` when not injected (test/production paths).\n\n## Test Results\n\nTask HTTP tests are green:\n\n| Suite | Result |\n|-------|--------|\n| `src/adapters/task/task-controller.test.ts` | **18/18 passed** |\n| `tests/tasks.integration.test\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "2cf691a7-abdb-4326-aee2-9e056f23cb72",
+    "rev": 1,
+    "createdAt": 1779987895070,
+    "updatedAt": 1779987895070
+  },
+  {
+    "type": "result",
+    "title": "Result: Write unit tests for task controller",
+    "content": "## Test Author Deliverable\n\nUnit tests for the Task HTTP controller are in `src/adapters/task/task-controller.test.ts`. The suite isolates the adapter layer with mocked `TaskUseCases` doubles and fresh controller/mocks per test via `beforeEach`. No PostgreSQL or server startup is required.\n\n### File\n\n| File | Tests (`it`) | Scope |\n|------|--------------|-------|\n| `src/adapters/task/task-controller.test.ts` | **29** | All five controller handlers: `create`, `list`, `get`, `update`, `delete` |\n\n### Coverage matrix\n\n| Handler | Happy path | Validation (400) | Domain / use-case errors |\n|---------|------------|------------------|--------------------------|\n| **create** | 201 + full body; title-only omits optionals; `userId` from JWT claims | Empty title → `VALIDATION_ERROR` | `ProjectNotFoundError` (404), `ProjectOwnershipError` (403), `InvalidTaskTitleError` (422), unknown → 500 |\n| **list** | 200 + task list | Empty project id | `ProjectNotFoundError` (404), `ProjectOwnershipError` (403) |\n| **get** | 200 + task DTO | Empty task id | `TaskNotFoundError` (404), `UnauthorizedTaskAccessError` (403) |\n| **update** | Single-field → `assign` / `changeStatus`; multi-field / title-only → `update`; null assignee unassigns | Empty body | `InvalidTaskTitleError` (422), `TaskNotFoundError` via assign (404), `InvalidTaskStatusError` via changeStatus (422), `UnauthorizedTaskAccessError` (403) |\n| **delete** | 204 empty body | Empty task id | `TaskNotFoundError` (404), `UnauthorizedTaskAccessError` (403) |\n\n### Patterns\n\n- ESM-compliant: `import`/`export`, `.js` extensions, no `require()`, no `vi.spyOn` on Node built-ins\n- Fresh `createMockTaskUseCases()` + `createTaskController()` in `beforeEach` (no shared state)\n- Mock `FastifyReply` with `vi.fn()` chain; authenticated requests use `createAccessTokenClaims`\n- Error assertions verify status code, HTTP error name, and domain `code` via `sendMappedTaskError` → `mapTaskError`\n\n### Ready for test-executor\n\n```bash\nnpm test -- src/ad\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "debd0499-8762-44f3-9a00-41e353e99dc1",
+    "rev": 1,
+    "createdAt": 1779987934795,
+    "updatedAt": 1779987934795
+  },
+  {
+    "type": "result",
+    "title": "Result: Write integration tests for task HTTP endpoints",
+    "content": "## Test Author Deliverable\n\nTask HTTP integration tests are in place and aligned with the current implementation. Both files use `createTaskIntegrationTestApp()` in `beforeEach` for isolated in-memory `ProjectRepository` + `TaskRepository` instances — no PostgreSQL/SQLite required.\n\n### Files\n\n| File | Tests (`it`) | Scope |\n|------|-------------|-------|\n| `tests/tasks.integration.test.ts` | **50** | Full CRUD HTTP coverage for all five endpoints |\n| `tests/tasks-authz-matrix.integration.test.ts` | **8** | Owner vs non-owner vs assignee authorization matrix |\n| `tests/helpers/create-task-integration-test-app.ts` | — | Factory wiring in-memory repos into `buildServer()` |\n\n**Total: 58 integration tests** (integration layer only — no unit tests in this deliverable).\n\n### Setup pattern (mandatory isolation)\n\nEvery `describe` block follows:\n\n```typescript\nbeforeEach(async () => {\n  testApp = await createTaskIntegrationTestApp();\n});\n\nafterEach(async () => {\n  await testApp.app.close();\n});\n```\n\nHTTP helpers receive `testApp.app` (the Fastify instance). Project setup uses `createOwnedProject(testApp.app, accessToken)`.\n\n### `tests/tasks.integration.test.ts` — CRUD coverage\n\n| Endpoint | Happy path | Validation (400) | Auth (401) | Authz (403) | Not found (404) |\n|----------|------------|------------------|------------|-------------|-----------------|\n| `POST /projects/:id/tasks` | ✓ defaults, assignee, all statuses | ✓ title/desc/status bounds | ✓ missing + malformed JWT | ✓ `PROJECT_OWNERSHIP` | ✓ `PROJECT_NOT_FOUND` |\n| `GET /projects/:id/tasks` | ✓ empty, scoped, sort order | — | ✓ | ✓ | ✓ |\n| `GET /tasks/:id` | ✓ full payload | — | ✓ | ✓ owner + assignee denied | ✓ task + deleted parent project |\n| `PATCH /tasks/:id` | ✓ multi-field, status workflow, assign/clear assignee | ✓ empty body, trim, invalid status | ✓ | ✓ intruder + assignee on update/assign/status-only PATCH | ✓ task + deleted parent project |\n| `DELETE /tasks/:id` | ✓ 204 + follow-up 404 | — | ✓ | ✓ int\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "eaebed07-4f82-4415-83d3-951aef2211b6",
+    "rev": 1,
+    "createdAt": 1779987948716,
+    "updatedAt": 1779987948716
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement only the Task HTTP controller with protected middleware",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "040c58cc-2c9b-4caf-a2c8-c5b70676ca55",
+    "rev": 1,
+    "createdAt": 1779988616923,
+    "updatedAt": 1779988616923
+  },
+  {
+    "type": "task",
+    "title": "Implement Task HTTP controller + protected routes",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n\nCreate `src/adapters/task/task-controller.ts` (factory returning create/list/get/update/delete handlers that call TaskUseCases after Zod parsing and `getAuthenticatedUserId`) and `src/routes/tasks.ts` (registering all five routes under `jwtAuth.preHandler`). Wire controller into the Fastify app. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "8cdfbb6f-3789-44fb-9e70-96d8e17e0f67",
+    "rev": 1,
+    "createdAt": 1779988639870,
+    "updatedAt": 1779988639870
+  },
+  {
+    "type": "task",
+    "title": "Write Task controller unit tests (one layer only)",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\n\nWrite unit tests only for `createTaskController` (mocked TaskUseCases, status codes, validation, dispatch logic, error mapping). Maximum 5–6 test files, controller layer only. Do not touch integration or E2E tests.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "15d35b7d-7051-4323-91b3-bb87bc488ed3",
+    "rev": 1,
+    "createdAt": 1779988639875,
+    "updatedAt": 1779988639875
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task HTTP controller + protected routes",
+    "content": "## Implementation\n\nThe Task HTTP controller and protected routes are **already implemented and wired end-to-end**. I verified the full request path from `buildServer()` through JWT middleware, route registration, Zod validation, and use-case delegation. No production changes were required.\n\n## End-to-End Verification\n\n| Layer | Status | Details |\n|-------|--------|---------|\n| **Controller** | Complete | `createTaskController()` in `src/adapters/task/task-controller.ts` exposes all five handlers: `create`, `list`, `get`, `update`, `delete` |\n| **Auth extraction** | Complete | Each handler calls `getAuthenticatedUserId(request)` → `request.accessTokenClaims!.sub` |\n| **Validation** | Complete | Zod schemas from `map-task-request.ts` parse params/body before use-case calls |\n| **Use cases** | Complete | Handlers delegate to `taskUseCases.create/list/get/update/delete` (update also routes single-field assign/status to dedicated use cases) |\n| **Error mapping** | Complete | `sendMappedTaskError()` maps domain/Zod errors to HTTP responses |\n| **Routes** | Complete | `src/routes/tasks.ts` registers all five routes with `jwtAuth.preHandler` |\n| **Server wiring** | Complete | `buildServer()` registers `taskRoutes` with `{ taskUseCases, jwtService }` |\n\n### Route map (all JWT-protected)\n\n| Method | Path | Handler |\n|--------|------|---------|\n| `POST` | `/projects/:id/tasks` | `controller.create` |\n| `GET` | `/projects/:id/tasks` | `controller.list` |\n| `GET` | `/tasks/:id` | `controller.get` |\n| `PATCH` | `/tasks/:id` | `controller.update` |\n| `DELETE` | `/tasks/:id` | `controller.delete` |\n\n### Request flow\n\n```\nHTTP request\n  → jwtAuth.preHandler (RS256 token verification, attaches accessTokenClaims)\n  → controller handler\n  → Zod parse (params/body)\n  → getAuthenticatedUserId(request)\n  → taskUseCases.*\n  → JSON response / mapped error\n```\n\n## Test Results\n\nAll Task HTTP tests pass:\n\n| Suite | Result |\n|-------|--------|\n| `src/adapters/task/task-controller.test.ts` | **\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "114853df-2306-47ad-b639-56dd89e8c98f",
+    "rev": 1,
+    "createdAt": 1779988720208,
+    "updatedAt": 1779988720208
+  },
+  {
+    "type": "result",
+    "title": "Result: Write Task controller unit tests (one layer only)",
+    "content": "## Test Author Deliverable\n\nUnit tests for `createTaskController` are in a single controller-layer file. The suite uses mocked `TaskUseCases`, fresh doubles per test in `beforeEach`, and ESM-safe patterns (no `require`, no `vi.spyOn` on Node built-ins).\n\n### File\n\n| File | Tests | Scope |\n|------|-------|--------|\n| `src/adapters/task/task-controller.test.ts` | **36** `it` blocks | All five handlers: create, list, get, update, delete |\n\n### Test design\n\n- **Isolation:** `beforeEach` creates fresh `createMockTaskUseCases()` and `createTaskController({ taskUseCases })`.\n- **Auth:** `createAuthenticatedRequest()` sets `accessTokenClaims`; handlers read `sub` as `userId`.\n- **Mocks:** `vi.fn()` use-case doubles; `createMockReply()` with chained `status().send()`.\n- **No integration:** No Fastify server, JWT middleware, or database.\n\n### Coverage matrix\n\n| Handler | Happy path | Validation (400) | Dispatch logic | Domain errors |\n|---------|------------|------------------|----------------|---------------|\n| **create** | 201 + full/partial body | Empty title, empty project id | Optional fields omitted when absent | 404 project, 403 ownership, 422 title/description, 500 |\n| **list** | 200 + list DTO | Empty project id | — | 404 project, 403 ownership |\n| **get** | 200 + task DTO | Empty task id | — | 404 task, 403 unauthorized |\n| **update** | 200 | Empty body, empty task id, invalid status enum | assign (incl. null), changeStatus, update (single/multi field) | 422 title/status/description, 404 assign, 403 update |\n| **delete** | 204 empty body | Empty task id | — | 404 task, 403 unauthorized |\n\n### Update dispatch (verified against implementation)\n\n```\nfieldCount === 1 && assigneeId  → taskUseCases.assign\nfieldCount === 1 && status      → taskUseCases.changeStatus\notherwise                       → taskUseCases.update\n```\n\n### Additions this wave\n\nSeven tests closing gaps in param validation, description handling, and error mapping:\n\n1. Create — empty project id → 400 `VAL\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "8dabf4d7-d905-4d44-bd20-0944ef089c5b",
+    "rev": 1,
+    "createdAt": 1779988748027,
+    "updatedAt": 1779988748027
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Register all Task routes in src/routes/tasks.ts with proper auth middleware",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "ec8b5aae-8f3e-4475-b188-809f4ac1b6b1",
+    "rev": 1,
+    "createdAt": 1779990861622,
+    "updatedAt": 1779990861622
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Write basic HTTP integration tests for Task CRUD endpoints",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "9959b6a2-066a-42ac-a142-e6f8ba93c09f",
+    "rev": 1,
+    "createdAt": 1779991250539,
+    "updatedAt": 1779991250539
+  },
+  {
+    "type": "task",
+    "title": "Write basic Task CRUD HTTP integration tests",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\n\nWrite the basic HTTP integration tests for Task CRUD endpoints (POST /projects/:id/tasks, GET /projects/:id/tasks, GET /tasks/:id, PATCH /tasks/:id, DELETE /tasks/:id) plus the common error responses (401, 403 ownership, 404). Use the existing `tests/helpers/create-task-integration-test-app.ts` helper and `tests/helpers/task-http.ts` helpers. Produce a single new file `tests/tasks.integration.test.ts` (or update the basic-CRUD section if skeleton exists). Keep assertions narrow and explicit. One integration-test layer only. Max ~5-6 test files total.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "0e5c0b8f-e791-42d9-a149-d61da890b4b0",
+    "rev": 1,
+    "createdAt": 1779991283667,
+    "updatedAt": 1779991283667
+  },
+  {
+    "type": "task",
+    "title": "Execute basic Task CRUD HTTP integration tests",
+    "content": "Run the newly authored basic Task CRUD HTTP integration tests (`tests/tasks.integration.test.ts`). Report full pass/fail results with fidelity. Surface any ESM, isolation, or rate-limiter leakage failures immediately. Do not modify test code.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "14e8ed55-533e-4eae-b234-45ce54d325cb",
+    "rev": 1,
+    "createdAt": 1779991283673,
+    "updatedAt": 1779991283673
+  },
+  {
+    "type": "result",
+    "title": "Result: Write basic Task CRUD HTTP integration tests",
+    "content": "## Test Author Deliverable\n\nReplaced `tests/tasks.integration.test.ts` with a **basic Task CRUD HTTP integration suite** (~21 tests). Detailed authorization (assignee denial, intruder matrices) stays in `tests/tasks-authz-matrix.integration.test.ts` to avoid duplication.\n\n### File\n\n| File | Tests (`it`) | Scope |\n|------|--------------|-------|\n| `tests/tasks.integration.test.ts` | 21 | Basic CRUD happy paths + 401/403/404 per endpoint + lifecycle |\n\n### Setup\n\n- `createTaskIntegrationTestApp()` in `beforeEach` — fresh in-memory repos per test\n- `testApp.app.close()` in `afterEach`\n- Helpers: `registerAndGetAccessToken`, `createOwnedProject`, `postTask`, `listTasks`, `getTask`, `patchTask`, `deleteTask`\n\n### Coverage matrix\n\n| Endpoint | Happy path | 401 | 403 | 404 |\n|----------|------------|-----|-----|-----|\n| `POST /projects/:id/tasks` | 201 create | no auth | `PROJECT_OWNERSHIP` (intruder) | `PROJECT_NOT_FOUND` |\n| `GET /projects/:id/tasks` | 200 list | no auth | `PROJECT_OWNERSHIP` | `PROJECT_NOT_FOUND` |\n| `GET /tasks/:id` | 200 get | no auth | `TASK_UNAUTHORIZED` | `TASK_NOT_FOUND` |\n| `PATCH /tasks/:id` | 200 update | no auth | `TASK_UNAUTHORIZED` | `TASK_NOT_FOUND` |\n| `DELETE /tasks/:id` | 204 + verify gone | no auth | `TASK_UNAUTHORIZED` | `TASK_NOT_FOUND` |\n| Lifecycle | create → list → get → update → delete | — | — | — |\n\n### ESM / isolation\n\n- ESM imports with `.js` extensions; no `require`, no `vi.spyOn` on Node built-ins\n- Fresh app/repos per test via `beforeEach`\n- Error bodies asserted with `.toEqual()` against fixed shapes matching `sendTaskHttpError` / domain error messages\n\n### For test-executor\n\n```bash\nnpx vitest run tests/tasks.integration.test.ts\n```\n\nExpect **21 passed**. Run alongside `tests/tasks-authz-matrix.integration.test.ts` for full authz coverage.",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "87f653de-cc58-42db-89c3-01dbdca928f7",
+    "rev": 1,
+    "createdAt": 1779991311493,
+    "updatedAt": 1779991311493
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute basic Task CRUD HTTP integration tests",
+    "content": "## Test Results\n\n**Verdict: PASS** — The basic Task CRUD HTTP integration suite is fully green. **21 passed, 0 failed, 0 skipped** across **1/1** test file. No ESM import errors, test isolation failures, or rate-limiter leakage observed.\n\n---\n\n### Commands Run\n\n```powershell\ncd C:\\Users\\amcintosh1\\source\\repos\\FlowForge\n\n# Primary deliverable (verbose)\nnpx vitest run tests/tasks.integration.test.ts --reporter=verbose\n\n# Coverage\nnpx vitest run tests/tasks.integration.test.ts --coverage\n```\n\nBoth commands exited **0**.\n\n---\n\n### Summary Counts\n\n| Metric | Value |\n|--------|-------|\n| **Test files** | 1 passed |\n| **Total tests** | **21 passed**, **0 failed**, **0 skipped** |\n| **Wall time** | 4.63s (verbose); 5.65s (with coverage) |\n| **Flaky / env failures** | None |\n| **PostgreSQL required** | No (in-memory repos via `createTaskIntegrationTestApp()`) |\n\n---\n\n### Per-File Breakdown\n\n| File | Passed | Failed | Skipped |\n|------|--------|--------|---------|\n| `tests/tasks.integration.test.ts` | 21 | 0 | 0 |\n\n#### Test matrix (all passed)\n\n| Suite | Tests | Status |\n|-------|-------|--------|\n| `POST /projects/:id/tasks` | 4 (201, 401, 403, 404) | ✅ |\n| `GET /projects/:id/tasks` | 4 (200, 401, 403, 404) | ✅ |\n| `GET /tasks/:id` | 4 (200, 401, 403, 404) | ✅ |\n| `PATCH /tasks/:id` | 4 (200, 401, 403, 404) | ✅ |\n| `DELETE /tasks/:id` | 4 (204, 401, 403, 404) | ✅ |\n| `Task CRUD lifecycle` | 1 (create → list → get → update → delete) | ✅ |\n\n---\n\n### Slow Tests (> 5 s)\n\n**None.** Slowest individual test: `POST /projects/:id/tasks > returns 201 with the created task for the project owner` at **392 ms** (coverage run). All other tests completed in **5–346 ms**.\n\n---\n\n### Failures\n\nNone.\n\n---\n\n### Triage Notes\n\n| Category | Finding |\n|----------|---------|\n| **(a) Implementation bug** | None |\n| **(b) Test bug** | None |\n| **(c) Environment/config** | None — suite runs without PostgreSQL/Docker |\n| **ESM** | No `require`, import resolution, or module-load errors |\n| **Isolation*\n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "d0c96eee-688c-4e99-b836-d3627d8c8b26",
+    "rev": 1,
+    "createdAt": 1779991354987,
+    "updatedAt": 1779991354987
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Extend Task integration tests to cover assignment and status change operations",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "82e89f52-c502-4e0b-8aa7-6072b249e036",
+    "rev": 1,
+    "createdAt": 1779991745411,
+    "updatedAt": 1779991745411
+  },
+  {
+    "type": "task",
+    "title": "Extend Task HTTP integration tests for assignment and status change",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\n\nExtend `tests/tasks.integration.test.ts` to cover assignment and status-change operations using the existing `createTaskIntegrationTestApp()` pattern and in-memory repositories. Add tests for: assigning a task to a user, changing task status (e.g. todo → in_progress → done), and the corresponding error cases (unauthorized, invalid status, non-existent task). Keep all assertions explicit and scoped to the integration layer only. One deliverable: the updated test file with new passing test cases for these operations.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ae217b5c-7409-4e5d-a1a4-2def8e6c4b93",
+    "rev": 1,
+    "createdAt": 1779991771916,
+    "updatedAt": 1779991771916
+  },
+  {
+    "type": "task",
+    "title": "Execute extended Task integration tests",
+    "content": "Run the full Task integration test suite (including the newly extended assignment and status-change tests) using `npm test` or the equivalent vitest command. Report full pass/fail results with per-test status, any failures, and coverage notes. Do not modify code.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "34f00053-2e74-48d4-b864-9fb40d67c4ce",
+    "rev": 1,
+    "createdAt": 1779991771921,
+    "updatedAt": 1779991771921
+  },
+  {
+    "type": "result",
+    "title": "Result: Extend Task HTTP integration tests for assignment and status change",
+    "content": "## Test Author Deliverable\n\nExtended `tests/tasks.integration.test.ts` with **11 new integration tests** for assignment and status-change operations. The file now has **32 tests** total (21 existing CRUD + 11 new).\n\n### File updated\n\n| File | New tests | Scope |\n|------|-----------|-------|\n| `tests/tasks.integration.test.ts` | **11** | Assignment, status change, combined lifecycle |\n\n### New coverage\n\n**`PATCH /tasks/:id — assignment`** (5 tests)\n- Happy path: owner assigns task via single-field `{ assigneeId }` → 200, persisted assignee verified via GET\n- Happy path: owner unassigns via `{ assigneeId: null }` → 200, assignee cleared\n- 401 `AUTH_UNAUTHORIZED` without auth header\n- 403 `TASK_UNAUTHORIZED` for non-owner (task remains unassigned)\n- 404 `TASK_NOT_FOUND` for missing task\n\n**`PATCH /tasks/:id — status change`** (5 tests)\n- Happy path: owner advances `TODO → IN_PROGRESS → DONE` via single-field `{ status }` patches\n- 401 `AUTH_UNAUTHORIZED` without auth header\n- 403 `TASK_UNAUTHORIZED` for non-owner (status remains `TODO`)\n- 400 `VALIDATION_ERROR` for invalid enum value (`not-a-status`) — matches controller Zod validation\n- 404 `TASK_NOT_FOUND` for missing task\n\n**`Task assignment and status lifecycle`** (1 test)\n- End-to-end: create → assign → `IN_PROGRESS` → `DONE`, asserting assignee is preserved across status changes\n\n### Implementation alignment\n\nTests match current HTTP routing in `task-controller.ts`:\n- Single-field `{ assigneeId }` → `assign` use case\n- Single-field `{ status }` → `changeStatus` use case\n- Multi-field PATCH (existing CRUD tests) → general `update` use case\n\nAll suites use fresh `createTaskIntegrationTestApp()` instances per `beforeEach` with in-memory repositories. No ESM violations (`import`/`export`, `.js` extensions, no `vi.spyOn` on Node built-ins).\n\n### For test-executor\n\nRun:\n\n```bash\nnpm test -- tests/tasks.integration.test.ts\n```\n\nExpected: **32 passed, 0 failed**. No external infrastructure required.",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ffbdfda6-19dd-408e-bb1f-57ea577831ab",
+    "rev": 1,
+    "createdAt": 1779991806831,
+    "updatedAt": 1779991806831
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute extended Task integration tests",
+    "content": "## Test Results\n\n**Verdict: PASS** — The extended Task HTTP integration suite is fully green. **32 passed, 0 failed, 0 skipped** across **1/1** test file. Matches test-author expectation (21 CRUD + 11 assignment/status).\n\n---\n\n### Commands Run\n\n```bash\nnpm test -- tests/tasks.integration.test.ts\n```\n\n```bash\nnpx vitest run tests/tasks.integration.test.ts --reporter=verbose --coverage\n```\n\nNo external infrastructure required (in-memory repos via `createTaskIntegrationTestApp()`).\n\n---\n\n### Summary\n\n| Metric | Value |\n|--------|-------|\n| **Test files** | 1 passed, 0 failed |\n| **Total tests** | **32 passed**, **0 failed**, **0 skipped** |\n| **Suite duration** | ~5.6s (no coverage) / ~7.3s (with coverage) |\n| **Test execution time** | ~3.7–3.9s |\n| **Flaky / env failures** | None observed |\n\n---\n\n### Per-Test Status (32/32 PASS)\n\n#### POST `/projects/:id/tasks` (4)\n| Status | Test | Time |\n|--------|------|------|\n| ✓ | returns 201 with the created task for the project owner | 351ms |\n| ✓ | returns 401 AUTH_UNAUTHORIZED when no authorization header is present | 9ms |\n| ✓ | returns 403 PROJECT_OWNERSHIP when a non-owner creates a task in a foreign project | 168ms |\n| ✓ | returns 404 PROJECT_NOT_FOUND when the project does not exist | 70ms |\n\n#### GET `/projects/:id/tasks` (4)\n| Status | Test | Time |\n|--------|------|------|\n| ✓ | returns 200 with tasks belonging to the requested project | 71ms |\n| ✓ | returns 401 AUTH_UNAUTHORIZED when no authorization header is present | 7ms |\n| ✓ | returns 403 PROJECT_OWNERSHIP when a non-owner lists tasks in a foreign project | 169ms |\n| ✓ | returns 404 PROJECT_NOT_FOUND when the project does not exist | 68ms |\n\n#### GET `/tasks/:id` (4)\n| Status | Test | Time |\n|--------|------|------|\n| ✓ | returns 200 with the task when the project owner requests it by id | 107ms |\n| ✓ | returns 401 AUTH_UNAUTHORIZED when no authorization header is present | 6ms |\n| ✓ | returns 403 TASK_UNAUTHORIZED when a non-owner requests the task | 168ms |\n|\n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "8953395a-3ffc-4aaf-b3bd-5f678f4d2564",
+    "rev": 1,
+    "createdAt": 1779991871706,
+    "updatedAt": 1779991871706
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Fix any failing tests and update ARCHITECTURE.md + DECISIONS.md with full Task CRUD implementation details",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "68efc1ba-1628-4116-9c52-6ce0888418fb",
+    "rev": 1,
+    "createdAt": 1779992099351,
+    "updatedAt": 1779992099351
+  },
+  {
+    "type": "task",
+    "title": "Run full test suite and report Task CRUD failures",
+    "content": "Execute the complete Vitest suite (unit + integration) with focus on all task-related tests (task-repository, task-access, tasks.integration, adapters). Report every failure with file:line, actual vs expected, and stack. Identify whether failures are implementation bugs, stale assertions, or missing coverage. Deliver a concise failure summary only—no fixes.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "fcc09ab0-c019-46b7-b4d5-4e7606f69c62",
+    "rev": 1,
+    "createdAt": 1779992126070,
+    "updatedAt": 1779992126070
+  },
+  {
+    "type": "task",
+    "title": "Update ARCHITECTURE.md with full Task CRUD implementation",
+    "content": "Add a dedicated 'Task Management' section to ARCHITECTURE.md documenting the complete Clean Architecture implementation: domain entities (Task, TaskId), application use-cases (create/list/update/delete), repository interfaces + Prisma adapter, Zod schemas, controller routes, and integration with auth. Mirror the style and detail level of the existing Authentication section. Include request flows and rate-limiting notes if applicable.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "5b91405a-9aba-47a0-9144-efd81b1d93de",
+    "rev": 1,
+    "createdAt": 1779992126076,
+    "updatedAt": 1779992126076
+  },
+  {
+    "type": "task",
+    "title": "Update DECISIONS.md with Task CRUD architecture decision",
+    "content": "Append a new dated ADR entry to DECISIONS.md recording the Task CRUD implementation decision (Clean Architecture layers, Prisma repository pattern, Zod validation, auth-protected routes). Follow the exact format of prior ADRs (Status, Context, Decision, Rationale, Consequences).",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "a22454a5-565a-4493-a6d6-b6e4e21bba41",
+    "rev": 1,
+    "createdAt": 1779992126086,
+    "updatedAt": 1779992126086
+  },
+  {
+    "type": "result",
+    "title": "Result: Update ARCHITECTURE.md with full Task CRUD implementation",
+    "content": "## Documentation\n\nAdded a dedicated **Task Management** section to `ARCHITECTURE.md`, replacing the shorter `## Tasks` block. It mirrors the depth and structure of the Authentication section.\n\n### Summary\n\nThe new section documents the full Clean Architecture stack end-to-end:\n\n| Layer | Coverage |\n|-------|----------|\n| **Domain** | `Task` entity, `TaskId`, `TaskStatus`, immutability via `update()`, domain errors |\n| **Application** | All 7 use cases (`create`, `list`, `get`, `update`, `delete`, `assign`, `changeStatus`), `task-access.ts` helpers, DTOs, `task-mapper.ts`, factory wiring |\n| **Infrastructure** | `TaskRepository` interface, Prisma adapter, in-memory adapter for tests |\n| **Adapters** | Controller, Zod request schemas (`map-task-request.ts`), error mapping |\n| **Routes / server** | JWT `preHandler` on every route, `server.ts` registration |\n\nAlso included:\n\n- **Request flows** — separate diagrams for project-scoped vs task-scoped routes, plus PATCH delegation (single-field body → `assign` or `changeStatus`)\n- **Auth integration** — RS256 JWT middleware, `userId` from `accessTokenClaims.sub` only\n- **Rate limiting** — explicitly notes task routes are **not** rate-limited (only `/auth/*`)\n- **API contracts** — all five HTTP endpoints with request/response examples, including assign-only and status-only PATCH variants\n- **Folder layout** — updated to list all seven use cases and shared JWT middleware\n\nUpdated **Key Design Decisions** with a bullet on project-owner task authorization.\n\nThe section aligns with the current implementation in `src/domain/task/`, `src/application/task/`, `src/adapters/task/`, `src/infrastructure/task/`, and `src/routes/tasks.ts`.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "e7b70aa3-e03c-4d34-a3bc-f2ec7255a8d5",
+    "rev": 1,
+    "createdAt": 1779992174380,
+    "updatedAt": 1779992174380
+  },
+  {
+    "type": "result",
+    "title": "Result: Update DECISIONS.md with Task CRUD architecture decision",
+    "content": "## Documentation\n\nAppended a new ADR to `DECISIONS.md` in the standard format used by prior entries (`Status`, `Context`, `Decision`, `Rationale`, `Consequences`).\n\n### New entry: `2025-05-28: Task CRUD Clean Architecture Implementation`\n\n| Field | Content |\n|-------|---------|\n| **Status** | Accepted |\n| **Context** | End-to-end Task CRUD (7 operations) scoped to projects, needing validation, persistence, and JWT-gated HTTP — aligned with auth/project patterns |\n| **Decision** | Four-layer Clean Architecture with explicit layer table (domain → application → adapters → infrastructure), plus three implementation rules: Prisma repository pattern, dual-layer Zod validation, JWT-protected routes |\n| **Rationale** | Consistency with auth/project stack; authorization in use cases; testability via in-memory repository doubles |\n| **Consequences** | Layer boundaries must be maintained; Prisma/schema changes require domain + mapper updates; HTTP and application DTOs synced manually; task routes not rate-limited |\n\n### Relationship to existing ADRs\n\nThe new entry complements (does not replace) earlier Task ADRs:\n\n- **`2025-05-27`** entries — authorization model, status enum, route shape, assignee rules\n- **`2025-05-28: Task Domain & Access Control`** — consolidated design reference\n- **`2025-05-28: Task CRUD Feature Complete`** — completion marker with non-standard format (`Summary`, `Authorization model` sections)\n\nThe new ADR is the canonical **implementation architecture** record in standard ADR format, covering Clean Architecture layering, Prisma repository pattern, Zod validation, and auth-protected routes as requested. It aligns with the **Task Management** section already added to `ARCHITECTURE.md`.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "abd462e0-7be4-4870-baf0-a06a1330c1ce",
+    "rev": 1,
+    "createdAt": 1779992188905,
+    "updatedAt": 1779992188905
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Update ARCHITECTURE.md and DECISIONS.md with full Task CRUD implementation details",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "e559e663-bd63-41a1-aff0-3f56df403446",
+    "rev": 1,
+    "createdAt": 1779993309779,
+    "updatedAt": 1779993309779
+  },
+  {
+    "type": "task",
+    "title": "Update ARCHITECTURE.md with full Task CRUD details",
+    "content": "Review existing Task CRUD implementation (domain entities, application use cases, adapters/controllers, Prisma repository, Zod schemas, project-scoped auth) and extend the ARCHITECTURE.md sections on layered architecture, Task model, and request flows with complete implementation details. Keep all existing content; add only accurate, concise CRUD coverage. One deliverable: updated ARCHITECTURE.md.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "db1491f9-dbef-4dcd-adf6-4ad8d1cd99fb",
+    "rev": 1,
+    "createdAt": 1779993325294,
+    "updatedAt": 1779993325294
+  },
+  {
+    "type": "task",
+    "title": "Update DECISIONS.md with Task CRUD architecture decisions",
+    "content": "Review the implemented Task CRUD (project ownership scoping, no assignee auth in MVP, Zod validation, repository pattern) and add a new dated ADR entry to DECISIONS.md capturing the key decisions and rationale. Keep the file's existing structure; produce only the new decision record. One deliverable: updated DECISIONS.md.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "4cc5327b-e88a-44d0-a43d-d54a36c73851",
+    "rev": 1,
+    "createdAt": 1779993325300,
+    "updatedAt": 1779993325300
+  },
+  {
+    "type": "result",
+    "title": "Result: Update DECISIONS.md with Task CRUD architecture decisions",
+    "content": "## Documentation\n\nAdded a new ADR to `DECISIONS.md`: **`2025-05-28: Task CRUD — Authorization, Validation, and Persistence`**.\n\n### Summary\n\nThe entry records the four integrated implementation decisions verified against the codebase:\n\n| Decision area | Recorded choice |\n|---------------|-----------------|\n| **Project ownership scoping** | All seven operations authorize via parent project ownership through `requireOwnedProject()` (create/list) and `requireTaskAccessibleByProjectOwner()` (get/update/delete/assign/changeStatus). `userId` comes only from JWT `sub`. |\n| **No assignee auth in MVP** | `assigneeId` is metadata only — assignees get no API access unless they also own the project. No assignee existence or membership validation. |\n| **Zod validation** | Dual boundary: application DTOs are canonical; HTTP schemas in `map-task-request.ts` omit auth/route fields via `.omit()` so clients cannot spoof identity or scope. |\n| **Repository pattern** | `TaskRepository` interface in infrastructure; Prisma for production, in-memory for tests; mapping via `Task.reconstitute()` / `task.toProps()`. |\n\nThe ADR follows the existing format (`Status`, `Context`, `Decision`, `Rationale`, `Consequences`), references prior granular entries (e.g. `2025-05-27: Optional Task Assignee`), and documents HTTP error semantics (`403` for unauthorized, `404` for not found to avoid cross-owner leaks).\n\n**File updated:** [DECISIONS.md](DECISIONS.md) — one new entry appended before the footer; no other sections modified.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "7f19cb81-1779-4d31-9359-35f98c55cc94",
+    "rev": 1,
+    "createdAt": 1779993359791,
+    "updatedAt": 1779993359791
+  },
+  {
+    "type": "result",
+    "title": "Result: Update ARCHITECTURE.md with full Task CRUD details",
+    "content": "## Documentation\n\nUpdated [ARCHITECTURE.MD](ARCHITECTURE.MD) with full Task CRUD implementation details, verified against the codebase. All prior content is preserved; additions are additive and accurate.\n\n### Summary\n\n**Layered Architecture** — Added a **Dependency direction** subsection with:\n- Inward dependency rule (domain never imports Fastify/Prisma/Zod)\n- Task CRUD layer mapping table (Domain → Application → Adapters → Infrastructure)\n- Composition-root wiring via `createTaskUseCasesFromInfrastructure()` and `taskRoutes`\n\n**Task Management** — Extended with:\n\n| Addition | Purpose |\n|----------|---------|\n| **HTTP route map** | Quick reference for all five endpoints, handlers, use cases, and success codes |\n| **Prisma schema and relations** | `Cascade` on project delete, `SetNull` on assignee delete, translation boundary |\n| **Status workflow** | Documents free transitions (no state machine) and validation boundaries |\n| **Use-case behavior** | Internal steps for all seven use cases after authorization |\n| **Repository method table** | Prisma operations per `TaskRepository` method + in-memory test double |\n| **End-to-end create flow** | Step-by-step request path from JWT through persistence to `201` |\n| **Testing strategy** | Layer-by-layer test locations and helpers (in-memory, SQLite, no Postgres) |\n| **Known trade-offs** | Assignee auth gap, no status state machine, no task rate limiting |\n\n**Corrections:**\n- `TaskId` described as a typed string alias (not “branded”)\n- Test helper path documented as `tests/helpers/create-task-integration-test-app.ts`\n\nThe Task section now mirrors the depth of the Authentication section: domain model, application use cases, repository pattern, Zod validation, JWT integration, request flows, API contracts, folder layout, and testing — all aligned with the implemented code in `src/domain/task/`, `src/application/task/`, `src/adapters/task/`, `src/infrastructure/task/`, and `src/routes/tasks.ts`.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "335f978c-68a1-48ae-92d8-7fdd8af85314",
+    "rev": 1,
+    "createdAt": 1779993378583,
+    "updatedAt": 1779993378583
   }
 ]

@@ -1,45 +1,34 @@
 {
-  "runId": "e3a89477",
-  "goal": "Implement Task getById, update, and delete use cases with proper authorization",
-  "startedAt": 1779985968368,
-  "updatedAt": 1779986222072,
+  "runId": "185a80c4",
+  "goal": "Update ARCHITECTURE.md and DECISIONS.md with full Task CRUD implementation details",
+  "startedAt": 1779993309765,
+  "updatedAt": 1779993415301,
   "status": "done",
-  "currentWave": 3,
-  "totalTasks": 3,
-  "completedTasks": 3,
+  "currentWave": 1,
+  "totalTasks": 2,
+  "completedTasks": 2,
   "tasks": [
     {
       "id": "task-1",
-      "title": "Review Task get/update/delete coverage & gaps",
-      "agent": "test-strategist",
+      "title": "Update ARCHITECTURE.md with full Task CRUD details",
+      "agent": "doc-writer",
       "wave": 1,
       "status": "done",
-      "startedAt": 1779986034362,
-      "completedAt": 1779986059902,
+      "startedAt": 1779993335373,
+      "completedAt": 1779993378589,
       "hadBlocker": false,
-      "outputPreview": "…pport all gaps; this is test coverage debt, not missing production behavior.\n\n**Recommendation for test-author:** Implement **G1–G4 + G8–G9** first (~8 tests). Add **G5–G7** if controller routing regressions are a concern. Defer G12–G14 unless aiming for full parity with project/auth HTTP suites."
+      "outputPreview": "…application use cases, repository pattern, Zod validation, JWT integration, request flows, API contracts, folder layout, and testing — all aligned with the implemented code in `src/domain/task/`, `src/application/task/`, `src/adapters/task/`, `src/infrastructure/task/`, and `src/routes/tasks.ts`."
     },
     {
       "id": "task-2",
-      "title": "Write any missing unit tests for task use cases (if gaps)",
-      "agent": "test-author",
-      "wave": 2,
+      "title": "Update DECISIONS.md with Task CRUD architecture decisions",
+      "agent": "doc-writer",
+      "wave": 1,
       "status": "done",
-      "startedAt": 1779986068143,
-      "completedAt": 1779986099785,
+      "startedAt": 1779993338378,
+      "completedAt": 1779993359796,
       "hadBlocker": false,
-      "outputPreview": "…k/update.use-case.test.ts src/application/task/delete.use-case.test.ts tests/tasks.integration.test.ts tests/tasks-authz-matrix.integration.test.ts\n```\n\n**Expected:** +11 new tests total (2 unit + 5 integration PATCH/DELETE + 2 authz matrix + 2 unit assignee). No external infrastructure required."
-    },
-    {
-      "id": "task-3",
-      "title": "Execute full Task use-case + integration test suite",
-      "agent": "test-executor",
-      "wave": 3,
-      "status": "done",
-      "startedAt": 1779986104955,
-      "completedAt": 1779986194009,
-      "hadBlocker": false,
-      "outputPreview": "…oader Task matrix (domain + infra + repo). This run is the **scoped use-case + HTTP integration** deliverable only; no regressions in the 155 tests executed here.\n- Harmless noise during coverage run: Vite source-map warnings for `generated/prisma-test-client/runtime/*` — does not affect results."
+      "outputPreview": "… prior granular entries (e.g. `2025-05-27: Optional Task Assignee`), and documents HTTP error semantics (`403` for unauthorized, `404` for not found to avoid cross-owner leaks).\n\n**File updated:** [DECISIONS.md](DECISIONS.md) — one new entry appended before the footer; no other sections modified."
     }
   ],
   "activeTaskIds": []

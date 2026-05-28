@@ -242,6 +242,43 @@ Seven use cases via `createTaskUseCases()`: create, list, get, update, delete, a
 **Rationale:** Reuses the established Project ownership model; keeps authorization in use cases rather than route-only checks; aligns with prior Task ADRs (`2025-05-27` and `2025-05-28: Task Domain & Access Control`).  
 **Consequences:** Assignees stored on a task have no API access unless they also own the project. Role-based or assignee-scoped access requires a future ADR. Test suite (domain, application, repository, HTTP integration) runs without PostgreSQL via in-memory repositories.
 
+### 2025-05-28: Task CRUD Clean Architecture Implementation
+**Status:** Accepted  
+**Context:** Task management requires create, read, list, update, delete, assign, and change-status operations scoped to projects, with input validation, persistence, and JWT-gated HTTP access. The team needed a consistent pattern matching auth and project features without leaking Fastify or Prisma into domain logic.  
+**Decision:** Implement Task CRUD across four Clean Architecture layers with explicit boundaries:
+
+| Layer | Location | Responsibility |
+|-------|----------|----------------|
+| Domain | `src/domain/task/` | Immutable `Task` entity, `TaskStatus` value object, domain errors; no framework imports |
+| Application | `src/application/task/` | Seven use cases via `createTaskUseCases()`, Zod DTOs, centralized authorization in `task-access.ts` |
+| Adapters | `src/adapters/task/`, `src/routes/tasks.ts` | HTTP controller, request/error mappers, JWT-protected Fastify routes |
+| Infrastructure | `src/infrastructure/task/` | `TaskRepository` interface, `createPrismaTaskRepository()` (production), `createInMemoryTaskRepository()` (tests) |
+
+Additional implementation rules:
+1. **Prisma repository pattern** — `TaskRepository` interface in `src/infrastructure/task/types.ts`; Prisma adapter maps records via `Task.reconstitute()` / `task.toProps()`; domain never imports Prisma types.
+2. **Zod validation** — Application DTOs (`createTaskInputSchema`, etc.) parsed in the use-case factory; HTTP body/param schemas in `map-task-request.ts` strip auth context fields the controller injects from JWT claims.
+3. **Auth-protected routes** — Every task route in `src/routes/tasks.ts` registers `createJwtAuthMiddleware({ jwtService }).preHandler`; `userId` is taken exclusively from `accessTokenClaims.sub`, never from the request body.
+
+Production wiring in `server.ts`: `createTaskUseCasesFromInfrastructure(createPrismaTaskRepository(prisma), projectRepository)`.  
+**Rationale:** Mirrors the established auth and project stack; keeps authorization in application use cases (not route-only checks); Zod at both HTTP and use-case boundaries catches invalid input early; repository interface enables in-memory doubles so the full test matrix runs without PostgreSQL.  
+**Consequences:** New task features must follow the same layer boundaries — domain rules in entities, auth in `task-access.ts`, persistence changes only in infrastructure adapters. Adding Prisma fields requires domain entity + mapper updates. HTTP schemas and application DTOs must stay in sync manually. Task routes are not rate-limited (unlike `/auth/*`); throttling would require a separate ADR.
+
+### 2025-05-28: Task CRUD — Authorization, Validation, and Persistence
+**Status:** Accepted  
+**Context:** Task CRUD is implemented across domain, application, infrastructure, and HTTP layers (create, list, get, update, delete, assign, changeStatus). Prior ADRs defined route shape, status enum, and domain design; this record captures the integrated implementation choices for authorization scope, input validation, and data access that govern the shipped feature.  
+**Decision:**
+
+1. **Project-owner authorization scoping** — Every task operation authorizes through the parent **project**, not through task-level roles or assignee identity. Create and list call `requireOwnedProject()` (`projectRepository.findById` → `project.assertOwnedBy(userId)`). Get, update, delete, assign, and changeStatus call `requireTaskAccessibleByProjectOwner()` (load task → load parent project → `task.assertAccessibleByProjectOwner(project.ownerId, userId)`). The authenticated user id is taken exclusively from JWT access-token `sub` in the controller; it is never accepted from the request body.
+
+2. **No assignee authorization in MVP** — `assigneeId` is optional persistence metadata for future UX. Assignees receive **zero** API access based on assignment alone — they cannot read or mutate a task unless they also own the parent project. The API does not validate that an assignee user exists or belongs to the project (no membership model). This is intentional; see `2025-05-27: Optional Task Assignee (No Membership Validation)`.
+
+3. **Zod validation at two boundaries** — Application DTOs in `src/application/task/dto/` define the canonical input schemas (including `userId`, `projectId`, and `taskId` where required). HTTP adapters in `src/adapters/task/map-task-request.ts` derive client-facing schemas by `.omit()`-ing auth and route context fields so callers cannot spoof identity or parent scope. Use-case factories parse application DTOs; controllers parse HTTP schemas first, then inject `userId` from token claims before invoking use cases. Domain entities enforce invariants (title length, status enum) independently of Zod.
+
+4. **Repository pattern with swappable implementations** — Persistence is accessed only through `TaskRepository` in `src/infrastructure/task/types.ts` (`save`, `findById`, `findByProjectId`, `update`, `delete`). Production uses `createPrismaTaskRepository(prisma)` with `Task.reconstitute()` / `task.toProps()` mapping; tests use `createInMemoryTaskRepository()` so the full domain, application, and HTTP integration matrix runs without PostgreSQL. The interface follows the same location and naming convention as `ProjectRepository` and `UserRepository`.
+
+**Rationale:** Reuses the established project-ownership gate without prematurely building teams, invitations, or role matrices. Dual Zod layers keep DTOs as the single validation source while preventing clients from supplying trusted auth context. The repository interface isolates Prisma from domain/application code and enables fast, isolated test doubles — consistent with auth and project features.  
+**Consequences:** Assignee-facing workflows require either project ownership or a future ADR for membership/role-based access. Adding or renaming task fields requires coordinated updates to domain entity, Prisma schema, repository mapper, application DTOs, and HTTP request schemas. Authorization changes must go through `task-access.ts`, not ad hoc route checks. Invalid cross-owner access returns `403` (`TASK_UNAUTHORIZED`); missing task or project returns `404` (`TASK_NOT_FOUND`) to avoid leaking existence across owners.
+
 ---
 
 **How to add new decisions:**  

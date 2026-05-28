@@ -1,56 +1,12 @@
 {
-  "runId": "c559e7d7",
-  "goal": "Implement full Task CRUD integration with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
-  "startedAt": 1779925971081,
-  "updatedAt": 1779926100925,
-  "status": "running",
-  "currentWave": 3,
-  "totalTasks": 4,
-  "completedTasks": 3,
-  "tasks": [
-    {
-      "id": "task-1",
-      "title": "Fix createOwnedProject helper and add in-memory task repo factory",
-      "agent": "executor",
-      "wave": 1,
-      "status": "done",
-      "startedAt": 1779925987821,
-      "completedAt": 1779926044600,
-      "hadBlocker": false,
-      "outputPreview": "…ation.test.ts` | **29/29 passed** |\n| Task domain + infra + `task-repository.integration` | **121/121 passed** |\n\n## Next Steps\n\nDownstream **test-author** can rely on `createOwnedProject(testApp.app, ...)` from `task-http.js` when updating HTTP integration tests. No blockers on this deliverable."
-    },
-    {
-      "id": "task-2",
-      "title": "Write corrected repository integration tests (in-memory/SQLite)",
-      "agent": "test-author",
-      "wave": 2,
-      "status": "done",
-      "startedAt": 1779926052016,
-      "completedAt": 1779926082803,
-      "hadBlocker": false,
-      "outputPreview": "…dProject` helpers replace `createPrismaTestContext` seeding\n\n### Setup requirements\n\n- **In-memory block:** none\n- **Prisma block:** SQLite via `prisma/schema.test.prisma` (handled by `createTestDatabase()`)\n\n### Test count\n\n**29 tests total** (17 in-memory + 12 Prisma) — ready for test-executor."
-    },
-    {
-      "id": "task-3",
-      "title": "Write corrected HTTP integration tests (in-memory only)",
-      "agent": "test-author",
-      "wave": 2,
-      "status": "done",
-      "startedAt": 1779926053525,
-      "completedAt": 1779926094793,
-      "hadBlocker": false,
-      "outputPreview": "… limiter injected via test app factory (no cross-test rate-limit state)\n\n### For test-executor\n\nRun:\n\n```bash\nnpm test -- tests/tasks.integration.test.ts\n```\n\nExpected: **43/43 pass** with no external infrastructure. Full suite should remain green alongside project and task unit/repository tests."
-    },
-    {
-      "id": "task-4",
-      "title": "Execute full Task test suite after fixes",
-      "agent": "test-executor",
-      "wave": 3,
-      "status": "running",
-      "startedAt": 1779926100925
-    }
-  ],
-  "activeTaskIds": [
-    "task-4"
-  ]
+  "runId": "c90499e2",
+  "goal": "Implement full Task CRUD with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
+  "startedAt": 1779970632758,
+  "updatedAt": 1779970632758,
+  "status": "planning",
+  "currentWave": 0,
+  "totalTasks": 0,
+  "completedTasks": 0,
+  "tasks": [],
+  "activeTaskIds": []
 }

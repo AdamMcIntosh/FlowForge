@@ -1,8 +1,12 @@
 import type { ProjectRepository } from '../../infrastructure/project/types.js';
 import type { TaskRepository } from '../../infrastructure/task/types.js';
+import { createAssignTaskUseCase } from './assign.use-case.js';
+import { createChangeTaskStatusUseCase } from './change-status.use-case.js';
 import { createCreateTaskUseCase } from './create.use-case.js';
 import { createDeleteTaskUseCase } from './delete.use-case.js';
 import {
+  assignTaskInputSchema,
+  changeTaskStatusInputSchema,
   createTaskInputSchema,
   deleteTaskInputSchema,
   getTaskInputSchema,
@@ -19,6 +23,8 @@ export function createTaskUseCases(deps: TaskUseCaseDependencies): TaskUseCases 
   const list = createListTasksUseCase(deps);
   const get = createGetTaskUseCase(deps);
   const update = createUpdateTaskUseCase(deps);
+  const assign = createAssignTaskUseCase(deps);
+  const changeStatus = createChangeTaskStatusUseCase(deps);
   const del = createDeleteTaskUseCase(deps);
 
   return {
@@ -36,6 +42,14 @@ export function createTaskUseCases(deps: TaskUseCaseDependencies): TaskUseCases 
 
     async update(input: unknown) {
       return update(updateTaskInputSchema.parse(input));
+    },
+
+    async assign(input: unknown) {
+      return assign(assignTaskInputSchema.parse(input));
+    },
+
+    async changeStatus(input: unknown) {
+      return changeStatus(changeTaskStatusInputSchema.parse(input));
     },
 
     async delete(input: unknown) {

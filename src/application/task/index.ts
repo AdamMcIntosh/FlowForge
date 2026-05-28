@@ -1,4 +1,6 @@
 export {
+  assignTaskInputSchema,
+  changeTaskStatusInputSchema,
   createTaskInputSchema,
   deleteTaskInputSchema,
   getTaskInputSchema,
@@ -6,6 +8,8 @@ export {
   listTasksResponseSchema,
   taskResponseSchema,
   updateTaskInputSchema,
+  type AssignTaskInputDto,
+  type ChangeTaskStatusInputDto,
   type CreateTaskInputDto,
   type DeleteTaskInputDto,
   type GetTaskInputDto,
@@ -18,6 +22,8 @@ export {
   createTaskUseCases,
   createTaskUseCasesFromInfrastructure,
 } from './create-task-use-cases.js';
+export { createAssignTaskUseCase } from './assign.use-case.js';
+export { createChangeTaskStatusUseCase } from './change-status.use-case.js';
 export { createCreateTaskUseCase } from './create.use-case.js';
 export { createDeleteTaskUseCase } from './delete.use-case.js';
 export { createGetTaskUseCase } from './get.use-case.js';

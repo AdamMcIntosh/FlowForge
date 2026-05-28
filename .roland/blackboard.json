@@ -3737,5 +3737,268 @@
     "rev": 1,
     "createdAt": 1779926094790,
     "updatedAt": 1779926094790
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement full Task CRUD with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "f3d2bffd-2587-43b4-8897-0e7c176c0234",
+    "rev": 1,
+    "createdAt": 1779969269319,
+    "updatedAt": 1779969269319
+  },
+  {
+    "type": "task",
+    "title": "Define Task domain entity, value objects, and errors",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti.\n\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it.\n\nCreate immutable Task entity + Status value object + domain errors in src/domain/task/. Update blackboard with completion status.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "8ff4a050-46e6-439a-838c-db66b8f65d05",
+    "rev": 1,
+    "createdAt": 1779969351594,
+    "updatedAt": 1779969351594
+  },
+  {
+    "type": "task",
+    "title": "Create Task repository interface + in-memory implementation",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response...\n2. Always include a unique `jti`...\n\n⚠️ COMPLETENESS CHECK: ...\n\nPlace TaskRepository interface in src/infrastructure/task/types.ts. Implement in-memory repo (no Prisma) that supports project-scoped queries and authorization checks. Update blackboard.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "24e47897-b2b6-4967-b2bc-c3ca613d125a",
+    "rev": 1,
+    "createdAt": 1779969351597,
+    "updatedAt": 1779969351597
+  },
+  {
+    "type": "task",
+    "title": "Implement Task use cases (CRUD + assign + status)",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy()...\n2. Always include a unique `jti`...\n\n⚠️ COMPLETENESS CHECK: ...\n\nBuild application/task use cases for create/read/update/delete/assign/changeStatus with project membership authorization. Wire Zod DTOs. Update blackboard.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "b42c0244-a008-4683-950f-ec3ff50cccbf",
+    "rev": 1,
+    "createdAt": 1779969351600,
+    "updatedAt": 1779969351600
+  },
+  {
+    "type": "task",
+    "title": "Build Task HTTP controller, routes, and authorization middleware",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy()...\n2. Always include a unique `jti`...\n\n⚠️ COMPLETENESS CHECK: ...\n\nCreate controller + routes in src/adapters/task/ and src/routes/task.ts. Enforce \"tasks only within user's projects\" at every endpoint. Update blackboard.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "c42db63d-bf9c-4a62-80c6-9cbfc18258d4",
+    "rev": 1,
+    "createdAt": 1779969351603,
+    "updatedAt": 1779969351603
+  },
+  {
+    "type": "task",
+    "title": "Write domain + application unit tests for Task",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\n\nWrite unit tests for Task entity, status transitions, and use cases (≤10 files). Use in-memory doubles. Update blackboard on completion.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "efa10510-8d38-4f5c-8dcd-71583eac2a16",
+    "rev": 1,
+    "createdAt": 1779969351605,
+    "updatedAt": 1779969351605
+  },
+  {
+    "type": "task",
+    "title": "Write per-operation repository unit tests",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require()...\nAlways create fresh instances of rate limiters...\n\nCreate one test file per repository operation (save.test.ts, findById.test.ts, etc.) using the in-memory implementation. Update blackboard.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "0231b421-4c44-41eb-9d21-c0d141522800",
+    "rev": 1,
+    "createdAt": 1779969351608,
+    "updatedAt": 1779969351608
+  },
+  {
+    "type": "task",
+    "title": "Write Task HTTP integration tests (in-memory repo)",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require()...\nAlways create fresh instances of rate limiters...\n\nWrite integration tests for all CRUD + authorization endpoints using in-memory repo + test server (≤10 files). Cover project-scoped access and error cases. Update blackboard.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "b881a8ff-770a-4026-99d8-9f151faf912f",
+    "rev": 1,
+    "createdAt": 1779969351611,
+    "updatedAt": 1779969351611
+  },
+  {
+    "type": "task",
+    "title": "Execute Task unit + repository tests",
+    "content": "Run the unit and repository test suites created by tasks 5 and 6. Report full pass/fail matrix and update blackboard.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "34c60cb0-7b46-4620-91d2-16f8c64c995d",
+    "rev": 1,
+    "createdAt": 1779969351613,
+    "updatedAt": 1779969351613
+  },
+  {
+    "type": "task",
+    "title": "Execute Task HTTP integration tests",
+    "content": "Run the integration test suite created by task 7. Report full matrix and update blackboard. Note any remaining Postgres-dependent tests.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-9"
+    ],
+    "relatedIds": [],
+    "id": "b6390c32-bdeb-41e5-8a91-a18865d81ed8",
+    "rev": 1,
+    "createdAt": 1779969351616,
+    "updatedAt": 1779969351616
+  },
+  {
+    "type": "task",
+    "title": "Update ARCHITECTURE.md and DECISIONS.md with Task layer",
+    "content": "Document the Task domain, repository interface location, authorization strategy, and any new ADRs. Keep single source of truth. Update blackboard.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "low",
+    "tags": [
+      "dispatched",
+      "task-10"
+    ],
+    "relatedIds": [],
+    "id": "a6844d80-f13c-4679-abd6-1d0f09735de7",
+    "rev": 1,
+    "createdAt": 1779969351633,
+    "updatedAt": 1779969351633
+  },
+  {
+    "type": "result",
+    "title": "Result: Define Task domain entity, value objects, and errors",
+    "content": "## Implementation\n\nThe Task domain layer under `src/domain/task/` is **already complete**. I verified it against the Project domain pattern and confirmed end-to-end wiring through application, infrastructure, and HTTP layers. No production code changes were required.\n\n## Verified Components\n\n### Immutable `Task` entity (`task.ts`)\n\n- Private constructor with `readonly` fields\n- Factory methods: `create()`, `reconstitute()`\n- Immutable updates via `update()` (returns a new instance)\n- Validation: title (1–255 chars), description (nullable, max 2000 chars)\n- Authorization helpers: `isInProject()`, `assertInProject()`, `assertAccessibleByProjectOwner()`\n- Serialization: `toProps()`\n\n### `TaskStatus` value object (`task-status.ts`)\n\n- Constants: `TODO`, `IN_PROGRESS`, `DONE`\n- Type guard: `isTaskStatus()`\n- Parser: `parseTaskStatus()` → throws `InvalidTaskStatusError` on invalid input\n\n### Domain errors (`errors.ts`)\n\n| Error | Code |\n|-------|------|\n| `TaskNotFoundError` | `TASK_NOT_FOUND` |\n| `UnauthorizedTaskAccessError` | `TASK_UNAUTHORIZED` |\n| `InvalidTaskTitleError` | `TASK_INVALID_TITLE` |\n| `InvalidTaskDescriptionError` | `TASK_INVALID_DESCRIPTION` |\n| `InvalidTaskStatusError` | `TASK_INVALID_STATUS` |\n\nAll extend `DomainError` from `src/domain/errors.ts`.\n\n### Barrel exports\n\n- `src/domain/task/index.ts` exports entity, status, errors, and types\n- `src/domain/index.ts` re-exports the full Task domain surface\n\n## End-to-End Wiring Confirmed\n\n- **Application:** `create.use-case.ts` calls `Task.create()`; get/update/delete use `TaskNotFoundError`; DTOs reference `TaskStatus`\n- **Infrastructure:** `PrismaTaskRepository` maps records via `Task.reconstitute()` / `toProps()`\n- **Tests:** **60/60** domain unit tests pass (`task.test.ts`, `task-status.test.ts`, `errors.test.ts`)\n\n## Blackboard\n\nUpdated task **\"Define Task domain entity, value objects, and errors\"** → `done`, with a result entry attached.\n\n## Next Steps\n\nTask-2 (Task repository interface + in-memory im\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "0200a8a9-6c88-4868-b5db-9ac3505f8044",
+    "rev": 1,
+    "createdAt": 1779969384200,
+    "updatedAt": 1779969384200
+  },
+  {
+    "type": "result",
+    "title": "Result: Create Task repository interface + in-memory implementation",
+    "content": "## Implementation\n\nThe `TaskRepository` interface and in-memory implementation are in place under `src/infrastructure/task/`. The in-memory repo mirrors the Prisma contract and is exported for production and test use.\n\n## Changes Made\n\n### `src/infrastructure/task/types.ts`\nThe `TaskRepository` interface was already defined with the full CRUD surface: `save`, `findById`, `findByProjectId`, `update`, `delete`.\n\n### `src/infrastructure/task/in-memory-task-repository.ts` (new)\n- `createInMemoryTaskRepository()` — Map-backed storage, no Prisma\n- **`findByProjectId`** filters via `task.isInProject(projectId)` and orders by `updatedAt` descending (project-scoped listing boundary)\n- **Authorization** stays at the domain/application layer: returned `Task` entities expose `assertInProject()` and `assertAccessibleByProjectOwner()` for callers to enforce ownership (same contract as `PrismaTaskRepository`)\n\n### Exports wired\n| File | Change |\n|------|--------|\n| `src/infrastructure/task/index.ts` | Exports `createInMemoryTaskRepository` |\n| `src/infrastructure/index.ts` | Re-exports `createInMemoryTaskRepository` |\n| `tests/helpers/in-memory-task-repository.ts` | Thin re-export from `src` (single source of truth) |\n\n## Verification\n\n- **74/75** task infrastructure + integration tests pass\n- 1 pre-existing flaky assertion in `tests/task-repository.integration.test.ts` (`updatedAt` same-millisecond timing) — unrelated to this change\n- In-memory repo remains wired through `createAuthTestApp()` for HTTP integration tests\n\n## Blackboard\n\nUpdated task **\"Create Task repository interface + in-memory implementation\"** → `done`, with a result entry attached.\n\n## Next Steps\n\nDownstream agents can import `createInMemoryTaskRepository` from either:\n- `src/infrastructure/task/index.js`\n- `src/infrastructure/index.js`\n\nTask use cases, HTTP routes, and authorization middleware were implemented in prior waves and already consume `TaskRepository` via dependency injection.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "cf682ed6-9d85-46e9-8cbb-895002a1cc9c",
+    "rev": 1,
+    "createdAt": 1779969465354,
+    "updatedAt": 1779969465354
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task use cases (CRUD + assign + status)",
+    "content": "## Implementation\n\nThe Task application layer is complete end-to-end: seven use cases with Zod DTOs, project-owner authorization, factory wiring, and HTTP controller delegation for focused assign/status updates.\n\nCRUD use cases were already in place. I added dedicated **assign** and **changeStatus** operations and wired them through the factory and HTTP layer.\n\n## Changes Made\n\n### New use cases\n\n| Use case | File | Authorization |\n|----------|------|---------------|\n| **assign** | `assign.use-case.ts` | Load task → load project → `assertAccessibleByProjectOwner` → update `assigneeId` |\n| **changeStatus** | `change-status.use-case.ts` | Same auth path → update `status` only |\n\n### New DTOs\n\n| File | Schema |\n|------|--------|\n| `dto/assign-task.dto.ts` | `userId`, `taskId`, `assigneeId` (nullable to unassign) |\n| `dto/change-task-status.dto.ts` | `userId`, `taskId`, `status` (domain enum literals) |\n\n### Factory + exports\n\n- `createTaskUseCases` now wires all seven operations with Zod parsing at the boundary\n- `TaskUseCases` extended with `assign` and `changeStatus`\n- Barrel exports updated in `src/application/task/index.ts` and `src/application/index.ts`\n\n### HTTP wiring (`task-controller.ts`)\n\n`PATCH /tasks/:id` delegates to the dedicated use cases when the body contains **only** `assigneeId` or **only** `status`. Combined updates (e.g. title + status) still use the general `update` use case.\n\n### Full use-case authorization model\n\n| Use case | Authorization |\n|----------|---------------|\n| **create** | Project must exist → `assertOwnedBy(userId)` |\n| **list** | Project must exist → `assertOwnedBy(userId)` |\n| **get** | Task + project → `assertAccessibleByProjectOwner` |\n| **update** | Task + project → `assertAccessibleByProjectOwner` |\n| **assign** | Task + project → `assertAccessibleByProjectOwner` |\n| **changeStatus** | Task + project → `assertAccessibleByProjectOwner` |\n| **delete** | Task + project → `assertAccessibleByProjectOwner` |\n\n## Verification\n\n- `tes\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "f5d4dcb6-94f3-46c7-adaa-832a0d74f14b",
+    "rev": 1,
+    "createdAt": 1779969560028,
+    "updatedAt": 1779969560028
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement full Task CRUD with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "b3bb316c-98b5-477d-9e40-f1e7f12a8fa0",
+    "rev": 1,
+    "createdAt": 1779970632783,
+    "updatedAt": 1779970632783
   }
 ]

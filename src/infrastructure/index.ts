@@ -38,6 +38,7 @@ export {
   type ProjectRepository,
 } from './project/index.js';
 export {
+  createInMemoryTaskRepository,
   createPrismaTaskRepository,
   type TaskRepository,
 } from './task/index.js';

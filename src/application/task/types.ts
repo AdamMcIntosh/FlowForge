@@ -12,10 +12,14 @@ export type TaskUseCases = {
   list(input: unknown): Promise<ListTasksResponseDto>;
   get(input: unknown): Promise<TaskResponseDto>;
   update(input: unknown): Promise<TaskResponseDto>;
+  assign(input: unknown): Promise<TaskResponseDto>;
+  changeStatus(input: unknown): Promise<TaskResponseDto>;
   delete(input: unknown): Promise<void>;
 };
 
 export type {
+  AssignTaskInputDto,
+  ChangeTaskStatusInputDto,
   CreateTaskInputDto,
   DeleteTaskInputDto,
   GetTaskInputDto,

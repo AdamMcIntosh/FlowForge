@@ -70,14 +70,37 @@ export function createTaskController(deps: TaskControllerDeps) {
         const userId = getAuthenticatedUserId(request);
         const body = updateTaskBodySchema.parse(request.body);
 
-        const result = await deps.taskUseCases.update({
-          userId,
-          taskId,
-          ...(body.title !== undefined ? { title: body.title } : {}),
-          ...(body.description !== undefined ? { description: body.description } : {}),
-          ...(body.status !== undefined ? { status: body.status } : {}),
-          ...(body.assigneeId !== undefined ? { assigneeId: body.assigneeId } : {}),
-        });
+        const hasTitle = body.title !== undefined;
+        const hasDescription = body.description !== undefined;
+        const hasStatus = body.status !== undefined;
+        const hasAssigneeId = body.assigneeId !== undefined;
+        const fieldCount =
+          Number(hasTitle) + Number(hasDescription) + Number(hasStatus) + Number(hasAssigneeId);
+
+        let result;
+
+        if (fieldCount === 1 && hasAssigneeId) {
+          result = await deps.taskUseCases.assign({
+            userId,
+            taskId,
+            assigneeId: body.assigneeId!,
+          });
+        } else if (fieldCount === 1 && hasStatus) {
+          result = await deps.taskUseCases.changeStatus({
+            userId,
+            taskId,
+            status: body.status!,
+          });
+        } else {
+          result = await deps.taskUseCases.update({
+            userId,
+            taskId,
+            ...(hasTitle ? { title: body.title } : {}),
+            ...(hasDescription ? { description: body.description } : {}),
+            ...(hasStatus ? { status: body.status } : {}),
+            ...(hasAssigneeId ? { assigneeId: body.assigneeId } : {}),
+          });
+        }
 
         void reply.status(200).send(result);
       } catch (error: unknown) {

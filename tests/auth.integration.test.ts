@@ -51,6 +51,7 @@ describe('POST /auth/register', () => {
 
     const claims = testApp.jwtService.verifyAccessToken(body.tokens.accessToken);
     expect(claims.jti).toEqual(expect.any(String));
+    expect(claims.sub).toBe(body.user.id);
   });
 
   it('returns 400 with VALIDATION_ERROR when required fields are missing', async () => {
@@ -62,6 +63,21 @@ describe('POST /auth/register', () => {
       error: 'Bad Request',
       code: 'VALIDATION_ERROR',
       message: 'Email is required',
+    });
+  });
+
+  it('returns 400 with VALIDATION_ERROR when name is missing', async () => {
+    const response = await postJson(testApp.app, '/auth/register', {
+      email: validRegisterPayload.email,
+      password: VALID_PASSWORD,
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.json()).toMatchObject({
+      statusCode: 400,
+      error: 'Bad Request',
+      code: 'VALIDATION_ERROR',
+      message: 'Name is required',
     });
   });
 
@@ -110,6 +126,66 @@ describe('POST /auth/register', () => {
       error: 'Conflict',
       message: 'A user with this email already exists',
       code: 'AUTH_USER_ALREADY_EXISTS',
+    });
+  });
+
+  it('returns 409 when registering with a case-variant of an existing email', async () => {
+    const first = await postJson(testApp.app, '/auth/register', validRegisterPayload);
+    expect(first.statusCode).toBe(201);
+
+    const second = await postJson(testApp.app, '/auth/register', {
+      ...validRegisterPayload,
+      email: 'USER@EXAMPLE.COM',
+    });
+
+    expect(second.statusCode).toBe(409);
+    expect(second.json()).toMatchObject({
+      statusCode: 409,
+      code: 'AUTH_USER_ALREADY_EXISTS',
+    });
+  });
+});
+
+describe('POST /auth/register per-email rate limiting', () => {
+  let testApp: AuthTestApp;
+
+  beforeEach(async () => {
+    testApp = await createAuthTestApp({ rateLimitMaxRequests: 3 });
+  });
+
+  afterEach(async () => {
+    await testApp.app.close();
+  });
+
+  it('returns 429 when duplicate registration attempts exhaust the per-email limit', async () => {
+    await postJsonFromIp(testApp.app, '/auth/register', validRegisterPayload, '203.0.113.1');
+
+    await postJsonFromIp(
+      testApp.app,
+      '/auth/register',
+      { ...validRegisterPayload, name: 'Duplicate One' },
+      '203.0.113.2',
+    );
+    await postJsonFromIp(
+      testApp.app,
+      '/auth/register',
+      { ...validRegisterPayload, name: 'Duplicate Two' },
+      '203.0.113.3',
+    );
+
+    const blocked = await postJsonFromIp(
+      testApp.app,
+      '/auth/register',
+      { ...validRegisterPayload, name: 'Duplicate Three' },
+      '203.0.113.4',
+    );
+
+    expect(blocked.statusCode).toBe(429);
+    expect(blocked.headers['retry-after']).toEqual(expect.any(String));
+    expect(blocked.json()).toEqual({
+      statusCode: 429,
+      error: 'Too Many Requests',
+      message: 'Rate limit exceeded',
     });
   });
 });

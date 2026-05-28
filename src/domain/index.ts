@@ -28,3 +28,40 @@ export type {
   UserId,
   UserProps,
 } from './auth/index.js';
+
+export {
+  InvalidProjectDescriptionError,
+  InvalidProjectNameError,
+  Project,
+  ProjectNotFoundError,
+  ProjectOwnershipError,
+} from './project/index.js';
+export type {
+  CreateProjectInput,
+  ProjectId,
+  ProjectProps,
+  UpdateProjectInput,
+} from './project/index.js';
+
+export {
+  InvalidTaskDescriptionError,
+  InvalidTaskStatusError,
+  InvalidTaskTitleError,
+  TASK_STATUSES,
+  TASK_STATUS_DONE,
+  TASK_STATUS_IN_PROGRESS,
+  TASK_STATUS_TODO,
+  Task,
+  TaskNotFoundError,
+  TaskStatus,
+  UnauthorizedTaskAccessError,
+  isTaskStatus,
+  parseTaskStatus,
+} from './task/index.js';
+export type {
+  CreateTaskInput,
+  TaskId,
+  TaskProps,
+  TaskStatusValue,
+  UpdateTaskInput,
+} from './task/index.js';

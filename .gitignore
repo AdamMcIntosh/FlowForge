@@ -1,6 +1,8 @@
 node_modules/
 dist/
 coverage/
+generated/prisma-test-client/
+tests/.data/
 .env
 .env.local
 *.log

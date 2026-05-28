@@ -419,7 +419,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -427,9 +427,9 @@
     ],
     "relatedIds": [],
     "id": "5116e66b-43cd-4002-8cf3-d0e0d9c47bf5",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779909559840,
-    "updatedAt": 1779909559840
+    "updatedAt": 1779922791108
   },
   {
     "type": "task",
@@ -822,7 +822,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -830,9 +830,9 @@
     ],
     "relatedIds": [],
     "id": "c15ad095-c259-44c1-9402-b556cce6c66c",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779910028830,
-    "updatedAt": 1779910028830
+    "updatedAt": 1779923396471
   },
   {
     "type": "task",
@@ -1136,7 +1136,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -1144,9 +1144,9 @@
     ],
     "relatedIds": [],
     "id": "fbd65256-35b2-4507-843e-18ab8e6f02a6",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779910876836,
-    "updatedAt": 1779910876836
+    "updatedAt": 1779923916883
   },
   {
     "type": "task",
@@ -1415,7 +1415,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -1423,9 +1423,9 @@
     ],
     "relatedIds": [],
     "id": "7725efca-d896-425e-b5e6-aa9c4666d675",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779913781512,
-    "updatedAt": 1779913781512
+    "updatedAt": 1779924506709
   },
   {
     "type": "task",
@@ -1695,7 +1695,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement user registration and login endpoints with JWT, Zod validation, and rate limiting (skip logout, refresh tokens, and tests for now)",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -1703,9 +1703,9 @@
     ],
     "relatedIds": [],
     "id": "88f9db5b-27a0-4e5c-8ead-e98abd60198e",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779914328193,
-    "updatedAt": 1779914328193
+    "updatedAt": 1779925002380
   },
   {
     "type": "task",
@@ -1835,7 +1835,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement JWT authentication: user registration, login, logout, and refresh token endpoints with proper validation and rate limiting",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -1843,9 +1843,9 @@
     ],
     "relatedIds": [],
     "id": "760c25d3-b512-4515-a275-6c4185b5b81f",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779915494365,
-    "updatedAt": 1779915494365
+    "updatedAt": 1779925386512
   },
   {
     "type": "task",
@@ -1991,7 +1991,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Add protected route middleware and a sample protected /me endpoint that returns current user info",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -1999,9 +1999,9 @@
     ],
     "relatedIds": [],
     "id": "c32e39dc-4c9b-4386-a723-5d6a9687d97a",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779915870044,
-    "updatedAt": 1779915870044
+    "updatedAt": 1779925768445
   },
   {
     "type": "task",
@@ -2165,7 +2165,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Add protected route middleware and a sample protected /me endpoint that returns current user info",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -2173,8 +2173,1569 @@
     ],
     "relatedIds": [],
     "id": "0ec5d30a-cc5a-4bfe-83bc-1ccc4d471465",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1779917506934,
-    "updatedAt": 1779917506934
+    "updatedAt": 1779925898083
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement full Project CRUD endpoints: create, list (user's projects), get by id, update, delete with ownership validation and protected routes",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "4d6a3436-4faf-47a1-ac1a-c4f948d48c53",
+    "rev": 1,
+    "createdAt": 1779922158989,
+    "updatedAt": 1779922158989
+  },
+  {
+    "type": "task",
+    "title": "Implement Project domain layer",
+    "content": "Create src/domain/project/ with Project entity, ownership errors, and index exports following auth/domain pattern. Use strict types only, no any. All imports use .js. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "2e2401d3-30e8-4bf1-a52d-b4f5f9660cf6",
+    "rev": 1,
+    "createdAt": 1779922189045,
+    "updatedAt": 1779922189045
+  },
+  {
+    "type": "task",
+    "title": "Implement Project repository in infrastructure",
+    "content": "Create src/infrastructure/project/project-repository.ts (Prisma-based) + index. Depend only on domain interfaces. Follow user-repository pattern exactly. All imports .js. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "7bd078dc-93f4-45c7-b860-9cf0fbecb4a1",
+    "rev": 1,
+    "createdAt": 1779922189047,
+    "updatedAt": 1779922189047
+  },
+  {
+    "type": "task",
+    "title": "Implement Project application use cases + DTOs",
+    "content": "Create src/application/project/ with create/list/get/update/delete use cases, Zod DTOs, types, factory (createProjectUseCases), and index. Depend only on domain + infra interfaces. Mirror auth use-case structure. All imports .js. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "1f352cc9-1e61-44d8-990e-29973144b79e",
+    "rev": 1,
+    "createdAt": 1779922189049,
+    "updatedAt": 1779922189049
+  },
+  {
+    "type": "task",
+    "title": "Implement Project adapters + routes",
+    "content": "Create src/adapters/project/ (controller, mappers, error handlers) and src/routes/projects.ts exporting FastifyPluginCallback with protected JWT routes + ownership checks. Register in server.ts and update all indexes. All imports .js. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "c316975e-660d-4cdd-ad76-74197195ddf9",
+    "rev": 1,
+    "createdAt": 1779922189050,
+    "updatedAt": 1779922189050
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for Project domain + use cases",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite unit tests (≤10 files) for domain entities/errors and application use cases following existing auth test patterns. All imports use .js.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "0a332513-2bff-47fc-a656-fb5555b25065",
+    "rev": 1,
+    "createdAt": 1779922189052,
+    "updatedAt": 1779922189052
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for Project API routes",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite integration tests (≤10 files) for the 5 CRUD endpoints + ownership + auth protection using buildServer() + app.inject(). All imports use .js.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "91368a73-e2a5-4488-838f-ddd03de16c38",
+    "rev": 1,
+    "createdAt": 1779922189053,
+    "updatedAt": 1779922189053
+  },
+  {
+    "type": "task",
+    "title": "Execute all Project tests",
+    "content": "Run the full test suite (unit + integration) after both test-author tasks complete. Report pass/fail with full fidelity, including any rate-limit or auth-protected endpoint results.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "c62a9bd9-f78d-4a74-aa53-51c8d4d86fd1",
+    "rev": 1,
+    "createdAt": 1779922189055,
+    "updatedAt": 1779922189055
+  },
+  {
+    "type": "task",
+    "title": "Document Project CRUD decisions and usage",
+    "content": "Update DECISIONS.md and ARCHITECTURE.md with the Project CRUD implementation details, ownership validation approach, and example request/response payloads. Keep docs concise and accurate.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "low",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "36a71d66-f052-42f9-9ae7-6050195f752e",
+    "rev": 1,
+    "createdAt": 1779922189057,
+    "updatedAt": 1779922189057
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Project domain layer",
+    "content": "## Implementation\n\nThe Project domain layer is in place under `src/domain/project/`, following the auth domain pattern: strict TypeScript, no `any`, `.js` import extensions, and barrel exports wired through the root domain index.\n\n## Changes Made\n\n### `src/domain/project/project.ts`\n\n- **`Project` entity** with immutable fields aligned to the Prisma schema: `id`, `name`, `description`, `ownerId`, `createdAt`, `updatedAt`\n- **Types:** `ProjectId`, `ProjectProps`, `CreateProjectInput`, `UpdateProjectInput`\n- **Factory methods:** `create()`, `reconstitute()`, `toProps()`\n- **Validation:** `validateName()` (1–255 chars, trimmed) and `validateDescription()` (optional, max 2000 chars, empty → `null`)\n- **Ownership:** `isOwnedBy(userId)` and `assertOwnedBy(userId)` (throws `ProjectOwnershipError`)\n- **Updates:** immutable `update()` returns a new instance with a fresh `updatedAt`\n- **`ownerId`** typed as `UserId` from `../auth/user.js`\n\n### `src/domain/project/errors.ts`\n\n| Error | Code |\n|-------|------|\n| `ProjectNotFoundError` | `PROJECT_NOT_FOUND` |\n| `ProjectOwnershipError` | `PROJECT_OWNERSHIP` |\n| `InvalidProjectNameError` | `PROJECT_INVALID_NAME` |\n| `InvalidProjectDescriptionError` | `PROJECT_INVALID_DESCRIPTION` |\n\nAll extend `DomainError` from `../errors.js`.\n\n### `src/domain/project/index.ts`\n\nBarrel exports for the entity, types, and errors (mirrors `src/domain/auth/index.ts`).\n\n### `src/domain/index.ts`\n\nRe-exports all project domain symbols for downstream layers.\n\n## Verification\n\n- TypeScript compiles cleanly (`tsc --noEmit`)\n- No linter errors in the new files\n\n## Next Steps\n\nDownstream agents can build on this layer:\n\n1. **Infrastructure** — `ProjectRepository` interface + Prisma implementation using `Project.reconstitute()` / `toProps()`\n2. **Application** — create/list/get/update/delete use cases; call `assertOwnedBy()` for ownership checks; map `ProjectNotFoundError` / `ProjectOwnershipError` in adapters\n3. **Test author** — unit tests for `Project` va\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "9f6a9c7e-cf00-4bdd-8583-14f043501aee",
+    "rev": 1,
+    "createdAt": 1779922216234,
+    "updatedAt": 1779922216234
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Project repository in infrastructure",
+    "content": "## Implementation\n\nThe Prisma-based Project repository is in place under `src/infrastructure/project/`, following the auth `user-repository` pattern: interface in `types.ts`, factory-backed Prisma implementation, and barrel exports wired through the root infrastructure index.\n\n## Changes Made\n\n### `src/infrastructure/project/types.ts`\n\nDefines the `ProjectRepository` interface with CRUD methods for downstream use cases:\n\n| Method | Purpose |\n|--------|---------|\n| `save(project)` | Create a new project |\n| `findById(id)` | Get project by ID |\n| `findByOwnerId(ownerId)` | List a user's projects |\n| `update(project)` | Persist updates |\n| `delete(id)` | Remove a project |\n\nImports only domain types (`Project`, `ProjectId`, `UserId`).\n\n### `src/infrastructure/project/project-repository.ts`\n\n- **`createPrismaProjectRepository(prisma)`** factory (mirrors `createPrismaUserRepository`)\n- Maps Prisma records ↔ domain via `Project.reconstitute()` / `project.toProps()`\n- `findByOwnerId` orders by `updatedAt` descending\n- All imports use `.js` extensions\n\n### `src/infrastructure/project/index.ts`\n\nBarrel exports for `ProjectRepository` and `createPrismaProjectRepository`.\n\n### `src/infrastructure/index.ts`\n\nRe-exports project infrastructure symbols for downstream layers.\n\n## Verification\n\n- `tsc --noEmit` passes\n- No linter errors in the new files\n\n## Next Steps\n\nDownstream agents can:\n\n1. **Application layer** — build create/list/get/update/delete use cases injecting `ProjectRepository`\n2. **Infrastructure factory** — add `createProjectInfrastructure(prisma)` if desired (optional; use cases can inject `createPrismaProjectRepository(prisma)` directly)\n3. **Adapters/routes** — wire protected `/projects` endpoints and register in `server.ts`\n4. **Tests** — add an in-memory `ProjectRepository` test double (pattern from `tests/helpers/in-memory-user-repository.ts`)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "73376398-f5a2-4103-bdbd-8e9ec0988cf8",
+    "rev": 1,
+    "createdAt": 1779922252205,
+    "updatedAt": 1779922252205
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Project application use cases + DTOs",
+    "content": "## Implementation\n\nThe Project application layer is implemented end-to-end under `src/application/project/`, mirroring the auth use-case structure: Zod DTOs, five use cases, a mapper, factory wiring, and barrel exports through the root application index.\n\n## Changes Made\n\n### DTOs (`src/application/project/dto/`)\n\n| File | Purpose |\n|------|---------|\n| `create-project.dto.ts` | `ownerId`, `name`, optional `description` |\n| `list-projects.dto.ts` | `ownerId` for listing user's projects |\n| `get-project.dto.ts` | `projectId` + `userId` for ownership check |\n| `update-project.dto.ts` | `projectId`, `userId`, optional `name`/`description` (requires at least one) |\n| `delete-project.dto.ts` | `projectId` + `userId` |\n| `project-response.dto.ts` | Single project + list response schemas with ISO date strings |\n\n### Use cases\n\n| Use case | Behavior |\n|----------|----------|\n| **create** | Creates domain `Project` with `randomUUID()`, saves via repository |\n| **list** | Returns all projects for `ownerId`, ordered by repository |\n| **get** | Loads by id → `ProjectNotFoundError` if missing → `assertOwnedBy(userId)` |\n| **update** | Same ownership flow, applies partial update, persists |\n| **delete** | Same ownership flow, deletes via repository |\n\n### Supporting files\n\n- **`project-mapper.ts`** — `toProjectResponse()` maps domain entity → `ProjectResponseDto`\n- **`types.ts`** — `ProjectUseCaseDependencies`, `ProjectUseCases`\n- **`create-project-use-cases.ts`** — `createProjectUseCases()` wraps Zod parsing; `createProjectUseCasesFromInfrastructure()` accepts a `ProjectRepository` directly\n- **`index.ts`** — barrel exports\n- **`src/application/index.ts`** — re-exports all project symbols\n\n### Dependencies\n\nAll use cases depend only on:\n- Domain: `Project`, `ProjectNotFoundError`, ownership via `assertOwnedBy()`\n- Infrastructure: `ProjectRepository` interface from `src/infrastructure/project/types.js`\n\n## Verification\n\n- `tsc --noEmit` passes\n- No linter errors in new files\n- `e\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "553b3286-524a-488f-8fda-d565ee63f1eb",
+    "rev": 1,
+    "createdAt": 1779922345824,
+    "updatedAt": 1779922345824
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Project adapters + routes",
+    "content": "## Implementation\n\nProject HTTP adapters and routes are wired end-to-end: JWT-protected CRUD endpoints, ownership checks via use cases, error mapping, and server registration.\n\n## Changes Made\n\n### Adapters (`src/adapters/project/`)\n\n| File | Purpose |\n|------|---------|\n| `map-project-error.ts` | Maps domain/Zod errors → HTTP status (404 not found, 403 ownership, 422 validation) |\n| `send-project-error.ts` | Sends consistent JSON error responses |\n| `map-project-request.ts` | HTTP body/param Zod schemas (strips auth-derived fields) |\n| `project-controller.ts` | Five handlers; injects `ownerId`/`userId` from JWT `sub` |\n| `index.ts` | Barrel exports |\n\n### Routes (`src/routes/projects.ts`)\n\nAll routes use `createJwtAuthMiddleware` as `preHandler`:\n\n| Method | Path | Behavior |\n|--------|------|----------|\n| `POST` | `/projects` | Create (201) |\n| `GET` | `/projects` | List user's projects |\n| `GET` | `/projects/:id` | Get by id + ownership |\n| `PATCH` | `/projects/:id` | Partial update + ownership |\n| `DELETE` | `/projects/:id` | Delete (204) + ownership |\n\n### Server (`src/server.ts`)\n\n- Added `projectUseCases` to `BuildServerOptions` (injectable for tests)\n- Auto-wires `createProjectUseCasesFromInfrastructure(createPrismaProjectRepository(prisma))` when not provided\n- Registers `projectRoutes` with `projectUseCases` and `jwtService`\n\n### Request flow\n\n```\nbuildServer() → projectRoutes → jwtAuth.preHandler → projectController → projectUseCases → ProjectRepository\n```\n\nOwnership is enforced in use cases via `assertOwnedBy(userId)`; the controller passes `userId` from JWT claims on get/update/delete.\n\n## Verification\n\n- `npm run build` — passes\n- `npm test` — 194/194 tests pass (no regressions)\n\n## Next Steps\n\nDownstream agents can add:\n\n1. **In-memory `ProjectRepository` test double** — pattern from `tests/helpers/in-memory-user-repository.ts`\n2. **Integration tests** — full CRUD + auth (401) + ownership (403) + not found (404) scenarios\n3. **Extend `createAuthTestA\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "0dd4b03e-cc78-4252-aa42-a0524465e801",
+    "rev": 1,
+    "createdAt": 1779922411487,
+    "updatedAt": 1779922411487
+  },
+  {
+    "type": "result",
+    "title": "Result: Write integration tests for Project API routes",
+    "content": "## Test Author Deliverable\n\nIntegration tests for all five Project CRUD endpoints are in place, using `buildServer()` + `app.inject()` with in-memory repositories (no PostgreSQL required).\n\n### Files\n\n| File | Action |\n|------|--------|\n| `tests/helpers/in-memory-project-repository.ts` | **Created** — in-memory `ProjectRepository` double |\n| `tests/helpers/project-http.ts` | **Created** — HTTP helpers for all `/projects` routes |\n| `tests/helpers/create-auth-test-app.ts` | **Updated** — wires in-memory project repo + `projectUseCases` into `buildServer()` |\n| `tests/projects.integration.test.ts` | **Created** — full HTTP integration suite (32 tests) |\n\n### Setup\n\nNo external infrastructure. Each `describe` block calls `createAuthTestApp()` in `beforeEach` and closes the app in `afterEach` for isolation.\n\n### Coverage\n\n**`POST /projects`**\n- 201 success with name, description, `ownerId` from JWT `sub`\n- Description defaults to `null` when omitted\n- `ownerId` in body is ignored (JWT wins)\n- 400 validation: missing name, whitespace name, name >255 chars, description >2000 chars\n- 401 without token / malformed token\n\n**`GET /projects`**\n- 200 empty list for new user\n- Returns only the authenticated user's projects (cross-user isolation)\n- Orders by most recently updated first\n- 401 without token\n\n**`GET /projects/:id`**\n- 200 for owner\n- 404 `PROJECT_NOT_FOUND` for missing id\n- 403 `PROJECT_OWNERSHIP` for non-owner\n- 401 without token\n\n**`PATCH /projects/:id`**\n- 200 partial name update; description cleared via `null`\n- 400 empty body / whitespace name\n- 404 not found; 403 ownership; 401 unauthorized\n\n**`DELETE /projects/:id`**\n- 204 with empty body; subsequent GET returns 404\n- 404 not found; 403 ownership (project remains); 401 unauthorized\n\n**Lifecycle**\n- Full create → list → get → update → delete flow for a single user\n\n### ESM compliance\n\nAll files use `import`/`export`, `.js` import extensions, no `vi.spyOn` on Node built-ins, and fresh app/repository instances p\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "721c65d4-e5dc-4cd4-b367-3483e65dcce7",
+    "rev": 1,
+    "createdAt": 1779922462107,
+    "updatedAt": 1779922462107
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Complete Project CRUD endpoints: create, list (user's projects), get by id, update, delete with ownership validation and protected routes",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "7b65ada6-afa4-4df7-bb92-bfdb0a5dc780",
+    "rev": 1,
+    "createdAt": 1779922670908,
+    "updatedAt": 1779922670908
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for update/delete project use cases",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite focused unit tests (≤8 files total) for the update and delete project use cases in src/application/project/. Cover success paths, ownership validation errors, not-found errors, and mapper behavior. Follow existing test style and patterns from create/list/get tests. One deliverable: the new test files.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "6d0c411f-11f7-4295-9a02-bf34057f996b",
+    "rev": 1,
+    "createdAt": 1779922692794,
+    "updatedAt": 1779922692794
+  },
+  {
+    "type": "task",
+    "title": "Execute project test suite",
+    "content": "Run the full project-related test suite (unit + integration) after test-author completes. Report pass/fail counts, any failures with full stack traces, and confirm 100% coverage of the CRUD endpoints including ownership and auth protection. Do not modify code.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "a60107ac-549b-4710-b62f-a80743423737",
+    "rev": 1,
+    "createdAt": 1779922692796,
+    "updatedAt": 1779922692796
+  },
+  {
+    "type": "result",
+    "title": "Result: Write unit tests for update/delete project use cases",
+    "content": "## Test Author Deliverable\n\nUnit tests for the **update** and **delete** project use cases are in place, following the same ESM and isolation patterns as `create`, `list`, and `get` tests.\n\n### Files\n\n| File | Action |\n|------|--------|\n| `src/application/project/update.use-case.test.ts` | **Created** |\n| `src/application/project/delete.use-case.test.ts` | **Created** |\n\n### Coverage\n\n**`createUpdateProjectUseCase`** (10 tests)\n\n- Happy path: updates name + description, trims values, persists via `projectRepository.update`, returns mapped DTO\n- Partial updates: name only, description only, `description: null` clears description\n- Mapper: ISO `createdAt`/`updatedAt`, `updatedAt` advances after update\n- `ProjectNotFoundError` (including `PROJECT_NOT_FOUND` code); `update` not called\n- `ProjectOwnershipError`; `update` not called\n- `InvalidProjectNameError` / `InvalidProjectDescriptionError` from domain validation; `update` not called\n\n**`createDeleteProjectUseCase`** (6 tests)\n\n- Happy path: `findById` → ownership check → `delete(projectId)`; resolves `void`\n- `ProjectNotFoundError` (including `PROJECT_NOT_FOUND` code); `delete` not called\n- `ProjectOwnershipError` (including `PROJECT_OWNERSHIP` code); `delete` not called\n\n### Conventions\n\n- ESM imports with `.js` extensions; `vi.fn` mocks only (no `vi.spyOn` on Node built-ins)\n- Fresh `createTestDeps()` per test via factory helpers (no shared repository state)\n- DTO validation remains in `project-dto.test.ts` (not duplicated here)\n\n**test-executor:** run `npm test` (or the project test script) to verify both files pass.",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "94c5b61e-8338-446f-81c1-066aefc778ad",
+    "rev": 1,
+    "createdAt": 1779922709987,
+    "updatedAt": 1779922709987
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute project test suite",
+    "content": "## Test Results\n\nProject-related tests (domain, application, integration) were executed after the test-author deliverable for update/delete use cases. **All tests passed.** No code or tests were modified.\n\n### Commands run\n\n```bash\ncd C:\\Users\\amcintosh1\\source\\repos\\FlowForge\nnpx vitest run src/domain/project src/application/project tests/projects.integration.test.ts --coverage --reporter=verbose\n```\n\nReproduce with `npm test` for the full repo suite, or the command above for project scope only.\n\n---\n\n### Summary counts\n\n| Metric | Value |\n|--------|-------|\n| **Test files** | 9 passed |\n| **Total tests** | **108 passed**, **0 failed**, **0 skipped** |\n| **Wall time** | 4.38s (suite); 10.7s including coverage collection |\n| **Flaky / env failures** | None observed |\n\n### Test files executed\n\n| File | Tests (approx.) |\n|------|-----------------|\n| `src/domain/project/project.test.ts` | 24 |\n| `src/domain/project/errors.test.ts` | 8 |\n| `src/application/project/project-dto.test.ts` | 19 |\n| `src/application/project/create.use-case.test.ts` | 5 |\n| `src/application/project/list.use-case.test.ts` | 3 |\n| `src/application/project/get.use-case.test.ts` | 4 |\n| `src/application/project/update.use-case.test.ts` | **10** (new) |\n| `src/application/project/delete.use-case.test.ts` | **6** (new) |\n| `tests/projects.integration.test.ts` | 29 |\n\n---\n\n### Slow tests (> 5 s)\n\n**None.** Slowest individual cases were integration ownership scenarios at ~115–121 ms. No slow-test flag.\n\n---\n\n## Failures\n\nNone. No triage required.\n\n---\n\n## Coverage\n\n### Project layers (primary scope)\n\n| Area | % Stmts | % Branch | % Funcs | % Lines |\n|------|---------|----------|---------|---------|\n| `src/domain/project/` | **100** | **100** | **100** | **100** |\n| `src/application/project/` | **100** | **100** | **100** | **100** |\n| `src/application/project/dto/` | **100** | **100** | **100** | **100** |\n| `src/adapters/project/` | 91.09 | 84.84 | **100** | 91.09 |\n| `src/routes/projects.ts` | **100\n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "7b223517-0df3-4077-a7ee-6c4a9cf25f15",
+    "rev": 1,
+    "createdAt": 1779922737947,
+    "updatedAt": 1779922737947
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement full Task CRUD with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "72ac7160-2a9c-435b-85c8-b15845068bbb",
+    "rev": 1,
+    "createdAt": 1779922873438,
+    "updatedAt": 1779922873438
+  },
+  {
+    "type": "task",
+    "title": "Implement Task domain entity, errors, and value objects",
+    "content": "Create src/domain/task/ with Task entity, TaskStatus value object/enum, domain errors (TaskNotFound, UnauthorizedTaskAccess, etc.), and index exports. Mirror project/domain pattern exactly. Use strict types only, no any. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "7be41be2-d2ab-42ec-9f5b-60bc031df6c6",
+    "rev": 1,
+    "createdAt": 1779922893904,
+    "updatedAt": 1779922893904
+  },
+  {
+    "type": "task",
+    "title": "Implement Task infrastructure (repository + Prisma wiring)",
+    "content": "Create src/infrastructure/task/ with PrismaTaskRepository implementing repository interface, types, and index. Depend only on domain interfaces. Wire into existing infrastructure/index.ts. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "8d752c82-fc81-41e6-a23d-e313b9fbd9ac",
+    "rev": 1,
+    "createdAt": 1779922893906,
+    "updatedAt": 1779922893906
+  },
+  {
+    "type": "task",
+    "title": "Implement Task application use-cases and DTOs",
+    "content": "Create src/application/task/ with create/list/get/update/delete use-cases, DTOs (with Zod), mapper, and factory. Enforce project-based authorization rules. Depend only on domain + infra interfaces. Export via index. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "424abc5b-27a0-4d34-bdb9-ff1c91def9dc",
+    "rev": 1,
+    "createdAt": 1779922893907,
+    "updatedAt": 1779922893907
+  },
+  {
+    "type": "task",
+    "title": "Wire Task adapters, controller, routes, and server registration",
+    "content": "Create src/adapters/task/ (controller, error mappers, request mapper) and src/routes/tasks.ts exporting FastifyPluginCallback. Register routes in server.ts. Implement project-ownership authorization checks. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "c632dbbf-f37e-49a9-84e4-732f388ad843",
+    "rev": 1,
+    "createdAt": 1779922893909,
+    "updatedAt": 1779922893909
+  },
+  {
+    "type": "task",
+    "title": "Write unit tests for Task domain and application layers",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite unit tests covering Task entity, errors, use-cases, and DTOs (≤8 files). Mirror project unit test style.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "06592006-5374-4263-89e1-a553e9708502",
+    "rev": 1,
+    "createdAt": 1779922893911,
+    "updatedAt": 1779922893911
+  },
+  {
+    "type": "task",
+    "title": "Write integration tests for Task API endpoints + authorization",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite integration tests for all CRUD routes, project scoping, user assignment, status transitions, and 403 authz cases (≤8 files). Use create-auth-test-app helper.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "31a115f0-35a8-417e-82d3-891aa1eae63d",
+    "rev": 1,
+    "createdAt": 1779922893913,
+    "updatedAt": 1779922893913
+  },
+  {
+    "type": "task",
+    "title": "Execute full Task test suite and report results",
+    "content": "Run the complete test suite after all test-author tasks complete. Report pass/fail breakdown, coverage gaps, and any failures with full fidelity. Do not modify code.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "0452f470-3e34-4fed-b7b8-0460da185562",
+    "rev": 1,
+    "createdAt": 1779922893914,
+    "updatedAt": 1779922893914
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task domain entity, errors, and value objects",
+    "content": "## Implementation\n\nThe Task domain layer is implemented under `src/domain/task/`, mirroring the Project domain pattern: strict types, `.js` import extensions, barrel exports, and re-exports from `src/domain/index.ts` for downstream infrastructure, application, and HTTP layers.\n\n## Changes Made\n\n### `src/domain/task/task-status.ts`\n- `TaskStatus` const object aligned with Prisma (`TODO`, `IN_PROGRESS`, `DONE`)\n- `TaskStatusValue` type, `TASK_STATUSES`, `isTaskStatus()`, and `parseTaskStatus()` with `InvalidTaskStatusError` on invalid values\n\n### `src/domain/task/errors.ts`\n| Error | Code |\n|-------|------|\n| `TaskNotFoundError` | `TASK_NOT_FOUND` |\n| `UnauthorizedTaskAccessError` | `TASK_UNAUTHORIZED` |\n| `InvalidTaskTitleError` | `TASK_INVALID_TITLE` |\n| `InvalidTaskDescriptionError` | `TASK_INVALID_DESCRIPTION` |\n| `InvalidTaskStatusError` | `TASK_INVALID_STATUS` |\n\n### `src/domain/task/task.ts`\n- `Task` entity with `create`, `reconstitute`, `update`, `toProps`\n- Title/description validation (same limits as project name/description: 255 / 2000)\n- Default status `TODO`\n- `projectId`, optional `assigneeId`\n- Authorization helpers: `isInProject` / `assertInProject`, `assertAccessibleByProjectOwner` (throws `UnauthorizedTaskAccessError`)\n\n### `src/domain/task/index.ts` + `src/domain/index.ts`\n- Barrel exports wired into the root domain index for use cases and infrastructure\n\n### Unit tests (41 passing)\n- `task.test.ts` — entity validation, lifecycle, authorization, updates\n- `task-status.test.ts` — status parsing and guards\n- `errors.test.ts` — stable error codes and hierarchy\n\n## Next Steps\n\nDownstream agents can proceed in order:\n1. **Infrastructure** — `PrismaTaskRepository` mapping Prisma `TaskStatus` ↔ domain `TaskStatusValue`\n2. **Application** — CRUD use cases calling `assertAccessibleByProjectOwner` after loading the parent project\n3. **Adapters/routes** — JWT-protected `/tasks` endpoints registered in `server.ts`\n\n`npm run build` and `npm test -- src/domain/ta\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "20c5c73d-294e-4aec-b7c2-0248f98cb9e0",
+    "rev": 1,
+    "createdAt": 1779922973697,
+    "updatedAt": 1779922973697
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task infrastructure (repository + Prisma wiring)",
+    "content": "## Implementation\n\nThe Task infrastructure layer is implemented under `src/infrastructure/task/`, following the Project repository pattern: interface in `types.ts`, Prisma-backed factory, barrel exports, and root infrastructure index wiring.\n\n## Changes Made\n\n### `src/infrastructure/task/types.ts`\n\nDefines `TaskRepository` with CRUD methods for downstream use cases:\n\n| Method | Purpose |\n|--------|---------|\n| `save(task)` | Create a new task |\n| `findById(id)` | Get task by ID |\n| `findByProjectId(projectId)` | List tasks in a project (ordered by `updatedAt` desc) |\n| `update(task)` | Persist title, description, status, assignee, and `updatedAt` |\n| `delete(id)` | Remove a task |\n\nImports only domain types (`Task`, `TaskId`, `ProjectId`).\n\n### `src/infrastructure/task/task-repository.ts`\n\n- **`createPrismaTaskRepository(prisma)`** factory (mirrors `createPrismaProjectRepository`)\n- Maps Prisma records ↔ domain via `Task.reconstitute()` / `task.toProps()`\n- **`TaskStatus` mapping:** Prisma `TaskStatus` enum values (`TODO`, `IN_PROGRESS`, `DONE`) align with domain `TaskStatusValue`; `toPrismaTaskStatus()` passes through on write\n- **`findByProjectId`:** `findMany` with `orderBy: { updatedAt: 'desc' }` (same ordering as projects by owner)\n\n### `src/infrastructure/task/index.ts`\n\nBarrel exports: `TaskRepository` type and `createPrismaTaskRepository`.\n\n### `src/infrastructure/index.ts`\n\nRe-exports `createPrismaTaskRepository` and `TaskRepository` alongside existing infrastructure exports.\n\n## Verification\n\n- `npm run build` — passes (Prisma generate + `tsc`)\n- No linter errors in the new files\n- Domain-only imports in `types.ts`; repository implementation uses domain `Task` + Prisma client only\n\n## Next Steps\n\nDownstream agents can proceed in order:\n\n1. **Application** — CRUD use cases in `src/application/task/` depending on `TaskRepository` + `ProjectRepository` for ownership checks\n2. **Adapters/routes** — JWT-protected `/tasks` endpoints; register `createPrismaTaskRe\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "0e7044a4-e2c4-429c-8e88-59a466eaee35",
+    "rev": 1,
+    "createdAt": 1779923010647,
+    "updatedAt": 1779923010647
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task application use-cases and DTOs",
+    "content": "## Implementation\n\nThe Task application layer is implemented end-to-end under `src/application/task/`, mirroring the Project use-case structure: Zod DTOs, five CRUD use cases, a mapper, factory wiring, and barrel exports through `src/application/index.ts`.\n\n## Changes Made\n\n### DTOs (`src/application/task/dto/`)\n\n| File | Purpose |\n|------|---------|\n| `create-task.dto.ts` | `userId`, `projectId`, `title`, optional `description`, `status`, `assigneeId` |\n| `list-tasks.dto.ts` | `userId`, `projectId` |\n| `get-task.dto.ts` | `userId`, `taskId` |\n| `update-task.dto.ts` | `userId`, `taskId`, optional fields with at-least-one refine |\n| `delete-task.dto.ts` | `userId`, `taskId` |\n| `task-response.dto.ts` | Single task + list response schemas |\n\nStatus values use domain `TaskStatus` enum literals for strict typing.\n\n### Use cases\n\n| Use case | Authorization |\n|----------|---------------|\n| **create** | Loads project → `ProjectNotFoundError` if missing → `project.assertOwnedBy(userId)` |\n| **list** | Same project ownership check, then `findByProjectId` |\n| **get** | Loads task → loads project → `task.assertAccessibleByProjectOwner(project.ownerId, userId)` |\n| **update** | Same as get, then persists via `taskRepository.update` |\n| **delete** | Same as get, then `taskRepository.delete` |\n\nDependencies are `TaskRepository` + `ProjectRepository` only (domain + infra interfaces).\n\n### Supporting files\n\n- `task-mapper.ts` — maps `Task` entity → `TaskResponseDto`\n- `types.ts` — `TaskUseCaseDependencies`, `TaskUseCases`\n- `create-task-use-cases.ts` — factory with Zod parsing at the boundary\n- `index.ts` + `src/application/index.ts` — full barrel exports\n\n### Authorization model\n\n- **Project-scoped operations** (create, list): reject with `ProjectNotFoundError` / `ProjectOwnershipError`\n- **Task-scoped operations** (get, update, delete): reject with `TaskNotFoundError` / `UnauthorizedTaskAccessError` when the user does not own the task's parent project\n\n## Verification\n\n- `npm run\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "79f9d71a-bcfa-49a0-bba0-efdf3d62c97e",
+    "rev": 1,
+    "createdAt": 1779923085488,
+    "updatedAt": 1779923085488
+  },
+  {
+    "type": "result",
+    "title": "Result: Wire Task adapters, controller, routes, and server registration",
+    "content": "## Implementation\n\nTask HTTP adapters and routes are wired end-to-end: JWT-protected endpoints, controllers that inject `userId` from token claims, domain error mapping (including project-ownership authorization surfaced by use cases), and `buildServer()` registration with Prisma repositories.\n\n## Changes Made\n\n### Adapters (`src/adapters/task/`)\n\n| File | Purpose |\n|------|---------|\n| `map-task-request.ts` | HTTP body/param Zod schemas (`createTaskBodySchema`, `updateTaskBodySchema`, `projectIdParamSchema`, `taskIdParamSchema`) |\n| `map-task-error.ts` | Maps Zod + domain errors → HTTP status (404 not found, 403 unauthorized/ownership, 422 validation) |\n| `send-task-error.ts` | Sends consistent JSON error payloads |\n| `task-controller.ts` | Five handlers; injects `userId` from JWT `sub` into use cases |\n| `index.ts` | Barrel exports |\n\n### Routes (`src/routes/tasks.ts`)\n\nAll routes use `createJwtAuthMiddleware` as `preHandler`:\n\n| Method | Path | Behavior |\n|--------|------|----------|\n| `POST` | `/projects/:id/tasks` | Create task in owned project (201) |\n| `GET` | `/projects/:id/tasks` | List tasks in owned project |\n| `GET` | `/tasks/:id` | Get task + project-owner authorization |\n| `PATCH` | `/tasks/:id` | Update task + authorization |\n| `DELETE` | `/tasks/:id` | Delete task + authorization (204) |\n\nAuthorization is enforced in application use cases (`assertOwnedBy` for project-scoped ops, `assertAccessibleByProjectOwner` for task-scoped ops); adapters map `ProjectNotFoundError`, `ProjectOwnershipError`, `TaskNotFoundError`, and `UnauthorizedTaskAccessError` to the correct HTTP responses.\n\n### Server (`src/server.ts`)\n\n- Added `taskUseCases` to `BuildServerOptions`\n- Shared `createPrismaProjectRepository` instance for project + task factories\n- Wires `createTaskUseCasesFromInfrastructure(createPrismaTaskRepository(prisma), projectRepository)` when not injected\n- Registers `taskRoutes` with `taskUseCases` and `jwtService`\n\n## Verification\n\n- `npm run build` — pa\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "14aa6610-e484-4800-ad24-8df19f73d180",
+    "rev": 1,
+    "createdAt": 1779923170369,
+    "updatedAt": 1779923170369
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement Task domain entity, value objects, and errors only (no repository, no use cases, no routes yet)",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "38ecb423-2e75-46e7-9334-7c0fa204aabc",
+    "rev": 1,
+    "createdAt": 1779923293408,
+    "updatedAt": 1779923293408
+  },
+  {
+    "type": "task",
+    "title": "Implement Task domain entity, value objects, and errors",
+    "content": "Create or complete src/domain/task/ with Task entity (Task.ts), TaskStatus value object (task-status.ts), and domain errors (errors.ts) only. Follow the exact structure and patterns from src/domain/auth/. Use strict TypeScript, no `any`, proper type guards, and `.js` imports. Export everything via index.ts. Do not touch adapters, application, infrastructure, or routes. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker. After completion, update the blackboard to mark this task done.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "706b583f-f7ba-44f7-93c6-f5f87fbf8090",
+    "rev": 1,
+    "createdAt": 1779923307802,
+    "updatedAt": 1779923307802
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement Task domain entity, value objects, and errors",
+    "content": "## Implementation\n\nThe Task domain layer under `src/domain/task/` is **complete**, strictly typed (no `any`), and follows the same patterns as `src/domain/auth/` and `src/domain/project/`. No production code changes were required — verification only.\n\n## Changes Made\n\n### `src/domain/task/task-status.ts`\n- `TaskStatus` const object aligned with Prisma enum (`TODO`, `IN_PROGRESS`, `DONE`)\n- `TaskStatusValue` type, `TASK_STATUSES` array, `isTaskStatus()` type guard, and `parseTaskStatus()` with `InvalidTaskStatusError` on invalid input\n\n### `src/domain/task/errors.ts`\n| Error | Code |\n|-------|------|\n| `TaskNotFoundError` | `TASK_NOT_FOUND` |\n| `UnauthorizedTaskAccessError` | `TASK_UNAUTHORIZED` |\n| `InvalidTaskTitleError` | `TASK_INVALID_TITLE` |\n| `InvalidTaskDescriptionError` | `TASK_INVALID_DESCRIPTION` |\n| `InvalidTaskStatusError` | `TASK_INVALID_STATUS` |\n\nAll extend `DomainError` with stable codes, matching auth/project error patterns.\n\n### `src/domain/task/task.ts`\n- `Task` entity with private constructor, `create`, `reconstitute`, `update`, `toProps`\n- Static validators: `validateTitle`, `validateDescription`, `validateStatus`\n- Title/description normalization (255 / 2000 char limits, same as Project)\n- Default status `TODO`; optional `assigneeId`\n- Authorization helpers: `isInProject` / `assertInProject`, `assertAccessibleByProjectOwner`\n\n### `src/domain/task/index.ts` + `src/domain/index.ts`\n- Full barrel exports wired into the root domain index for downstream layers\n\n### Unit tests — **41 passing**\n- `task.test.ts` — validation, lifecycle, authorization, updates\n- `task-status.test.ts` — status parsing and type guards\n- `errors.test.ts` — stable error codes and hierarchy\n\n## Verification\n\n- `npm test -- src/domain/task` — 41/41 passed\n- `npm run build` — compiles cleanly\n- Scope respected: no changes to adapters, application, infrastructure, or routes\n- Blackboard updated: task and team goal marked **done**\n\n## Next Steps\n\nDownstream agents can proceed wi\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ee02a191-29dd-445b-bd38-a20dd38a32b0",
+    "rev": 1,
+    "createdAt": 1779923335316,
+    "updatedAt": 1779923335316
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement PrismaTaskRepository with proper mapping between Task domain entity and Prisma schema",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "7c3d8d1f-ba71-40dd-a69c-ccfe479e4a00",
+    "rev": 1,
+    "createdAt": 1779923534056,
+    "updatedAt": 1779923534056
+  },
+  {
+    "type": "task",
+    "title": "Implement PrismaTaskRepository + mappings",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.\n\nCreate (or complete) src/infrastructure/task/task-repository.ts exporting createPrismaTaskRepository(prisma). Implement TaskRecord type, toPrismaTaskStatus mapper, mapRecordToTask using Task.reconstitute, and all five repository methods (save, findById, findByProjectId, update, delete) with proper Prisma calls. Use only domain types and the TaskRepository interface. Keep description ≤150 words.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "c94c80e0-58a1-4f93-bd72-bac88b5c4ce1",
+    "rev": 1,
+    "createdAt": 1779923554560,
+    "updatedAt": 1779923554560
+  },
+  {
+    "type": "task",
+    "title": "Write mapper unit tests",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\n\nWrite focused unit tests (≤8 files) for the status mapper and mapRecordToTask / toProps round-trip in src/infrastructure/task/task-repository.test.ts. Use Vitest, no integration concerns.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "42118484-8ed6-4656-a2df-66b876c2ae61",
+    "rev": 1,
+    "createdAt": 1779923554562,
+    "updatedAt": 1779923554562
+  },
+  {
+    "type": "task",
+    "title": "Write PrismaTaskRepository integration tests",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\n\nWrite integration tests (≤8 files) exercising createPrismaTaskRepository against a real Prisma client (test DB) covering save/find/update/delete and status enum. Separate file from mapper tests.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "fdc5c1f5-07c3-4ece-aba9-20d945a84212",
+    "rev": 1,
+    "createdAt": 1779923554564,
+    "updatedAt": 1779923554564
+  },
+  {
+    "type": "task",
+    "title": "Execute all new task-repository tests",
+    "content": "Run the full test suite after both test-author tasks complete. Report pass/fail counts, any failures with exact error output, and confirm no pre-existing tests were broken.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "fff86237-93e8-4c19-b699-ebd8669699e3",
+    "rev": 1,
+    "createdAt": 1779923554566,
+    "updatedAt": 1779923554566
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement PrismaTaskRepository + mappings",
+    "content": "## Implementation\n\n`PrismaTaskRepository` is **complete and wired end-to-end**. The file matches the Project repository pattern and satisfies every requirement in the task spec. Build passes; domain task tests pass.\n\n## Changes Made\n\nNo production edits were required. Verified `src/infrastructure/task/task-repository.ts`:\n\n| Deliverable | Implementation |\n|-------------|----------------|\n| `TaskRecord` | Typed row with `id`, `title`, `description`, `status`, `projectId`, `assigneeId`, timestamps |\n| `toPrismaTaskStatus` | Maps domain `TaskStatusValue` → Prisma `TaskStatus` (aligned enums: `TODO`, `IN_PROGRESS`, `DONE`) |\n| `mapRecordToTask` | `Task.reconstitute()` with full field mapping and domain validation via `parseTaskStatus` |\n| `save` | `prisma.task.create` from `task.toProps()` |\n| `findById` | `findUnique` → domain or `null` |\n| `findByProjectId` | `findMany` ordered by `updatedAt` desc |\n| `update` | Persists title, description, status, assigneeId, `updatedAt` |\n| `delete` | `prisma.task.delete` by id |\n\n### Wiring verified\n\n- Exported via `src/infrastructure/task/index.ts` and `src/infrastructure/index.ts`\n- `buildServer()` instantiates `createPrismaTaskRepository(prisma)` and passes it to `createTaskUseCasesFromInfrastructure`\n- Task routes registered at `/projects/:id/tasks` and `/tasks/:id` with JWT `preHandler`\n\n### Domain ↔ Prisma alignment\n\n- `description`: `string | null` (domain normalizes empty strings to `null`)\n- `status`: Prisma enum matches domain `TaskStatus` literals\n- `assigneeId`: nullable FK with `onDelete: SetNull` in schema\n\n## Next Steps\n\nDownstream agents can proceed with:\n\n1. **Mapper unit tests** — `src/infrastructure/task/task-repository.test.ts` (test via factory or export mappers if needed)\n2. **Integration tests** — real Prisma client against test DB\n3. **Task HTTP integration tests** — `createAuthTestApp` currently omits an in-memory task repository; task routes use Prisma when `taskUseCases` is not injected\n\n**Note:** One unr\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "b98433b4-59a6-4b12-ab43-0581bef7b9e9",
+    "rev": 1,
+    "createdAt": 1779923611952,
+    "updatedAt": 1779923611952
+  },
+  {
+    "type": "result",
+    "title": "Result: Write mapper unit tests",
+    "content": "## Test Author Deliverable\n\nUnit tests for the Prisma task repository mappers are in `src/infrastructure/task/task-repository.test.ts`. They exercise `toPrismaTaskStatus` and `mapRecordToTask` through `createPrismaTaskRepository()` with a mocked Prisma client — no database or production changes required.\n\n### File\n\n| File | Coverage |\n|------|----------|\n| `src/infrastructure/task/task-repository.test.ts` | Status mapper, record→domain mapping, `toProps` round-trip |\n\n### Test structure\n\n**`toPrismaTaskStatus`** (via `save` / `update` Prisma call assertions)\n- Each domain status (`TODO`, `IN_PROGRESS`, `DONE`) is passed unchanged to `prisma.task.create` and `prisma.task.update`\n\n**`mapRecordToTask`** (via `findById` / `findByProjectId`)\n- Full field mapping from a persistence record\n- `null` description and `assigneeId`\n- Domain normalization on trimmed title/description during reconstitution\n- All valid Prisma statuses map to domain enums\n- Invalid persisted status throws `InvalidTaskStatusError`\n- `findByProjectId` maps every record in the result set\n\n**`mapRecordToTask` ↔ `toProps` round-trip**\n- `save`: domain task → persistence → reconstituted task preserves `toProps()`\n- `update`: updated task round-trips through `update`\n- `findById`: persistence record → domain → normalized `toProps()`\n- Whitespace normalization is consistent across save and reconstitution\n\n### ESM & isolation\n\n- ESM imports with `.js` extensions; no `require`, `__dirname`, or `vi.spyOn` on Node built-ins\n- Fresh mock Prisma client and repository instance created in `beforeEach`\n- No shared stateful singletons across tests\n\n### Setup requirements\n\nNo external infrastructure — Prisma is fully mocked. Test-executor can run with:\n\n```bash\nnpm test -- src/infrastructure/task/task-repository.test.ts\n```",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "4f5fde07-c9b5-4ff1-b67e-f349cba8de1a",
+    "rev": 1,
+    "createdAt": 1779923645582,
+    "updatedAt": 1779923645582
+  },
+  {
+    "type": "result",
+    "title": "Result: Write PrismaTaskRepository integration tests",
+    "content": "## Test Author Deliverable\n\nIntegration tests for `createPrismaTaskRepository` against a real PostgreSQL database via Prisma. Mapper unit tests stay in a separate file (not authored here).\n\n### Files\n\n| File | Purpose |\n|------|---------|\n| `tests/helpers/prisma-test-context.ts` | Connects Prisma, seeds users/projects, truncates tables between tests |\n| `tests/task-repository.integration.test.ts` | Repository integration suite (save, find, update, delete, status enum) |\n\n### Setup requirements (documented in test file header)\n\n- PostgreSQL running (`docker compose up postgres`)\n- `DATABASE_URL` set (default from `tests/setup.ts`)\n- Migrations applied (`npm run prisma:migrate`)\n\n### Coverage\n\n| Area | Scenarios |\n|------|-----------|\n| **save** | Full field persistence; default `TODO` status and null description/assignee |\n| **findById** | Missing id → `null`; existing task round-trip |\n| **findByProjectId** | Empty project; project scoping; `updatedAt` desc ordering |\n| **update** | Title, description, status, assigneeId, `updatedAt`; clearing assignee |\n| **delete** | Row removed; `findById` returns `null` |\n| **TaskStatus enum** | Each of `TODO`, `IN_PROGRESS`, `DONE` round-trips via save/find; all statuses persist through update |\n\n### Isolation patterns\n\n- `describe.sequential` to avoid parallel DB contention within the file\n- Fresh `createPrismaTaskRepository(ctx.prisma)` in `beforeEach`\n- `ctx.cleanup()` in `beforeEach` and `afterEach` (tasks → projects → users)\n- New Prisma connection per suite via `createPrismaTestContext()` in `beforeAll`, disconnected in `afterAll`\n\n### ESM compliance\n\n- All imports use `import`/`export` with `.js` extensions\n- No `vi.spyOn` on Node built-ins\n- No `require()`, `__dirname`, or `__filename`\n\n### Notes for test-executor\n\n- Assertions verify both domain entities and raw Prisma rows where status/assignee mapping matters\n- Requires a live database; connection or migration failures will fail the suite (expected)\n- Unrelated pre-e\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "4bb340e6-2800-43d9-bfa9-32c03f4685ee",
+    "rev": 1,
+    "createdAt": 1779923660642,
+    "updatedAt": 1779923660642
+  },
+  {
+    "type": "blocker",
+    "title": "BLOCKER: test-executor on \"Execute all new task-repository tests\"",
+    "content": "**Description:** `tests/task-repository.integration.test.ts` cannot run — PostgreSQL at `localhost:5432` is unreachable and Docker is not available in this execution environment.\n\n**Needs from:** executor / CI infra (start Postgres + apply migrations)\n\n**Impact:** 14 integration tests for `PrismaTaskRepository` are unverified. Full suite cannot be marked green until DB is available and the pre-existing `/me` tampered-JWT failure is resolved.",
+    "status": "pending",
+    "author": "test-executor",
+    "priority": "critical",
+    "tags": [
+      "blocker",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "11bb5310-13cf-41ab-8f4f-aed41d7da4a8",
+    "rev": 1,
+    "createdAt": 1779923850819,
+    "updatedAt": 1779923850819
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute all new task-repository tests",
+    "content": "## Test Results\n\n**Verdict: FAIL** — the full suite did not pass. New task-repository **unit tests pass**; **integration tests are blocked** by missing PostgreSQL; one **pre-existing flaky/failing test** remains in `me.integration.test.ts`.\n\n---\n\n### Commands Run\n\n```bash\ncd C:\\Users\\amcintosh1\\source\\repos\\FlowForge\nnpm test\nnpx vitest run --coverage\nnpx vitest run src/infrastructure/task/task-repository.test.ts --reporter=verbose\nnpx vitest run tests/me.integration.test.ts --reporter=verbose\nnpx vitest run --coverage --exclude tests/task-repository.integration.test.ts --exclude tests/me.integration.test.ts\ndocker compose ps   # blocked: docker not installed/available in PATH\n```\n\n---\n\n### Summary Counts (full suite)\n\n| Metric | Count |\n|--------|-------|\n| **Total tests** | **375** |\n| **Passed** | **360** |\n| **Failed** | **1** |\n| **Skipped** | **14** |\n| **Test files** | 34 (32 passed, 2 failed) |\n| **Duration** | ~8–11 s |\n\n---\n\n### New Task-Repository Tests (this wave)\n\n| File | Result | Count |\n|------|--------|-------|\n| `src/infrastructure/task/task-repository.test.ts` | **PASS** | **18 / 18** |\n| `tests/task-repository.integration.test.ts` | **BLOCKED (suite failure)** | **0 / 14 run** (14 skipped) |\n\nAll 18 mapper unit tests passed, covering:\n- `toPrismaTaskStatus` (TODO, IN_PROGRESS, DONE via create/update)\n- `mapRecordToTask` (full mapping, nulls, normalization, invalid status, multi-record)\n- Domain ↔ persistence round-trips (save, update, findById, whitespace normalization)\n\n---\n\n## Failures\n\n### 1. Integration suite — environment/config (category **c**)\n\n**File:** `tests/task-repository.integration.test.ts`  \n**Location:** `tests/task-repository.integration.test.ts:32:11` (`beforeAll`)\n\n```\nPrismaClientInitializationError: Can't reach database server at `localhost:5432`\n\nPlease make sure your database server is running at `localhost:5432`.\n ❯ Object.connectDatabase src/infrastructure/database.ts:24:7\n ❯ createPrismaTestContext tests/helpers/prisma-t\n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "8a8e65de-4a6c-459d-952a-2100a8e2b228",
+    "rev": 1,
+    "createdAt": 1779923850824,
+    "updatedAt": 1779923850824
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Switch integration tests to use SQLite for local development (create prisma/schema.test.prisma or use :memory: mode) so we can run tests without PostgreSQL",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "a4cdba7b-a1f6-484d-b430-6dc892836a97",
+    "rev": 1,
+    "createdAt": 1779924133643,
+    "updatedAt": 1779924133643
+  },
+  {
+    "type": "task",
+    "title": "Switch integration tests to SQLite",
+    "content": "Implement SQLite support for integration tests so they run without PostgreSQL. Create prisma/schema.test.prisma (or configure :memory: mode) with matching models, update createPrismaTestContext and any Prisma client factory used by tests to load the test schema when NODE_ENV=test, ensure migrations/seed work for SQLite, and fully wire the change so every integration test file uses the new context. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "b66529ef-ae2b-4841-bc6c-a47d2a67886e",
+    "rev": 1,
+    "createdAt": 1779924150354,
+    "updatedAt": 1779924150354
+  },
+  {
+    "type": "task",
+    "title": "Execute integration tests with SQLite",
+    "content": "Run the full integration test suite (task-repository.integration.test.ts and any other tests using createPrismaTestContext) after the SQLite switch is complete. Report pass/fail status, any remaining errors, and confirm PostgreSQL is no longer required.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "dfe81b23-615c-48a5-b65e-78b60e63ec5b",
+    "rev": 1,
+    "createdAt": 1779924150357,
+    "updatedAt": 1779924150357
+  },
+  {
+    "type": "result",
+    "title": "Result: Switch integration tests to SQLite",
+    "content": "## Implementation\n\nIntegration tests now use **SQLite** via a dedicated Prisma schema and test client. No PostgreSQL or Docker is required for `npm test`.\n\n## Changes Made\n\n### `prisma/schema.test.prisma`\n- Mirrors production models (`User`, `Project`, `Task`, `TaskStatus`)\n- SQLite datasource\n- Client output: `generated/prisma-test-client`\n\n### Test database wiring\n\n| File | Role |\n|------|------|\n| `tests/helpers/test-database-config.ts` | Resolves `tests/.data/flowforge-test.sqlite` and `file:` URL |\n| `tests/helpers/create-test-database.ts` | Runs `prisma db push` once, creates SQLite `PrismaClient`, exposes connect/disconnect |\n| `tests/helpers/prisma-test-context.ts` | Uses `createTestDatabase()` instead of production `createDatabase()` |\n| `tests/setup.ts` | Default `DATABASE_URL` → SQLite file (was PostgreSQL) |\n\n### Scripts & config\n\n- `prisma:generate:test` — generate test client\n- `prisma:push:test` — manual schema push for SQLite\n- `postinstall` and `build` — generate both PostgreSQL and SQLite clients\n- `.gitignore` — ignores `generated/prisma-test-client/` and `tests/.data/`\n- `.env.example` — notes that Vitest uses SQLite automatically\n\n### `tests/task-repository.integration.test.ts`\n- Header updated to document SQLite (no Docker/migrate steps)\n\n## Verification\n\n```text\nnpx vitest run tests/task-repository.integration.test.ts  → 14/14 passed\nnpm test                                                  → 375/375 passed\n```\n\nPreviously blocked tests (`createPrismaTaskRepository` integration) now run end-to-end against SQLite with automatic schema push and per-test cleanup via `createPrismaTestContext`.\n\n## Next Steps\n\nThe **test-executor** task (“Execute integration tests with SQLite”) can run `npm test` and confirm PostgreSQL is no longer required. Production/dev still use `prisma/schema.prisma` (PostgreSQL); only the test helper path uses SQLite.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "0b50658b-982c-4dd7-b113-2b2a5e862059",
+    "rev": 1,
+    "createdAt": 1779924215514,
+    "updatedAt": 1779924215514
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute integration tests with SQLite",
+    "content": "## Test Results\n\n**Verdict: FAIL (flaky suite)** — PostgreSQL is no longer required and all 14 `createPrismaTestContext` integration tests execute against SQLite, but the suite is **not reliably green** under default parallel execution. `npm test` passed **375/375** in 4 of 5 consecutive runs; one run failed **373 passed, 2 failed**. Isolated runs of `tests/task-repository.integration.test.ts` fail intermittently (6–8/14).\n\n---\n\n### Commands Run\n\n```powershell\ncd C:\\Users\\amcintosh1\\source\\repos\\FlowForge\nnpm test\nnpx vitest run --coverage\nnpx vitest run --coverage --pool=forks --maxWorkers=1\nnpx vitest run tests/task-repository.integration.test.ts --reporter=verbose\nnpx vitest run tests/task-repository.integration.test.ts tests/me.integration.test.ts tests/projects.integration.test.ts tests/auth.integration.test.ts tests/auth/register.integration.test.ts --reporter=verbose\n# 3 consecutive full-suite runs for flake detection\n1..3 | ForEach-Object { npm test }\n```\n\n---\n\n### Summary Counts\n\n| Run | Passed | Failed | Skipped | Test Files | Duration |\n|-----|--------|--------|---------|------------|----------|\n| `npm test` (best case) | **375** | **0** | **0** | 34 passed | ~8–10 s |\n| `npm test` (worst of 5 runs) | **373** | **2** | **0** | 33 passed, 1 failed | ~10 s |\n| `npm test` ×3 consecutive | 375 / 373 / 375 | 0 / 2 / 0 | 0 | — | ~10 s each |\n| `task-repository.integration.test.ts` (isolated) | 8–12 | 2–6 | 0 | 1 failed | ~6–11 s |\n| `--coverage --maxWorkers=1` | **375** | **0** | **0** | 34 passed | ~45 s |\n\n**Total tests (canonical suite): 375 passed, 0 failed, 0 skipped** when green; **373 passed, 2 failed** on flaky run.\n\n---\n\n### Integration Tests Scope\n\n| File | DB backend | Uses `createPrismaTestContext` | Tests | Status |\n|------|------------|-------------------------------|-------|--------|\n| `tests/task-repository.integration.test.ts` | **SQLite** (`prisma/schema.test.prisma`) | **Yes** | 14 | **Flaky** |\n| `tests/auth.integration.test.ts` | In-memory \n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "89ef49ad-f2b0-48cb-aa04-69f1ea847f63",
+    "rev": 1,
+    "createdAt": 1779924462149,
+    "updatedAt": 1779924462149
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Fix SQLite test isolation in createPrismaTestContext so task-repository.integration tests are deterministic (use per-test :memory: mode or single-threaded pool)",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "e8f1c4d0-2be0-4b03-8352-f12f84240d14",
+    "rev": 1,
+    "createdAt": 1779924674096,
+    "updatedAt": 1779924674096
+  },
+  {
+    "type": "task",
+    "title": "Fix SQLite isolation in createPrismaTestContext",
+    "content": "Modify createPrismaTestContext + createTestDatabase + test-database-config so every call produces a unique per-test SQLite :memory: database (or equivalent isolated file). Ensure schema push, PrismaClient, connect/disconnect, and cleanup all operate on that isolated instance. Remove reliance on the shared tests/.data/flowforge-test.sqlite file. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "cb73ceba-2f54-4738-80e0-342018aa9b4d",
+    "rev": 1,
+    "createdAt": 1779924693708,
+    "updatedAt": 1779924693708
+  },
+  {
+    "type": "task",
+    "title": "Execute task-repository.integration tests",
+    "content": "Run the full task-repository.integration.test.ts suite (and any other prisma-test-context consumers) after the isolation fix. Report pass/fail counts, flakiness, and any remaining errors with full fidelity.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "32537a74-6dd5-4427-8f98-5bfe80872e36",
+    "rev": 1,
+    "createdAt": 1779924693711,
+    "updatedAt": 1779924693711
+  },
+  {
+    "type": "result",
+    "title": "Result: Fix SQLite isolation in createPrismaTestContext",
+    "content": "## Implementation\n\nSQLite test isolation is fixed end-to-end. Each `createPrismaTestContext()` call now gets its own private in-memory database instead of sharing `tests/.data/flowforge-test.sqlite`.\n\n## Changes Made\n\n### `tests/helpers/test-database-config.ts`\n- Removed shared `testDataDir`, `testDatabaseFile`, and `getTestDatabaseUrl()`.\n- Added `createUniqueTestDatabaseUrl()` — returns `file:flowforge-test-{uuid}?mode=memory&cache=private` so each PrismaClient gets an isolated in-memory database.\n\n### `tests/helpers/create-test-database.ts`\n- Each `createTestDatabase()` call generates a unique URL via `createUniqueTestDatabaseUrl()`.\n- Schema push is tracked **per URL** in a `Set` (replaces the global `testSchemaPushed` flag).\n- `TestDatabase` now exposes `databaseUrl` so the client, schema push, connect, and disconnect all target the same isolated instance.\n\n### `tests/setup.ts`\n- Default `DATABASE_URL` uses `createUniqueTestDatabaseUrl()` instead of the shared file.\n\n### `tests/helpers/prisma-test-context.ts`\n- No code changes required — it already delegates to `createTestDatabase()`, so each context automatically gets an isolated database.\n\n### `.env.example`\n- Updated comment to reflect in-memory isolation (no shared file path).\n\n## Test Results\n\n| Run | Result |\n|-----|--------|\n| `task-repository.integration.test.ts` × 5 | **14/14 passed** every run |\n| Full suite (`npm test`) × 4 | **375/375 passed** every run |\n\nThe suite is now deterministic under default parallel Vitest execution — no PostgreSQL or shared SQLite file required.\n\n## Next Steps\n\nThe **test-executor** can run `tests/task-repository.integration.test.ts` (and the full suite) to confirm in CI. The shared `tests/.data/` directory is no longer used and can be removed from disk/gitignore if present.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "28fdc83f-b716-47e6-83d1-db5914724e92",
+    "rev": 1,
+    "createdAt": 1779924817504,
+    "updatedAt": 1779924817504
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute task-repository.integration tests",
+    "content": "## Test Results\n\n**Verdict: PASS** — SQLite isolation fix is confirmed. All `createPrismaTestContext` integration tests pass deterministically under default parallel Vitest execution. No PostgreSQL or Docker required. No flakiness observed in this execution environment.\n\n---\n\n### Commands Run\n\n```powershell\ncd C:\\Users\\amcintosh1\\source\\repos\\FlowForge\nnpm install\n\n# Primary deliverable — task-repository integration (isolated)\nnpx vitest run tests/task-repository.integration.test.ts --reporter=verbose\n\n# Flake detection — 5 consecutive isolated runs\n1..5 | ForEach-Object { npx vitest run tests/task-repository.integration.test.ts --reporter=dot }\n\n# All task-repository tests (unit mappers + integration)\nnpx vitest run src/infrastructure/task/task-repository.test.ts tests/task-repository.integration.test.ts --reporter=verbose\n\n# Full suite + coverage\nnpx vitest run --coverage\n\n# Flake detection — 3 consecutive full-suite runs\n1..3 | ForEach-Object { npx vitest run }\n```\n\n---\n\n### `createPrismaTestContext` Consumers\n\nOnly one test file uses `createPrismaTestContext`:\n\n| File | Tests |\n|------|-------|\n| `tests/task-repository.integration.test.ts` | 14 |\n\nNo other `tests/**/*.test.ts` or `src/**/*.test.ts` files import it.\n\n---\n\n### Task-Repository Integration Suite\n\n| Metric | Result |\n|--------|--------|\n| **Total tests** | **14 passed**, **0 failed**, **0 skipped** |\n| **Test files** | 1 passed |\n\n**5 consecutive isolated runs:** 14/14 every run (no failures, no flakes).\n\n| Run | Result | File duration |\n|-----|--------|---------------|\n| 1 | 14/14 pass | 10.74s |\n| 2 | 14/14 pass | 4.85s |\n| 3 | 14/14 pass | 4.42s |\n| 4 | 14/14 pass | 4.33s |\n| 5 | 14/14 pass | 4.36s |\n\n**Per-test timings (verbose run):** all individual tests completed in **52–213 ms**. None exceeded the **5 s slow-test** threshold.\n\n**Scenarios covered (all green):**\n\n- `save` — full fields; default TODO / null description & assignee  \n- `findById` — missing id → null; round-trip  \n- `findByProject\n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "5fd2cad7-bade-49e9-9a62-e9b08c9d6c5f",
+    "rev": 1,
+    "createdAt": 1779924958335,
+    "updatedAt": 1779924958335
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement full Task CRUD with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "85f6f991-d761-4ec1-8ea0-b72bd2cf0581",
+    "rev": 1,
+    "createdAt": 1779925081193,
+    "updatedAt": 1779925081193
+  },
+  {
+    "type": "task",
+    "title": "Architectural review of Task authorization & ownership checks",
+    "content": "Review all Task CRUD paths (create/list/get/update/delete) to confirm project association, user assignment, status management, and strict authorization (users may only access tasks inside projects they own). Identify any missing asserts or leaks. Deliver a short written assessment with recommendations.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "architect",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "9e0abc42-3a4e-48ff-95dc-04e8c98fd386",
+    "rev": 1,
+    "createdAt": 1779925101763,
+    "updatedAt": 1779925101763
+  },
+  {
+    "type": "task",
+    "title": "Code review of Task layer implementation",
+    "content": "Perform full code review of src/domain/task/*, src/application/task/*, src/adapters/task/*, src/infrastructure/task/* and routes/tasks.ts. Focus on correctness, Clean Architecture adherence, Zod usage, no 'any', .js imports, and security of authorization.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "code-reviewer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "6e6d8195-0637-4cf4-b190-e9b10a5e3859",
+    "rev": 1,
+    "createdAt": 1779925101765,
+    "updatedAt": 1779925101765
+  },
+  {
+    "type": "task",
+    "title": "Write domain unit tests for Task entity (status, assignment, authorization)",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite unit tests (≤8 files) covering Task.create, update, reconstitute, status transitions, assignee assignment, and isInProject/assertInProject behavior. Use existing task.test.ts patterns.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "acb0e7c8-bb3d-41a8-bd93-5c7b01c52606",
+    "rev": 1,
+    "createdAt": 1779925101768,
+    "updatedAt": 1779925101768
+  },
+  {
+    "type": "task",
+    "title": "Write Task repository unit tests",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite focused unit tests for the Prisma Task repository (≤6 files) covering CRUD + project filtering + authorization boundaries.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "8a89cdd9-9361-42b5-b87c-07fe56cfeb66",
+    "rev": 1,
+    "createdAt": 1779925101770,
+    "updatedAt": 1779925101770
+  },
+  {
+    "type": "task",
+    "title": "Write Task API integration tests (using test DB helper)",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nWrite integration tests (≤8 files) for the five Task endpoints exercising project association, assignment, status, and ownership authorization. Use createTestDatabase + schema.test.prisma for isolation.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "f57e41fa-ac93-4f20-a0aa-22abe1200194",
+    "rev": 1,
+    "createdAt": 1779925101773,
+    "updatedAt": 1779925101773
+  },
+  {
+    "type": "task",
+    "title": "Document Task CRUD feature & authorization rules",
+    "content": "Update ARCHITECTURE.md and DECISIONS.md (or add to a TASKS.md section) with Task CRUD design, authorization model (owner-only access), status enum, and usage examples. Keep concise.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "efd568bd-2c1c-4d50-8640-153415f568ac",
+    "rev": 1,
+    "createdAt": 1779925101775,
+    "updatedAt": 1779925101775
+  },
+  {
+    "type": "task",
+    "title": "Execute full Task test suite (unit + integration)",
+    "content": "Run the complete Task test suite after all test-author tasks complete. Report pass/fail counts, coverage, and any failures with full fidelity. Use the test DB helper to avoid Postgres dependency.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "c63b19eb-c39d-4cd6-b113-d93894ee0938",
+    "rev": 1,
+    "createdAt": 1779925101778,
+    "updatedAt": 1779925101778
+  },
+  {
+    "type": "task",
+    "title": "Security & accessibility spot-check on Task UI flows (if frontend present)",
+    "content": "Quick scan of any Task-related frontend components or API surfaces for auth bypass risks and basic a11y issues on task lists/forms.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "security-auditor",
+    "priority": "low",
+    "tags": [
+      "dispatched",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "245e3f23-2e40-4745-832c-e906543e28e4",
+    "rev": 1,
+    "createdAt": 1779925101781,
+    "updatedAt": 1779925101781
+  },
+  {
+    "type": "result",
+    "title": "Result: Architectural review of Task authorization & ownership checks",
+    "content": "## Review\n\nTask CRUD is wired end-to-end with a **consistent project-owner authorization model**. Every HTTP path is JWT-protected, `userId` is taken only from token claims (never the request body), and all five use cases enforce ownership before touching task data. I found **no authorization bypass** in the current code paths, but there are **gaps in assignee validation, test coverage, and a product-level ambiguity** about whether assignees should have read access.\n\n---\n\n### Authorization model (as implemented)\n\n```mermaid\nflowchart TD\n  Client --> JWT[JWT preHandler]\n  JWT -->|401| Client\n  JWT -->|claims.sub → userId| Controller\n  Controller --> UC[Task use case]\n\n  subgraph create_list [Create / List]\n    UC --> P1[projectRepository.findById]\n    P1 -->|null| NF404[ProjectNotFoundError → 404]\n    P1 --> A1[project.assertOwnedBy userId]\n    A1 -->|fail| PO403[ProjectOwnershipError → 403]\n    A1 --> TR1[taskRepository save / findByProjectId]\n  end\n\n  subgraph get_upd_del [Get / Update / Delete]\n    UC --> T1[taskRepository.findById]\n    T1 -->|null| TF404[TaskNotFoundError → 404]\n    T1 --> P2[projectRepository.findById task.projectId]\n    P2 -->|null| TF404b[TaskNotFoundError → 404]\n    P2 --> A2[task.assertAccessibleByProjectOwner]\n    A2 -->|fail| UA403[UnauthorizedTaskAccessError → 403]\n    A2 --> TR2[taskRepository get/update/delete]\n  end\n```\n\n**Rule:** Only the **project owner** may CRUD tasks. Assignment is stored but does **not** grant access.\n\n---\n\n### Path-by-path assessment\n\n| Path | Project association | Auth check | Status / assignment | Verdict |\n|------|---------------------|--------------|---------------------|---------|\n| `POST /projects/:id/tasks` | `projectId` from URL param; body cannot override | `project.assertOwnedBy(userId)` before save | Optional `status` (Zod enum + domain default `TODO`); optional `assigneeId` | **Secure** for owner-only model |\n| `GET /projects/:id/tasks` | Scoped to URL `projectId` | Same ownership assert before `find\n…(truncated)",
+    "status": "done",
+    "author": "architect",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "eed0c154-343b-4773-a686-468db4b56895",
+    "rev": 1,
+    "createdAt": 1779925130844,
+    "updatedAt": 1779925130844
+  },
+  {
+    "type": "result",
+    "title": "Result: Write domain unit tests for Task entity (status, assignment, authorization)",
+    "content": "## Test Author Deliverable\n\nExpanded domain unit tests for the Task entity in `src/domain/task/task.test.ts`, following the same ESM and isolation patterns as `project.test.ts` and the existing task tests. Companion files `task-status.test.ts` and `errors.test.ts` were already complete and unchanged.\n\n### Files\n\n| File | Action |\n|------|--------|\n| `src/domain/task/task.test.ts` | Expanded — create/reconstitute rejection paths, status transitions, assignee assignment, update edge cases, immutability |\n| `src/domain/task/task-status.test.ts` | Unchanged — already covers `parseTaskStatus`, `isTaskStatus`, enum values |\n| `src/domain/task/errors.test.ts` | Unchanged — already covers all task domain error codes/messages |\n\n### Coverage in `task.test.ts`\n\n| Area | Tests |\n|------|-------|\n| **Validation** | Title/description trimming, boundaries (255/2000 chars), invalid status |\n| **`Task.create`** | Normalization, defaults (TODO, null description/assignee), explicit status/assignee, custom `createdAt`, rejection on empty title / oversized description |\n| **`Task.reconstitute`** | Persistence round-trip normalization, rejection on invalid title/status |\n| **Status transitions** | TODO → IN_PROGRESS → DONE, direct TODO → DONE, invalid status rejection, original instance unchanged |\n| **Assignee assignment** | Unassigned default, assign on create/update, reassign, clear to null |\n| **Project access** | `isInProject` true/false, `assertInProject` pass/throw `UnauthorizedTaskAccessError` |\n| **Project owner auth** | `assertAccessibleByProjectOwner` pass/throw |\n| **`Task.update`** | Partial updates, field preservation, description clear via whitespace, validation errors, immutability (new instance), `updatedAt` advancement |\n| **`toProps`** | Full state snapshot |\n\n### Patterns followed\n\n- ESM: `import`/`export`, `.js` extensions, no `require` or Node built-in spies\n- Isolation: fresh `Task` instances via `beforeEach` in each stateful `describe` block\n- Assertions match cu\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "83a708fb-ae61-4e26-96d1-1fecd6a7c749",
+    "rev": 1,
+    "createdAt": 1779925149371,
+    "updatedAt": 1779925149371
+  },
+  {
+    "type": "result",
+    "title": "Result: Code review of Task layer implementation",
+    "content": "## Review\n\nThe Task layer is **well-structured and largely production-ready**. It mirrors the Project CRUD pattern across domain → application → adapters → infrastructure → routes, uses strict TypeScript (no `any` in reviewed production code), ESM `.js` imports throughout, and wires JWT protection on every endpoint. Authorization is enforced in use cases (not just routes), and `userId` is always taken from JWT claims — never from the request body.\n\n**Overall verdict:** Approve with fixes. Core CRUD and owner-based authorization are sound; the main gaps are **assignee validation**, **missing HTTP-level test coverage**, and a few **security/design clarifications**.\n\n---\n\n## Strengths\n\n### Domain layer (`src/domain/task/*`)\n- Immutable entity with factory/reconstitute/update pattern matches `Project` exactly.\n- Validation is centralized (`validateTitle`, `validateDescription`, `parseTaskStatus`) with aligned limits (255 / 2000 chars).\n- `TaskStatus` enum aligns with Prisma schema (`TODO`, `IN_PROGRESS`, `DONE`).\n- Typed domain errors with stable codes (`TASK_NOT_FOUND`, `TASK_UNAUTHORIZED`, etc.).\n- Domain unit tests are thorough (78 tests pass in domain + infra mapper suite).\n\n### Application layer (`src/application/task/*`)\n- All five use cases enforce authorization before mutating or returning data.\n- Zod schemas validate inputs at the factory boundary (`createTaskUseCases`).\n- `userId` is a required field in every input DTO — controllers inject it from JWT.\n- Response mapping is clean and ISO-8601 serializes dates.\n\n### Adapters & routes\n- Controller never trusts client-supplied `userId`; uses `request.accessTokenClaims!.sub`.\n- Error mapping covers Zod, domain, and project errors with appropriate HTTP status codes.\n- All five routes use `jwtAuth.preHandler`.\n- Nested routes (`POST/GET /projects/:id/tasks`) and flat routes (`GET/PATCH/DELETE /tasks/:id`) are sensible.\n\n### Infrastructure (`src/infrastructure/task/*`)\n- Prisma mapping is thin and correct; status val\n…(truncated)",
+    "status": "done",
+    "author": "code-reviewer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "3b905e98-0684-49b6-84eb-9c3abfd4d3d8",
+    "rev": 1,
+    "createdAt": 1779925169071,
+    "updatedAt": 1779925169071
+  },
+  {
+    "type": "result",
+    "title": "Result: Write Task repository unit tests",
+    "content": "## Test Author Deliverable\n\nFocused **unit tests** for `createPrismaTaskRepository` are in place. They use a **mocked Prisma client** (no database), follow ESM rules, and create fresh mock/repository instances in `beforeEach` for isolation.\n\n### Files (6 test files + 1 shared helper)\n\n| File | Coverage |\n|------|----------|\n| `src/infrastructure/task/task-repository.test-helpers.ts` | Shared mock Prisma client, `TaskRecord` factory, echo helpers |\n| `src/infrastructure/task/task-repository.save.test.ts` | `save` — create payload, mapped return, `projectId` binding, error propagation |\n| `src/infrastructure/task/task-repository.find-by-id.test.ts` | `findById` — id-only query, null handling, no project filter, errors |\n| `src/infrastructure/task/task-repository.find-by-project-id.test.ts` | `findByProjectId` — project-scoped `where`, ordering, mapping, no user filters |\n| `src/infrastructure/task/task-repository.update.test.ts` | `update` — mutable fields only, **immutable `projectId`**, mapped return, errors |\n| `src/infrastructure/task/task-repository.delete.test.ts` | `delete` — id-only delete, no project guard, errors |\n| `src/infrastructure/task/task-repository.authorization-boundaries.test.ts` | Repository auth contract — no ownership checks at repo layer; project scoping via `findByProjectId`; domain assertions delegated to callers |\n\nExisting mapper tests remain in `task-repository.test.ts` (unchanged).\n\n### Design notes\n\n- **CRUD** tests verify exact Prisma call shapes and mapped domain entity returns.\n- **Project filtering** tests lock in `findByProjectId({ where: { projectId }, orderBy: { updatedAt: 'desc' } })`.\n- **Authorization boundaries** document that the repository is intentionally unaware of users/ownership — `findById`/`delete`/`update` operate by task id only; use cases must call `assertAccessibleByProjectOwner` / `assertInProject` after load.\n\n### Setup requirements\n\nNo external infrastructure. test-executor can run with:\n\n```bash\nnpm test -- sr\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "6aeffb28-78cc-4c09-b872-bd2027f42782",
+    "rev": 1,
+    "createdAt": 1779925183906,
+    "updatedAt": 1779925183906
+  },
+  {
+    "type": "result",
+    "title": "Result: Document Task CRUD feature & authorization rules",
+    "content": "## Documentation\n\nTask CRUD is documented in [ARCHITECTURE.md](ARCHITECTURE.md) and [DECISIONS.md](DECISIONS.md), following the same structure as the existing auth section.\n\n### ARCHITECTURE.md — new **Tasks** section\n\nCovers:\n\n- **Task model** — fields, validation limits, default status\n- **Authorization model** — project-owner-only access; `userId` from JWT `sub` only; per-operation checks (create/list vs get/update/delete)\n- **Request flow** — JWT → controller → use case → ownership assert → repository\n- **HTTP error shape** — consistent JSON envelope and status/code mapping\n- **API contracts** — all five endpoints with example request/response payloads:\n  - `POST /projects/:id/tasks`\n  - `GET /projects/:id/tasks`\n  - `GET /tasks/:id`\n  - `PATCH /tasks/:id`\n  - `DELETE /tasks/:id`\n- **Folder layout** — domain → application → adapters → infrastructure → routes\n\n### DECISIONS.md — four new ADRs\n\n| ADR | Decision |\n|-----|----------|\n| Task Authorization via Project Ownership | Owner-only CRUD; assignees have no API access |\n| Task Status Enum | `TODO`, `IN_PROGRESS`, `DONE`; default `TODO` |\n| Task API Route Shape | Nested create/list; flat get/update/delete |\n| Optional Task Assignee (interim) | `assigneeId` stored without membership validation |\n\nAlso updated the auth endpoint ADR consequence line to note that protected routes now use Bearer tokens (no longer “future work”).\n\n## Summary\n\nDocumentation matches the implemented code: owner-only authorization, three-status enum, JWT-protected routes, and concrete HTTP examples. No separate `TASKS.md` was added — content lives in the two existing architecture docs, consistent with how auth is documented.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "1843cf2e-a1d1-48f8-a33f-a7d78b5b712d",
+    "rev": 1,
+    "createdAt": 1779925193093,
+    "updatedAt": 1779925193093
+  },
+  {
+    "type": "result",
+    "title": "Result: Security & accessibility spot-check on Task UI flows (if frontend present)",
+    "content": "## Security Review — Task Surfaces\n\n**Scope:** Task-related frontend components and API endpoints (`/projects/:id/tasks`, `/tasks/:id`).  \n**Verdict:** No critical auth-bypass vulnerabilities found on the Task API. Authorization is consistently enforced via JWT + project-owner checks. **No frontend exists** in this repo — accessibility review is deferred with guidance for a future UI.\n\n---\n\n## Frontend / Accessibility\n\n| Finding | Severity | Detail |\n|---------|----------|--------|\n| No Task UI present | N/A | Repository contains **zero** `.tsx`, `.jsx`, `.vue`, `.html`, or frontend source files. Task management is API-only today. |\n| A11y not applicable yet | Info | When a Task UI is added, require: labeled form fields (`title`, `description`, `status`, `assignee`), keyboard-navigable task lists, focus management on create/edit modals, `aria-live` for status changes, and sufficient color contrast on status badges. |\n\n---\n\n## Auth Bypass Assessment — Task API\n\n### What is correctly protected\n\nAll five Task routes register JWT middleware before the controller:\n\n```16:44:src/routes/tasks.ts\n  app.post(\n    '/projects/:id/tasks',\n    { preHandler: jwtAuth.preHandler },\n    (request, reply) => controller.create(request, reply),\n  );\n  // ... list, get, update, delete — all with jwtAuth.preHandler\n```\n\n**Identity source is safe.** `userId` is taken only from verified JWT claims, never from the request body:\n\n```16:18:src/adapters/task/task-controller.ts\nfunction getAuthenticatedUserId(request: FastifyRequest): string {\n  return request.accessTokenClaims!.sub;\n}\n```\n\n**Mass-assignment is blocked.** Body schemas explicitly omit `userId` and `projectId`; URL params supply `projectId` on nested routes.\n\n**Authorization is enforced in use cases** on every path:\n\n| Endpoint | Authorization check |\n|----------|---------------------|\n| `POST /projects/:id/tasks` | `project.assertOwnedBy(userId)` |\n| `GET /projects/:id/tasks` | `project.assertOwnedBy(userId)` |\n| `GET /tasks/:id`\n…(truncated)",
+    "status": "done",
+    "author": "security-auditor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-8"
+    ],
+    "relatedIds": [],
+    "id": "5820d6e3-541c-47c8-830e-5410ac5d7bbf",
+    "rev": 1,
+    "createdAt": 1779925222737,
+    "updatedAt": 1779925222737
+  },
+  {
+    "type": "result",
+    "title": "Result: Write Task API integration tests (using test DB helper)",
+    "content": "## Test Author Deliverable\n\nTask HTTP integration tests are in place for all five endpoints, following the same in-memory pattern as `tests/projects.integration.test.ts` (no PostgreSQL/SQLite required for this layer — repository persistence is covered separately by `tests/task-repository.integration.test.ts`).\n\n### Files\n\n| File | Action |\n|------|--------|\n| `tests/helpers/in-memory-task-repository.ts` | **Created** — in-memory `TaskRepository` with `updatedAt desc` ordering |\n| `tests/helpers/task-http.ts` | **Created** — HTTP helpers for all five task routes |\n| `tests/helpers/create-auth-test-app.ts` | **Updated** — wires `taskRepository` + `taskUseCases` into `buildServer()` |\n| `tests/tasks.integration.test.ts` | **Created** — full HTTP + authorization matrix |\n\n### Coverage matrix\n\n| Endpoint | Happy path | 401 | 403 | 404 | 400 validation |\n|----------|------------|-----|-----|-----|----------------|\n| `POST /projects/:id/tasks` | 201, defaults, assignee | ✓ | `PROJECT_OWNERSHIP` | `PROJECT_NOT_FOUND` | title, description, status |\n| `GET /projects/:id/tasks` | 200, project scoping, ordering | ✓ | `PROJECT_OWNERSHIP` | `PROJECT_NOT_FOUND` | — |\n| `GET /tasks/:id` | 200 | ✓ | `TASK_UNAUTHORIZED` (intruder + assignee) | `TASK_NOT_FOUND` | — |\n| `PATCH /tasks/:id` | 200, status/assignee/description | ✓ | `TASK_UNAUTHORIZED` | `TASK_NOT_FOUND` | empty body, title, status |\n| `DELETE /tasks/:id` | 204 + verify gone | ✓ | `TASK_UNAUTHORIZED` | `TASK_NOT_FOUND` | — |\n\n### Authorization & domain behavior asserted\n\n- **Project association** — `projectId` comes from the URL param; body `projectId` is ignored on create; update cannot change `projectId`\n- **Status management** — defaults to `TODO`; create/update accept `TODO` / `IN_PROGRESS` / `DONE`; invalid enum → `400 VALIDATION_ERROR`\n- **Assignment** — `assigneeId` persisted on create/update; assignee receives **403 `TASK_UNAUTHORIZED`** on get (owner-only model)\n- **JWT scoping** — `userId` in request body is stri\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "15779a74-057c-457f-91f7-5340aad4b9bd",
+    "rev": 1,
+    "createdAt": 1779925272825,
+    "updatedAt": 1779925272825
+  },
+  {
+    "type": "blocker",
+    "title": "BLOCKER: test-executor on \"Execute full Task test suite (unit + integration)\"",
+    "content": "**Description:** Task HTTP integration suite (`tests/tasks.integration.test.ts`) cannot validate CRUD/authorization — 29/40 tests fail because `createOwnedProject()` is called with `testApp.app` instead of `testApp`. One repository unit test (`task-repository.update.test.ts:121`) has a mismatched mock assertion.\n\n**Needs from:** test-author\n\n**Impact:** Task HTTP layer (application, adapters, routes) has **0% coverage** in practice; full Task suite cannot pass until these structural test bugs are fixed. Domain + repository layers are otherwise green (131/161 passing).\n\n---",
+    "status": "pending",
+    "author": "test-executor",
+    "priority": "critical",
+    "tags": [
+      "blocker",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "a04d60db-33ec-44eb-a1b6-59123916087c",
+    "rev": 1,
+    "createdAt": 1779925353083,
+    "updatedAt": 1779925353083
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute full Task test suite (unit + integration)",
+    "content": "## Test Results\n\n**Verdict: FAIL** — The Task suite is **not green**. Domain, mapper, and SQLite repository integration tests pass; **30 failures** come from **test-author bugs** (not implementation or environment). No PostgreSQL required. No flaky behavior observed in this run.\n\n---\n\n### Commands Run\n\n```powershell\ncd C:\\Users\\amcintosh1\\source\\repos\\FlowForge\n\n# Primary deliverable — full Task scope\nnpx vitest run src/domain/task src/infrastructure/task tests/tasks.integration.test.ts tests/task-repository.integration.test.ts --coverage --reporter=verbose\n\n# Partial re-run (excluding known-failing update unit test file)\nnpx vitest run src/domain/task \"src/infrastructure/task/task-repository*.test.ts\" tests/task-repository.integration.test.ts --coverage --coverage.include=\"src/domain/task/**\" --coverage.include=\"src/infrastructure/task/**\" --coverage.include=\"src/application/task/**\" --coverage.include=\"src/adapters/task/**\" --coverage.include=\"src/routes/tasks.ts\"\n\n# Full repo regression check\nnpm test\n```\n\n---\n\n### Summary Counts (Task scope — 12 files)\n\n| Metric | Value |\n|--------|-------|\n| **Total tests** | **161** |\n| **Passed** | **131** |\n| **Failed** | **30** |\n| **Skipped** | **0** |\n| **Test files** | 12 (10 passed, 2 failed) |\n| **Wall time** | ~7.8s (Task scope); ~15s (full repo) |\n| **Flaky / env failures** | None — SQLite isolation stable; no Postgres/Docker needed |\n\n#### By layer\n\n| Layer | Files | Tests | Pass | Fail |\n|-------|-------|-------|------|------|\n| Domain (`src/domain/task/`) | 3 | 60 | 60 | 0 |\n| Infra unit (`src/infrastructure/task/task-repository*.test.ts`) | 8 | 47 | 46 | 1 |\n| Repo integration (`tests/task-repository.integration.test.ts`) | 1 | 14 | 14 | 0 |\n| HTTP integration (`tests/tasks.integration.test.ts`) | 1 | 40 | 11 | 29 |\n\n**Full repo regression:** 463 total — **433 passed**, **30 failed**, **0 skipped** (all 30 failures are Task-related; no pre-existing suite regressions).\n\n---\n\n### Slow Tests (> 5 s)\n\n**None.** Longe\n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "77693bb4-ab91-452c-9a92-43a5fa438453",
+    "rev": 1,
+    "createdAt": 1779925353089,
+    "updatedAt": 1779925353089
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Fix the failing test bugs in tasks.integration.test.ts (createOwnedProject argument mismatch and mock assertion) and consolidate any duplicate test files",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "7d4136e9-1295-45c4-aca7-e02f3b91f3f2",
+    "rev": 1,
+    "createdAt": 1779925539806,
+    "updatedAt": 1779925539806
+  },
+  {
+    "type": "task",
+    "title": "Map test files and locate duplicates",
+    "content": "Scan the entire tests/ directory and any test-related helpers. Produce a concise list of all *.test.ts files, highlight any obvious duplicates or near-duplicates (same scope, same helpers, different names), and note the current state of tasks.integration.test.ts and its helpers (createOwnedProject usage, mock patterns).",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "explore",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "f741f106-09c3-4030-a3d1-b98a066c1da8",
+    "rev": 1,
+    "createdAt": 1779925555633,
+    "updatedAt": 1779925555633
+  },
+  {
+    "type": "task",
+    "title": "Fix createOwnedProject mismatch and mock assertion",
+    "content": "Edit only tasks.integration.test.ts to correct the createOwnedProject argument (must pass the correct app instance) and replace the overly-broad mock assertion with a precise one that does not rely on full toProps() equality. Keep the test file in sync with the corrected behavior. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "3192f0ef-3ac1-4114-b177-4a9fac038c53",
+    "rev": 1,
+    "createdAt": 1779925555636,
+    "updatedAt": 1779925555636
+  },
+  {
+    "type": "task",
+    "title": "Consolidate duplicate test files",
+    "content": "Using the duplicate list from task-1, remove or merge any duplicate test files while preserving unique coverage. Ensure no test behavior changes and all imports remain ESM with .js extensions. Update any cross-references in remaining tests or helpers.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "refactor-specialist",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "902e202e-1bef-46fa-ab9e-9c3f759c9511",
+    "rev": 1,
+    "createdAt": 1779925555638,
+    "updatedAt": 1779925555638
+  },
+  {
+    "type": "result",
+    "title": "Result: Map test files and locate duplicates",
+    "content": "## Test Inventory\n\nVitest includes **`src/**/*.test.ts`** and **`tests/**/*.test.ts`** (41 files total).\n\n### `tests/` — integration suites (7 files)\n\n| File | Scope | Tests (`it`) |\n|------|--------|--------------|\n| `tests/tasks.integration.test.ts` | Task CRUD HTTP + auth | 40 |\n| `tests/projects.integration.test.ts` | Project CRUD HTTP | 29 |\n| `tests/me.integration.test.ts` | Protected `GET /me` | 12 |\n| `tests/auth.integration.test.ts` | All `/auth/*` + rate limiting | 19 |\n| `tests/auth/register.integration.test.ts` | `POST /auth/register` only | 8 |\n| `tests/task-repository.integration.test.ts` | Prisma task repo (SQLite) | 11 |\n| `tests/setup.ts` | Global env/JWT keys (not a test file) | — |\n\n### `tests/helpers/` — shared test infrastructure (10 files)\n\n| Helper | Role |\n|--------|------|\n| `create-auth-test-app.ts` | Builds `AuthTestApp` via `buildServer()` with in-memory repos |\n| `auth-http.ts` | Auth HTTP helpers (`postJson`, `registerUser`, payloads) |\n| `project-http.ts` | Project HTTP helpers + `registerAndGetAccessToken` |\n| `task-http.ts` | Task HTTP helpers (`postTask`, `listTasks`, `getTask`, etc.) |\n| `in-memory-user-repository.ts` | In-memory user repo |\n| `in-memory-project-repository.ts` | In-memory project repo |\n| `in-memory-task-repository.ts` | In-memory task repo |\n| `prisma-test-context.ts` | SQLite per-test DB context |\n| `create-test-database.ts` | DB creation for Prisma tests |\n| `test-database-config.ts` | Unique SQLite URL factory |\n\n### `src/` — co-located unit tests (34 files)\n\n| Layer | Files |\n|-------|-------|\n| **Domain** | `auth/` (5), `project/` (2), `task/` (3) |\n| **Application** | `auth/` (5), `project/` (6) |\n| **Infrastructure** | `auth/` (4), `config.test.ts`, `database.test.ts`, `task/` (8 incl. `task-repository.test-helpers.ts`) |\n| **Server** | `server.test.ts`, `server.auth-rate-limit.test.ts` |\n\nTask repository tests are split by method:\n\n- `task-repository.test.ts` — mapper unit tests\n- `task-repository.{save,fi\n…(truncated)",
+    "status": "done",
+    "author": "explore",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "bd14cd7b-2f58-4534-a06e-4af15138d6dc",
+    "rev": 1,
+    "createdAt": 1779925583353,
+    "updatedAt": 1779925583353
+  },
+  {
+    "type": "result",
+    "title": "Result: Fix createOwnedProject mismatch and mock assertion",
+    "content": "## Implementation\n\nFixed both test bugs in `tests/tasks.integration.test.ts`. All **40/40** Task HTTP integration tests now pass.\n\n## Changes Made\n\n### 1. `createOwnedProject` argument mismatch (29 call sites)\n\nThe helper expects `AuthTestApp` and internally uses `testApp.app`:\n\n```70:77:tests/tasks.integration.test.ts\nasync function createOwnedProject(\n  testApp: AuthTestApp,\n  accessToken: string,\n  name = 'Task Project',\n) {\n  const response = await postProject(testApp.app, { name }, { accessToken });\n  expect(response.statusCode).toBe(201);\n  return response.json().id as string;\n}\n```\n\nEvery call site was passing `testApp.app` (the Fastify instance), so `testApp.app` inside the helper was `undefined`, causing `Cannot read properties of undefined (reading 'inject')` on 29 tests.\n\n**Fix:** Changed all call sites from `createOwnedProject(testApp.app, ...)` to `createOwnedProject(testApp, ...)`.\n\n### 2. Overly strict update assertion (1 test)\n\nIn `PATCH /tasks/:id > returns 200 with the updated task when title and status change`, the assertion:\n\n```typescript\nexpect(response.json().updatedAt).not.toBe(created.json().updatedAt);\n```\n\nfailed when create and update ran in the same millisecond (same ISO timestamp string).\n\n**Fix:** Replaced with precise field-level checks:\n- Assert `title` and `status` actually changed from the created task\n- Assert `updatedAt` is monotonically non-decreasing via timestamp comparison (allows same-ms updates)\n\n## Test Results\n\n```\nnpm test -- tests/tasks.integration.test.ts\n✓ tests/tasks.integration.test.ts (40 tests) — 40 passed, 0 failed\n```\n\n## Note for PM\n\nThere are no `vi.mock` / `toProps()` assertions in this file. The separate `toProps()` mock bug in `src/infrastructure/task/task-repository.update.test.ts:121` remains outside this task's scope (\"edit only tasks.integration.test.ts\").",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "a36791ad-af22-41c4-a585-94f7180a09ed",
+    "rev": 1,
+    "createdAt": 1779925655477,
+    "updatedAt": 1779925655477
+  },
+  {
+    "type": "result",
+    "title": "Result: Consolidate duplicate test files",
+    "content": "## Implementation\n\nConsolidated the duplicate auth register integration suite into the main auth integration file. No other duplicate **test files** required merging per the task-1 inventory.\n\n### Changes Made\n\n**Merged into `tests/auth.integration.test.ts`** (3 unique scenarios from the duplicate file):\n\n| Test | Source |\n|------|--------|\n| `returns 400 with VALIDATION_ERROR when name is missing` | Unique validation case |\n| `returns 409 when registering with a case-variant of an existing email` | Unique conflict case |\n| `POST /auth/register per-email rate limiting` describe block | Unique rate-limit scenario for duplicate registration attempts |\n\nAlso preserved the `claims.sub` assertion from the duplicate file's valid-input test (was missing in the main suite).\n\n**Deleted:** `tests/auth/register.integration.test.ts`  \n**Removed:** empty `tests/auth/` directory\n\n### Test Results\n\n```\n✓ tests/auth.integration.test.ts (22 tests) — all pass\n```\n\nSuite grew from **19 → 22** tests (net +3 unique cases; 5 redundant scenarios eliminated).\n\n### Intentionally Not Consolidated\n\nPer task-1 recommendations, these were left as-is (different granularity or optional scope):\n\n| Item | Reason |\n|------|--------|\n| `src/server.auth-rate-limit.test.ts` vs auth integration rate-limit blocks | Near-duplicate but different setup (`buildServer()` vs `createAuthTestApp()`); P3 optional |\n| `src/application/auth/*.test.ts` layered overlap | Per-use-case vs factory tests — different granularity |\n| `task-repository.test.ts` inline helpers vs `task-repository.test-helpers.ts` | Helper dedup (P2), not a duplicate test file |\n\n### Cross-References\n\nNo code imports referenced `register.integration.test.ts`. Only stale mentions remain in `.roland/blackboard.json` and historical test output logs.\n\n## 📨 MESSAGE TO lead-pm\n\n**Subject:** Auth register duplicate consolidated — 22/22 green\n\nDuplicate `tests/auth/register.integration.test.ts` is merged and deleted. Auth integration suite is self-co\n…(truncated)",
+    "status": "done",
+    "author": "refactor-specialist",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "4b0d71af-b7c8-4332-8a1a-0e26d6674df1",
+    "rev": 1,
+    "createdAt": 1779925716835,
+    "updatedAt": 1779925716835
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Fix the failing toProps() mock assertion in src/infrastructure/task/task-repository.update.test.ts",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "533b36a1-e440-47aa-a029-56e17bcbddeb",
+    "rev": 1,
+    "createdAt": 1779925840451,
+    "updatedAt": 1779925840451
+  },
+  {
+    "type": "task",
+    "title": "Fix toProps() mock assertion in update.test.ts",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nNarrowly edit only src/infrastructure/task/task-repository.update.test.ts to replace the failing full-object toProps() equality assertion with a targeted check on the specific fields that differ between the entity under test and the mock defaults. Do not alter any other test logic, mocks, or files.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "67d409a5-75ca-46bf-92ad-82575962fc23",
+    "rev": 1,
+    "createdAt": 1779925849673,
+    "updatedAt": 1779925849673
+  },
+  {
+    "type": "result",
+    "title": "Result: Fix toProps() mock assertion in update.test.ts",
+    "content": "## Test Author Deliverable\n\nFixed the failing assertion in `src/infrastructure/task/task-repository.update.test.ts`.\n\n### Root cause\n\nIn `'returns the mapped domain Task from the updated record'`, the test used:\n\n```typescript\nexpect(result.toProps()).toEqual(task.toProps());\n```\n\nThat fails because `createTaskRecord()` only overrides `id`, `title`, `status`, and `updatedAt`. The mock still uses helper defaults for:\n\n| Field | Domain entity (`task`) | Mock record (`record`) |\n|-------|------------------------|-------------------------|\n| `description` | `null` | `'Repro steps'` |\n| `assigneeId` | `null` | `'user-2'` |\n| `createdAt` | runtime `Date` from `Task.create()` | `2025-01-01T00:00:00.000Z` |\n\n`repository.update()` maps the Prisma record back to a domain entity, so `result` should reflect `record`, not `task.toProps()`.\n\n### Fix\n\nReplaced the full-object `toProps()` equality with field-level checks:\n\n- **From the updated entity:** `id`, `projectId`, `updatedAt`\n- **From the mock record (fields that differ from entity defaults):** `description`, `assigneeId`, `createdAt`\n- **Already asserted:** `title`, `status`\n\n### File changed\n\n| File | Change |\n|------|--------|\n| `src/infrastructure/task/task-repository.update.test.ts` | Replaced line 121 `toProps()` assertion with 6 targeted field assertions |\n\nNo other test logic, mocks, or files were modified. Ready for test-executor to run `npm test -- src/infrastructure/task/task-repository.update.test.ts`.",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "7661a92d-1cc2-41e2-8c4e-56a66e600024",
+    "rev": 1,
+    "createdAt": 1779925869884,
+    "updatedAt": 1779925869884
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement full Task CRUD integration with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "1c5638dc-6615-4026-a274-d2c3dc6b5f69",
+    "rev": 1,
+    "createdAt": 1779925971092,
+    "updatedAt": 1779925971092
+  },
+  {
+    "type": "task",
+    "title": "Fix createOwnedProject helper and add in-memory task repo factory",
+    "content": "Update tests/helpers/project-http.ts so createOwnedProject accepts the correct FastifyInstance (not testApp.app). Add an in-memory TaskRepository factory in tests/helpers/in-memory-task-repository.ts that satisfies the infrastructure TaskRepository interface. Wire it into create-auth-test-app.ts and task test helpers. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "edadc082-8ecf-453c-8854-c677f487a17e",
+    "rev": 1,
+    "createdAt": 1779925987804,
+    "updatedAt": 1779925987804
+  },
+  {
+    "type": "task",
+    "title": "Write corrected repository integration tests (in-memory/SQLite)",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nRewrite tests/task-repository.integration.test.ts (≤8 files) to use createTestDatabase + in-memory TaskRepository where possible, fix any stale assertions after helper changes, and cover project association + authorization boundaries. One deliverable: corrected repository test file.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "99626f3e-4a09-40f2-9534-ce978dc9ef98",
+    "rev": 1,
+    "createdAt": 1779925987807,
+    "updatedAt": 1779925987807
+  },
+  {
+    "type": "task",
+    "title": "Write corrected HTTP integration tests (in-memory only)",
+    "content": "⚠️ ESM PROJECT — MANDATORY: Never use require(), vi.spyOn on Node built-ins (fs/path/node:fs/os), or __dirname/__filename. Use import/export, vi.mock('node:fs', () => ({...})) factories, and import.meta.url + fileURLToPath instead. Any test file that violates this will break the entire suite.\nAlways create fresh instances of rate limiters, stores, caches, and servers inside each `describe`/`beforeEach` — never reuse a module-level singleton across tests. Inject no-op doubles for stateful services not under test (e.g. `createNoOpRateLimiter()`). Cross-test state leakage causes flaky, order-dependent failures.\nUpdate tests/tasks.integration.test.ts (≤8 files) to use the fixed createOwnedProject + in-memory task repo, correct the 29 failing assertions around project scoping and status/assignment, and ensure all CRUD + authorization paths are exercised. One deliverable: corrected HTTP test file.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "0be09c2f-035d-438d-a811-f814be26d3b4",
+    "rev": 1,
+    "createdAt": 1779925987810,
+    "updatedAt": 1779925987810
+  },
+  {
+    "type": "task",
+    "title": "Execute full Task test suite after fixes",
+    "content": "Run the complete Task test suite (unit + repository integration + HTTP integration) after both test-author tasks complete. Report pass/fail counts per file with full fidelity. Use the in-memory setup so no Postgres/Docker is required. Only execute after all test-author work is done.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "eca413db-ca98-4c39-be40-c175d40f4db6",
+    "rev": 1,
+    "createdAt": 1779925987813,
+    "updatedAt": 1779925987813
+  },
+  {
+    "type": "result",
+    "title": "Result: Fix createOwnedProject helper and add in-memory task repo factory",
+    "content": "## Implementation\n\nTest helpers are aligned so `createOwnedProject` takes the **Fastify instance** (`TestApp`), matching `postProject`, `postTask`, and `registerAndGetAccessToken`. The in-memory task repository was already implemented and wired through `createAuthTestApp`; the main gap was the shared helper signature and call sites.\n\n## Changes Made\n\n### `tests/helpers/project-http.ts`\n- Added exported `createOwnedProject(app: TestApp, accessToken, name?)` that calls `postProject` on the Fastify instance directly.\n- Call sites pass `testApp.app` (not `AuthTestApp`), so `testApp.app` inside the helper is never `undefined`.\n\n### `tests/helpers/task-http.ts`\n- Re-exports `createOwnedProject` from `project-http.ts` so task integration tests can import HTTP helpers from one module.\n\n### `tests/tasks.integration.test.ts`\n- Removed the local `createOwnedProject` implementation.\n- Imports `createOwnedProject` from `task-http.js`.\n- Updated all 30 call sites from `createOwnedProject(testApp, ...)` to `createOwnedProject(testApp.app, ...)`.\n\n### Already in place (verified, no changes)\n- **`tests/helpers/in-memory-task-repository.ts`** — implements full `TaskRepository` (`save`, `findById`, `findByProjectId`, `update`, `delete`).\n- **`tests/helpers/create-auth-test-app.ts`** — wires `createInMemoryTaskRepository()` into `taskUseCases` via `createTaskUseCasesFromInfrastructure(taskRepository, projectRepository)` and exposes `taskRepository` / `taskUseCases` on `AuthTestApp`.\n\n## Test Results\n\n| Suite | Result |\n|-------|--------|\n| `tests/tasks.integration.test.ts` | **40/40 passed** |\n| `tests/projects.integration.test.ts` | **29/29 passed** |\n| Task domain + infra + `task-repository.integration` | **121/121 passed** |\n\n## Next Steps\n\nDownstream **test-author** can rely on `createOwnedProject(testApp.app, ...)` from `task-http.js` when updating HTTP integration tests. No blockers on this deliverable.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "d422e707-5bc9-4bd7-8927-31316e5cb766",
+    "rev": 1,
+    "createdAt": 1779926044597,
+    "updatedAt": 1779926044597
+  },
+  {
+    "type": "result",
+    "title": "Result: Write corrected repository integration tests (in-memory/SQLite)",
+    "content": "## Test Author Deliverable\n\nRewrote `tests/task-repository.integration.test.ts` to split responsibilities between in-memory and Prisma implementations, with fresh repository/database instances per test.\n\n### File\n\n| File | Action |\n|------|--------|\n| `tests/task-repository.integration.test.ts` | **Rewritten** — dual implementation strategy |\n\n### Architecture\n\n**1. `TaskRepository via createInMemoryTaskRepository` (17 tests, no DB)**\n\nUses `createInMemoryTaskRepository()` in `beforeEach` for:\n\n| Area | Scenarios |\n|------|-----------|\n| **save** | Full fields; default `TODO` / null description / null assignee |\n| **findById** | Missing id → `null`; round-trip via `toProps()` |\n| **findByProjectId** | Empty project; project scoping; `updatedAt desc` ordering |\n| **update** | All mutable fields; clear `assigneeId`; `projectId` unchanged |\n| **delete** | Task removed from subsequent lookups |\n| **project association** | Save binds `projectId`; update is immutable; no cross-project mixing |\n| **authorization boundaries** | `findById` has no ownership check; domain `assertInProject` / `assertAccessibleByProjectOwner`; update/delete by id only |\n\n**2. `createPrismaTaskRepository via createTestDatabase` (12 tests, SQLite)**\n\nUses `createTestDatabase()` + per-test connect/disconnect for persistence-only checks:\n\n| Area | Scenarios |\n|------|-----------|\n| **save** | Row-level verification of all fields and defaults |\n| **findById** | Prisma mapping round-trip |\n| **findByProjectId** | SQLite project scoping with seeded projects |\n| **update** | Row-level field persistence; clear assignee |\n| **delete** | Row removed from SQLite |\n| **TaskStatus enum** | All statuses round-trip through save/find; transitions through update |\n\n### Key changes from prior version\n\n- Removed `createPrismaTestContext` / shared `beforeAll` context — each Prisma test gets its own isolated SQLite DB via `createTestDatabase()`\n- Removed `describe.sequential` — per-test DB isolation allows parallel e\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "5b61eb66-f621-46f6-bf6d-40d7558a9478",
+    "rev": 1,
+    "createdAt": 1779926082800,
+    "updatedAt": 1779926082800
+  },
+  {
+    "type": "result",
+    "title": "Result: Write corrected HTTP integration tests (in-memory only)",
+    "content": "## Test Author Deliverable\n\nCorrected and expanded HTTP integration tests for Task CRUD in `tests/tasks.integration.test.ts`. The suite uses the fixed helpers and matches the current implementation.\n\n### File\n\n| File | Action |\n|------|--------|\n| `tests/tasks.integration.test.ts` | Updated — **43 tests** across 6 describe blocks |\n\n### Fixes applied (from upstream executor + audit)\n\n1. **`createOwnedProject` signature** — All **31** call sites pass `testApp.app` (Fastify instance), not `AuthTestApp`. Matches `postTask`, `listTasks`, `getTask`, etc.\n2. **In-memory wiring** — Each describe uses fresh `createAuthTestApp()` with the in-memory task repository; no PostgreSQL/SQLite required.\n3. **Assertion audit** — Error bodies, status codes, and response shapes verified against:\n   - `map-task-error.ts` / domain errors (`PROJECT_OWNERSHIP`, `TASK_UNAUTHORIZED`, `TASK_NOT_FOUND`, etc.)\n   - Zod DTO validation messages (`Title is required`, `At least one field must be provided for update`, etc.)\n   - JWT middleware (`Authentication required`, `Invalid or expired token`)\n\n### Coverage\n\n| Endpoint | Tests | Highlights |\n|----------|-------|------------|\n| `POST /projects/:id/tasks` | 15 | Create, defaults, assignee, URL project scoping, JWT-only auth, validation, 404/403/401 |\n| `GET /projects/:id/tasks` | 6 | Empty list, project scoping, updatedAt ordering, 404/403/401 |\n| `GET /tasks/:id` | 5 | Owner access, assignee denied, intruder denied, 404/401 |\n| `PATCH /tasks/:id` | 12 | Title/status/description/assignee updates, empty body validation, assignee + intruder denied, 404/401 |\n| `DELETE /tasks/:id` | 5 | 204 + removal verification, assignee + intruder denied, 404/401 |\n| Lifecycle | 1 | Full create → list → get → update → delete with assignee auth checks |\n\n### New tests added\n\n- **`accepts each valid TaskStatus value on create`** — exercises `TODO`, `IN_PROGRESS`, and `DONE`\n- **`returns 403 TASK_UNAUTHORIZED when the assignee attempts to update the task`** — confir\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "4831f8f3-4050-474d-9aa5-0ad44f614487",
+    "rev": 1,
+    "createdAt": 1779926094790,
+    "updatedAt": 1779926094790
   }
 ]

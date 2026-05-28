@@ -39,8 +39,9 @@ const TEST_JWT_PUBLIC_KEY =
   'XQIDAQAB\n' +
   '-----END PUBLIC KEY-----\n';
 
-process.env.DATABASE_URL ??=
-  'postgresql://flowforge:flowforge@localhost:5432/flowforge?schema=public';
+import { createUniqueTestDatabaseUrl } from './helpers/test-database-config.js';
+
+process.env.DATABASE_URL ??= createUniqueTestDatabaseUrl();
 process.env.NODE_ENV ??= 'test';
 process.env.PORT ??= '3000';
 process.env.JWT_PRIVATE_KEY ??= TEST_JWT_PRIVATE_KEY;

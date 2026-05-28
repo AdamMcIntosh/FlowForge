@@ -33,3 +33,11 @@ export {
 export { getEnv, resetEnvCache, type Env } from './config.js';
 export { createDatabase, type Database } from './database.js';
 export { registerErrorHandler } from './error-handler.js';
+export {
+  createPrismaProjectRepository,
+  type ProjectRepository,
+} from './project/index.js';
+export {
+  createPrismaTaskRepository,
+  type TaskRepository,
+} from './task/index.js';

@@ -191,6 +191,158 @@ src/
 └── server.ts              # Early rate limit + route registration
 ```
 
+## Tasks
+
+Tasks belong to a **Project** and follow the same Clean Architecture layering as auth and projects. Domain rules live in `src/domain/task/`, use cases in `src/application/task/`, HTTP adapters in `src/adapters/task/`, and persistence in `src/infrastructure/task/`.
+
+### Task model
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | UUID | Server-generated on create |
+| `title` | string | Required, 1–255 chars (trimmed) |
+| `description` | string \| null | Optional, max 2000 chars; empty string → `null` |
+| `status` | enum | `TODO` (default), `IN_PROGRESS`, `DONE` |
+| `projectId` | string | Parent project; immutable after create |
+| `assigneeId` | string \| null | Optional user reference; no assignee-based auth yet |
+| `createdAt` / `updatedAt` | ISO datetime | Set by domain/repository |
+
+Status values are defined in `src/domain/task/task-status.ts` and mirrored in the Prisma `TaskStatus` enum.
+
+### Authorization model (project owner only)
+
+All task routes require a valid **Bearer access token**. The controller injects `userId` from JWT `sub` only — it is never accepted from the request body.
+
+| Operation | Authorization check |
+|-----------|----------------------|
+| Create / List | Load project by `projectId` → `project.assertOwnedBy(userId)` |
+| Get / Update / Delete | Load task → load parent project → `task.assertAccessibleByProjectOwner(project.ownerId, userId)` |
+
+**Only the project owner** may access tasks in that project. Assignees have no implicit read or write access in the current model. Non-owners receive `403` (`TASK_UNAUTHORIZED` or `PROJECT_OWNERSHIP`); missing project/task returns `404` (no existence leak across owners).
+
+```
+JWT preHandler → controller (userId from claims)
+  → task use case
+  → projectRepository.findById + ownership assert
+  → taskRepository save | findByProjectId | findById | update | delete
+  → sendMappedTaskError on failure
+```
+
+### HTTP error shape
+
+Task errors use the same JSON envelope as auth:
+
+```json
+{
+  "statusCode": 403,
+  "error": "Forbidden",
+  "message": "You do not have permission to access this task",
+  "code": "TASK_UNAUTHORIZED"
+}
+```
+
+Mapping lives in `src/adapters/task/map-task-error.ts`. Common codes: `VALIDATION_ERROR` (400), `TASK_NOT_FOUND` / `PROJECT_NOT_FOUND` (404), `TASK_UNAUTHORIZED` / `PROJECT_OWNERSHIP` (403), `TASK_INVALID_*` (422).
+
+### Task API contracts
+
+Base URL: `http://localhost:3000`. All routes require `Authorization: Bearer <accessToken>`.
+
+#### `POST /projects/:id/tasks`
+
+Create a task in a project the caller owns.
+
+**Request**
+
+```json
+{
+  "title": "Set up CI pipeline",
+  "description": "GitHub Actions for test + lint",
+  "status": "TODO",
+  "assigneeId": "550e8400-e29b-41d4-a716-446655440001"
+}
+```
+
+Only `title` is required. `status` defaults to `TODO`; `description` and `assigneeId` are optional (`assigneeId: null` clears assignment on update only).
+
+**Success — `201 Created`**
+
+```json
+{
+  "id": "660e8400-e29b-41d4-a716-446655440000",
+  "title": "Set up CI pipeline",
+  "description": "GitHub Actions for test + lint",
+  "status": "TODO",
+  "projectId": "770e8400-e29b-41d4-a716-446655440000",
+  "assigneeId": "550e8400-e29b-41d4-a716-446655440001",
+  "createdAt": "2025-05-27T12:00:00.000Z",
+  "updatedAt": "2025-05-27T12:00:00.000Z"
+}
+```
+
+**Errors:** `400` validation, `403` not project owner, `404` project not found, `422` domain validation.
+
+#### `GET /projects/:id/tasks`
+
+List tasks for an owned project, ordered by `updatedAt` descending.
+
+**Success — `200 OK`**
+
+```json
+{
+  "tasks": [
+    {
+      "id": "660e8400-e29b-41d4-a716-446655440000",
+      "title": "Set up CI pipeline",
+      "description": null,
+      "status": "IN_PROGRESS",
+      "projectId": "770e8400-e29b-41d4-a716-446655440000",
+      "assigneeId": null,
+      "createdAt": "2025-05-27T12:00:00.000Z",
+      "updatedAt": "2025-05-27T14:30:00.000Z"
+    }
+  ]
+}
+```
+
+#### `GET /tasks/:id`
+
+Fetch a single task. Caller must own the task's parent project.
+
+**Success — `200 OK`:** Same task object shape as create response.
+
+**Errors:** `404` task or parent project not found, `403` not owner.
+
+#### `PATCH /tasks/:id`
+
+Partial update; at least one of `title`, `description`, `status`, or `assigneeId` must be provided.
+
+**Request**
+
+```json
+{
+  "status": "DONE",
+  "assigneeId": null
+}
+```
+
+**Success — `200 OK`:** Updated task object.
+
+#### `DELETE /tasks/:id`
+
+**Success — `204 No Content`** (empty body)
+
+### Task folder layout
+
+```
+src/
+├── domain/task/           # Task entity, TaskStatus, domain errors
+├── application/task/      # create, list, get, update, delete use cases + DTOs
+├── adapters/task/         # Controller, request/error mapping
+├── infrastructure/task/   # PrismaTaskRepository
+├── routes/tasks.ts        # Fastify plugin (JWT on all routes)
+└── infrastructure/auth/   # jwt-auth-middleware (shared with /me, /projects)
+```
+
 ## Folder Structure
 
 src/

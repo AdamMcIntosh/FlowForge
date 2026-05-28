@@ -112,7 +112,45 @@ Defaults: 10 requests / 60 s (`RATE_LIMIT_MAX_REQUESTS`, `RATE_LIMIT_WINDOW_MS`)
 
 Input schemas: `registerInputSchema` (email, name, password with letter+number rules), `loginInputSchema`, `logoutInputSchema`, `refreshInputSchema` (refresh token string).  
 **Rationale:** RESTful verbs via POST for credential-bearing bodies; token responses separate user profile from secrets.  
-**Consequences:** Access token is not required on logout/refresh — refresh token in body is sufficient; protected resource routes will use Bearer access tokens (future work).
+**Consequences:** Access token is not required on logout/refresh — refresh token in body is sufficient; protected resource routes use Bearer access tokens via `createJwtAuthMiddleware`.
+
+### 2025-05-27: Task Authorization via Project Ownership
+**Status:** Accepted  
+**Context:** Tasks belong to projects; multiple users may exist but only project owners should manage task data in MVP.  
+**Decision:** Enforce **owner-only** access for all task CRUD operations. Create/list check `project.assertOwnedBy(userId)`; get/update/delete load the parent project and call `task.assertAccessibleByProjectOwner(project.ownerId, userId)`. `userId` always comes from JWT `sub`, never from the request body.  
+**Rationale:** Reuses the existing project ownership model; keeps authorization logic in use cases and domain entities rather than route-only checks.  
+**Consequences:** Assignees can be stored on a task but cannot access it unless they also own the project. Future role-based access (assignee read, team members) requires new domain rules and ADRs.
+
+### 2025-05-27: Task Status Enum
+**Status:** Accepted  
+**Context:** Tasks need a simple lifecycle for kanban-style workflows without over-modeling states.  
+**Decision:** Three statuses only: `TODO`, `IN_PROGRESS`, `DONE`. Defined in `src/domain/task/task-status.ts`, validated by `parseTaskStatus`, mirrored in Prisma `TaskStatus`, and exposed in Zod DTOs. Default on create: `TODO`.  
+**Rationale:** Aligns domain, API, and database; easy to extend later with explicit migration if new states are needed.  
+**Consequences:** Clients must send exact enum strings; invalid values return `422` / `TASK_INVALID_STATUS`. No enforced transition rules (e.g. DONE → TODO is allowed at the domain layer).
+
+### 2025-05-27: Task API Route Shape
+**Status:** Accepted  
+**Context:** Tasks are always scoped to a project for create/list, but clients need direct access by task id for detail views and edits.  
+**Decision:** Nested routes for collection operations, flat routes for instance operations:
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `POST` | `/projects/:id/tasks` | Create in project |
+| `GET` | `/projects/:id/tasks` | List by project |
+| `GET` | `/tasks/:id` | Get one |
+| `PATCH` | `/tasks/:id` | Partial update |
+| `DELETE` | `/tasks/:id` | Delete |
+
+All routes register JWT `preHandler` in `src/routes/tasks.ts`.  
+**Rationale:** RESTful nesting where the parent is natural (project context); flat paths avoid redundant project id on single-task mutations when the task id is already known.  
+**Consequences:** Get/update/delete must resolve authorization via the task's stored `projectId`, not a URL project segment.
+
+### 2025-05-27: Optional Task Assignee (No Membership Validation)
+**Status:** Accepted (interim)  
+**Context:** Tasks support an optional `assigneeId` for future UX, but there is no project membership or team model yet.  
+**Decision:** Accept optional `assigneeId` (nullable) on create/update without verifying that the user exists or belongs to the project. Assignees receive **no** API access based on assignment alone.  
+**Rationale:** Unblocks assignment UI and data model without building teams/invitations. Owner-only auth remains the single gate.  
+**Consequences:** Orphan or arbitrary user ids may be stored; clients should validate assignees in UI until a membership ADR exists. Authorization gaps for assignees are intentional until roles are defined.
 
 ---
 

@@ -1,0 +1,142 @@
+
+ RUN  v3.2.4 C:/Users/amcintosh1/source/repos/FlowForge
+      Coverage enabled with v8
+
+ Γ£ô src/infrastructure/task/task-repository.test.ts (18 tests) 33ms
+
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+   Start at  19:15:50
+   Duration  2.92s (transform 209ms, setup 63ms, collect 178ms, tests 33ms, environment 0ms, prepare 486ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |    8.54 |    46.09 |   42.74 |    8.54 |                   
+ src               |       0 |        0 |       0 |       0 |                   
+  server.ts        |       0 |        0 |       0 |       0 | 1-145             
+ src/adapters/auth |       0 |    57.14 |   57.14 |       0 |                   
+  ...controller.ts |       0 |      100 |     100 |       0 | 3-99              
+  ...auth-error.ts |       0 |      100 |     100 |       0 | 2-40              
+  index.ts         |       0 |        0 |       0 |       0 | 1-4               
+  ...auth-error.ts |       0 |        0 |       0 |       0 | 1-48              
+  ...main-error.ts |       0 |        0 |       0 |       0 | 1-15              
+  me-controller.ts |       0 |      100 |     100 |       0 | 3-18              
+  ...auth-error.ts |       0 |      100 |     100 |       0 | 3-27              
+ ...apters/project |       0 |       40 |      40 |       0 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1-11              
+  ...ject-error.ts |       0 |        0 |       0 |       0 | 1-48              
+  ...ct-request.ts |       0 |        0 |       0 |       0 | 1-27              
+  ...controller.ts |       0 |      100 |     100 |       0 | 4-91              
+  ...ject-error.ts |       0 |      100 |     100 |       0 | 3-27              
+ src/adapters/task |       0 |       40 |      40 |       0 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1-13              
+  ...task-error.ts |       0 |        0 |       0 |       0 | 1-63              
+  ...sk-request.ts |       0 |        0 |       0 |       0 | 1-27              
+  ...task-error.ts |       0 |      100 |     100 |       0 | 3-27              
+  ...controller.ts |       0 |      100 |     100 |       0 | 4-100             
+ src/application   |       0 |        0 |       0 |       0 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1-56              
+ ...plication/auth |       0 |     12.5 |    12.5 |       0 |                   
+  ...-use-cases.ts |       0 |        0 |       0 |       0 | 1-49              
+  index.ts         |       0 |        0 |       0 |       0 | 1-27              
+  ...n.use-case.ts |       0 |        0 |       0 |       0 | 1-32              
+  ...t.use-case.ts |       0 |        0 |       0 |       0 | 1-35              
+  ...h.use-case.ts |       0 |        0 |       0 |       0 | 1-62              
+  ...r.use-case.ts |       0 |        0 |       0 |       0 | 1-39              
+  token-pair.ts    |       0 |        0 |       0 |       0 | 1-63              
+  types.ts         |       0 |        0 |       0 |       0 |                   
+ ...ation/auth/dto |       0 |        0 |       0 |       0 |                   
+  ...tokens.dto.ts |       0 |        0 |       0 |       0 | 1-22              
+  index.ts         |       0 |        0 |       0 |       0 | 1-14              
+  login.dto.ts     |       0 |        0 |       0 |       0 | 1-11              
+  logout.dto.ts    |       0 |        0 |       0 |       0 | 1-8               
+  ...sponse.dto.ts |       0 |        0 |       0 |       0 | 1-6               
+  ...result.dto.ts |       0 |        0 |       0 |       0 | 1-7               
+  refresh.dto.ts   |       0 |        0 |       0 |       0 | 1-8               
+  register.dto.ts  |       0 |        0 |       0 |       0 | 1-23              
+ ...cation/project |       0 |    44.44 |   44.44 |       0 |                   
+  ...-use-cases.ts |       0 |      100 |     100 |       0 | 2-50              
+  ...e.use-case.ts |       0 |        0 |       0 |       0 | 1-25              
+  ...e.use-case.ts |       0 |        0 |       0 |       0 | 1-21              
+  get.use-case.ts  |       0 |        0 |       0 |       0 | 1-22              
+  index.ts         |       0 |        0 |       0 |       0 | 1-26              
+  list.use-case.ts |       0 |      100 |     100 |       0 | 3-19              
+  ...ect-mapper.ts |       0 |      100 |     100 |       0 | 4-13              
+  types.ts         |       0 |        0 |       0 |       0 |                   
+  ...e.use-case.ts |       0 |        0 |       0 |       0 | 1-29              
+ ...on/project/dto |       0 |        0 |       0 |       0 |                   
+  ...roject.dto.ts |       0 |        0 |       0 |       0 | 1-15              
+  ...roject.dto.ts |       0 |        0 |       0 |       0 | 1-6               
+  ...roject.dto.ts |       0 |        0 |       0 |       0 | 1-6               
+  index.ts         |       0 |        0 |       0 |       0 | 1-20              
+  ...ojects.dto.ts |       0 |        0 |       0 |       0 | 1-5               
+  ...sponse.dto.ts |       0 |        0 |       0 |       0 | 1-16              
+  ...roject.dto.ts |       0 |        0 |       0 |       0 | 1-23              
+ ...plication/task |       0 |    33.33 |   33.33 |       0 |                   
+  ...-use-cases.ts |       0 |      100 |     100 |       0 | 3-52              
+  ...e.use-case.ts |       0 |        0 |       0 |       0 | 1-37              
+  ...e.use-case.ts |       0 |        0 |       0 |       0 | 1-29              
+  get.use-case.ts  |       0 |        0 |       0 |       0 | 1-30              
+  index.ts         |       0 |        0 |       0 |       0 | 1-26              
+  list.use-case.ts |       0 |        0 |       0 |       0 | 1-28              
+  task-mapper.ts   |       0 |      100 |     100 |       0 | 4-15              
+  types.ts         |       0 |        0 |       0 |       0 |                   
+  ...e.use-case.ts |       0 |        0 |       0 |       0 | 1-39              
+ ...ation/task/dto |       0 |        0 |       0 |       0 |                   
+  ...e-task.dto.ts |       0 |        0 |       0 |       0 | 1-28              
+  ...e-task.dto.ts |       0 |        0 |       0 |       0 | 1-6               
+  get-task.dto.ts  |       0 |        0 |       0 |       0 | 1-6               
+  index.ts         |       0 |        0 |       0 |       0 | 1-11              
+  ...-tasks.dto.ts |       0 |        0 |       0 |       0 | 1-8               
+  ...sponse.dto.ts |       0 |        0 |       0 |       0 | 1-26              
+  ...e-task.dto.ts |       0 |        0 |       0 |       0 | 1-38              
+ src/domain        |   66.66 |    66.66 |   66.66 |   66.66 |                   
+  errors.ts        |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1-46              
+ src/domain/auth   |       0 |        0 |       0 |       0 |                   
+  ...ken-claims.ts |       0 |        0 |       0 |       0 | 1-100             
+  errors.ts        |       0 |        0 |       0 |       0 | 1-43              
+  index.ts         |       0 |        0 |       0 |       0 | 1-30              
+  password.ts      |       0 |        0 |       0 |       0 | 1-45              
+  user.ts          |       0 |        0 |       0 |       0 | 1-116             
+ ...domain/project |       0 |    33.33 |   33.33 |       0 |                   
+  errors.ts        |       0 |        0 |       0 |       0 | 1-25              
+  index.ts         |       0 |        0 |       0 |       0 | 1-8               
+  project.ts       |       0 |      100 |     100 |       0 | 2-163             
+ src/domain/task   |   81.05 |    68.75 |   59.09 |   81.05 |                   
+  errors.ts        |   69.23 |      100 |      20 |   69.23 | ...12,17-18,23-24 
+  index.ts         |       0 |        0 |       0 |       0 | 1-20              
+  task-status.ts   |     100 |      100 |     100 |     100 |                   
+  task.ts          |   81.88 |    65.38 |   71.42 |   81.88 | ...87-188,191-194 
+ ...infrastructure |       0 |       25 |      25 |       0 |                   
+  config.ts        |       0 |        0 |       0 |       0 | 1-34              
+  database.ts      |       0 |        0 |       0 |       0 | 1-30              
+  error-handler.ts |       0 |      100 |     100 |       0 | 3-57              
+  index.ts         |       0 |        0 |       0 |       0 | 1-40              
+ ...structure/auth |       0 |    66.66 |   66.66 |       0 |                   
+  ...astructure.ts |       0 |      100 |     100 |       0 | 4-25              
+  index.ts         |       0 |        0 |       0 |       0 | 1-41              
+  ...middleware.ts |       0 |      100 |     100 |       0 | 4-67              
+  jwt-service.ts   |       0 |        0 |       0 |       0 | 1-159             
+  ...ord-hasher.ts |       0 |        0 |       0 |       0 | 1-24              
+  rate-limiter.ts  |       0 |      100 |     100 |       0 | 2-249             
+  ...repository.ts |       0 |      100 |     100 |       0 | 3-40              
+  types.ts         |       0 |        0 |       0 |       0 |                   
+  ...repository.ts |       0 |      100 |     100 |       0 | 3-82              
+ ...ucture/project |       0 |      100 |     100 |       0 |                   
+  index.ts         |       0 |      100 |     100 |       0 | 2                 
+  ...repository.ts |       0 |      100 |     100 |       0 | 3-85              
+  types.ts         |       0 |        0 |       0 |       0 |                   
+ ...structure/task |   90.27 |       90 |      90 |   90.27 |                   
+  index.ts         |       0 |      100 |     100 |       0 | 2                 
+  ...repository.ts |   91.54 |     87.5 |    87.5 |   91.54 | 61-62,93-96       
+  types.ts         |       0 |        0 |       0 |       0 |                   
+ src/routes        |       0 |      100 |     100 |       0 |                   
+  auth.ts          |       0 |      100 |     100 |       0 | 3-24              
+  health.ts        |       0 |      100 |     100 |       0 | 3-6               
+  me.ts            |       0 |      100 |     100 |       0 | 3-19              
+  projects.ts      |       0 |      100 |     100 |       0 | 3-47              
+  tasks.ts         |       0 |      100 |     100 |       0 | 3-47              
+-------------------|---------|----------|---------|---------|-------------------

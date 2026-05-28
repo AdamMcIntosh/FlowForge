@@ -1,5 +1,9 @@
 import { createAuthUseCases } from '../../src/application/auth/create-auth-use-cases.js';
 import type { AuthUseCases } from '../../src/application/auth/types.js';
+import { createProjectUseCasesFromInfrastructure } from '../../src/application/project/create-project-use-cases.js';
+import type { ProjectUseCases } from '../../src/application/project/types.js';
+import { createTaskUseCasesFromInfrastructure } from '../../src/application/task/create-task-use-cases.js';
+import type { TaskUseCases } from '../../src/application/task/types.js';
 import { createArgon2PasswordHasher } from '../../src/infrastructure/auth/password-hasher.js';
 import { createJwtService } from '../../src/infrastructure/auth/jwt-service.js';
 import { createInMemoryRefreshTokenRepository } from '../../src/infrastructure/auth/refresh-token-repository.js';
@@ -10,7 +14,11 @@ import {
 } from '../../src/infrastructure/auth/rate-limiter.js';
 import type { JwtService, UserRepository } from '../../src/infrastructure/auth/types.js';
 import { getEnv } from '../../src/infrastructure/config.js';
+import type { ProjectRepository } from '../../src/infrastructure/project/types.js';
+import type { TaskRepository } from '../../src/infrastructure/task/types.js';
 import { buildServer } from '../../src/server.js';
+import { createInMemoryProjectRepository } from './in-memory-project-repository.js';
+import { createInMemoryTaskRepository } from './in-memory-task-repository.js';
 import { createInMemoryUserRepository } from './in-memory-user-repository.js';
 
 export type AuthTestApp = {
@@ -19,11 +27,17 @@ export type AuthTestApp = {
   userRepository: UserRepository;
   jwtService: JwtService;
   rateLimiter: RateLimiter;
+  projectRepository: ProjectRepository;
+  projectUseCases: ProjectUseCases;
+  taskRepository: TaskRepository;
+  taskUseCases: TaskUseCases;
 };
 
 export type CreateAuthTestAppOptions = {
   rateLimiter?: RateLimiter;
   rateLimitMaxRequests?: number;
+  projectRepository?: ProjectRepository;
+  taskRepository?: TaskRepository;
 };
 
 export async function createAuthTestApp(
@@ -52,7 +66,18 @@ export async function createAuthTestApp(
     },
   });
 
-  const app = await buildServer({ authUseCases, rateLimiter, jwtService });
+  const projectRepository = options.projectRepository ?? createInMemoryProjectRepository();
+  const projectUseCases = createProjectUseCasesFromInfrastructure(projectRepository);
+  const taskRepository = options.taskRepository ?? createInMemoryTaskRepository();
+  const taskUseCases = createTaskUseCasesFromInfrastructure(taskRepository, projectRepository);
+
+  const app = await buildServer({
+    authUseCases,
+    rateLimiter,
+    jwtService,
+    projectUseCases,
+    taskUseCases,
+  });
 
   return {
     app,
@@ -60,5 +85,9 @@ export async function createAuthTestApp(
     userRepository,
     jwtService,
     rateLimiter,
+    projectRepository,
+    projectUseCases,
+    taskRepository,
+    taskUseCases,
   };
 }

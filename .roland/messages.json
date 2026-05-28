@@ -1,0 +1,42 @@
+[
+  {
+    "id": "6423816b-c701-4cf3-b313-0dce11b5b14e",
+    "from": "code-reviewer",
+    "to": "test-author",
+    "subject": "Message from agent",
+    "body": "Task HTTP integration tests are the highest-priority gap. You will need:\n- `tests/helpers/in-memory-task-repository.ts`\n- `tests/helpers/task-http.ts`\n- Updates to `createAuthTestApp` to pass `taskUseCases` built from in-memory task + project repos\n- Coverage for all five endpoints, 401/403/404/400 paths, and confirmation that body `userId` is ignored\n\nDomain and repository mapper tests are already solid — focus on the HTTP + authorization matrix.",
+    "sentAt": 1779925169070,
+    "deliveredTo": [
+      "test-author"
+    ]
+  },
+  {
+    "id": "3aaf2d6b-1509-4ed9-8264-20b804bebc20",
+    "from": "test-executor",
+    "to": "lead-pm",
+    "subject": "Message from agent",
+    "body": "**Subject:** Task test suite — 30 test bugs, 0 implementation failures\n\nDomain (60/60), repository unit (46/47), and SQLite integration (14/14) all pass. The 30 failures are confined to two test-author issues: a helper argument type mismatch in `tasks.integration.test.ts` and an over-broad mock assertion in `task-repository.update.test.ts`. Full repo suite: 433/463 pass with no regressions outside Task tests. Wave should not proceed on “Task CRUD tested end-to-end” until test-author fixes land.",
+    "sentAt": 1779925353089,
+    "deliveredTo": []
+  },
+  {
+    "id": "21208f5c-7830-4e98-8154-89198f8a0033",
+    "from": "explore",
+    "to": "executor",
+    "subject": "Message from agent",
+    "body": "**Subject:** `tasks.integration.test.ts` fix is call-site vs helper mismatch; no mocks in that file\n\n1. **`createOwnedProject(testApp.app, ...)` → `createOwnedProject(testApp, ...)`** at all 29 call sites (lines 96, 128, 153, 168, 184, 213, 233, 252, 271, 290, 327, 373, 383–384, 416, 468, 506, 539, 573, 612, 648, 680, 703, 727, 754, 781, 826, 868, 909, 959). Alternative: change helper param type to `TestApp` and use `app` directly.\n2. **No mock assertions exist in `tasks.integration.test.ts`.** The failing mock assertion is at `src/infrastructure/task/task-repository.update.test.ts:121` — outside your \"edit only tasks.integration.test.ts\" scope unless PM expands it.\n3. After the fix, expect most of the 40 Task HTTP tests to pass (previously ~29 failing due to broken project setup).",
+    "sentAt": 1779925583352,
+    "deliveredTo": [
+      "executor"
+    ]
+  },
+  {
+    "id": "46f93c03-82ec-496b-86b7-5cfc161df882",
+    "from": "refactor-specialist",
+    "to": "lead-pm",
+    "subject": "Message from agent",
+    "body": "**Subject:** Auth register duplicate consolidated — 22/22 green\n\nDuplicate `tests/auth/register.integration.test.ts` is merged and deleted. Auth integration suite is self-contained at 22 tests. Full suite still has 2 pre-existing failures in `task-repository.update.test.ts` (mock `toProps()` assertion) — outside refactor-specialist scope; executor task covers that separately.",
+    "sentAt": 1779925716835,
+    "deliveredTo": []
+  }
+]

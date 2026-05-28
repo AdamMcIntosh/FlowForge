@@ -5,13 +5,19 @@ import Fastify from 'fastify';
 
 import {
   createAuthUseCasesFromInfrastructure,
+  createProjectUseCasesFromInfrastructure,
+  createTaskUseCasesFromInfrastructure,
   type AuthUseCases,
+  type ProjectUseCases,
+  type TaskUseCases,
 } from './application/index.js';
 import {
   createAuthInfrastructure,
   createDatabase,
   createFixedWindowRateLimiter,
   createJwtService,
+  createPrismaProjectRepository,
+  createPrismaTaskRepository,
   getEnv,
   registerEarlyRateLimit,
   type JwtService,
@@ -21,11 +27,15 @@ import { registerErrorHandler } from './infrastructure/error-handler.js';
 import { authRoutes } from './routes/auth.js';
 import { healthRoutes } from './routes/health.js';
 import { meRoutes } from './routes/me.js';
+import { projectRoutes } from './routes/projects.js';
+import { taskRoutes } from './routes/tasks.js';
 
 export type BuildServerOptions = {
   rateLimiter?: RateLimiter;
   authUseCases?: AuthUseCases;
   jwtService?: JwtService;
+  projectUseCases?: ProjectUseCases;
+  taskUseCases?: TaskUseCases;
 };
 
 export async function buildServer(options: BuildServerOptions = {}) {
@@ -40,16 +50,38 @@ export async function buildServer(options: BuildServerOptions = {}) {
   let rateLimiter = options.rateLimiter;
   let authUseCases = options.authUseCases;
   let jwtService = options.jwtService;
+  let projectUseCases = options.projectUseCases;
+  let taskUseCases = options.taskUseCases;
 
-  if (authUseCases === undefined) {
+  if (
+    authUseCases === undefined ||
+    projectUseCases === undefined ||
+    taskUseCases === undefined
+  ) {
     const database = createDatabase(env);
-    const auth = createAuthInfrastructure(env, database.prisma);
-    rateLimiter ??= auth.rateLimiter;
-    jwtService ??= auth.jwtService;
-    authUseCases = createAuthUseCasesFromInfrastructure(auth, {
-      accessTokenTtlSeconds: env.JWT_ACCESS_TOKEN_TTL_SECONDS,
-      refreshTokenTtlSeconds: env.JWT_REFRESH_TOKEN_TTL_SECONDS,
-    });
+    const prisma = database.prisma;
+    const projectRepository = createPrismaProjectRepository(prisma);
+
+    if (authUseCases === undefined) {
+      const auth = createAuthInfrastructure(env, prisma);
+      rateLimiter ??= auth.rateLimiter;
+      jwtService ??= auth.jwtService;
+      authUseCases = createAuthUseCasesFromInfrastructure(auth, {
+        accessTokenTtlSeconds: env.JWT_ACCESS_TOKEN_TTL_SECONDS,
+        refreshTokenTtlSeconds: env.JWT_REFRESH_TOKEN_TTL_SECONDS,
+      });
+    }
+
+    if (projectUseCases === undefined) {
+      projectUseCases = createProjectUseCasesFromInfrastructure(projectRepository);
+    }
+
+    if (taskUseCases === undefined) {
+      taskUseCases = createTaskUseCasesFromInfrastructure(
+        createPrismaTaskRepository(prisma),
+        projectRepository,
+      );
+    }
   }
 
   jwtService ??= createJwtService(env);
@@ -64,6 +96,8 @@ export async function buildServer(options: BuildServerOptions = {}) {
   await app.register(healthRoutes);
   await app.register(authRoutes, { authUseCases, rateLimiter });
   await app.register(meRoutes, { jwtService });
+  await app.register(projectRoutes, { projectUseCases, jwtService });
+  await app.register(taskRoutes, { taskUseCases, jwtService });
 
   return app;
 }

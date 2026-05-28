@@ -116,6 +116,25 @@ describe('createGetTaskUseCase', () => {
     ).rejects.toThrow(UnauthorizedTaskAccessError);
   });
 
+  it('allows the project owner to read a task assigned to another user', async () => {
+    await seedOwnedProject(deps.projectRepository, { ownerId: 'user-1' });
+    await seedTask(deps.taskRepository, {
+      title: 'Delegated work',
+      assigneeId: 'user-2',
+      status: TaskStatus.IN_PROGRESS,
+    });
+    const getTask = createGetTaskUseCase(deps);
+
+    const result = await getTask({
+      userId: 'user-1',
+      taskId: 'task-1',
+    });
+
+    expect(result.title).toBe('Delegated work');
+    expect(result.assigneeId).toBe('user-2');
+    expect(result.status).toBe(TaskStatus.IN_PROGRESS);
+  });
+
   it('throws TaskNotFoundError with TASK_NOT_FOUND code', async () => {
     const getTask = createGetTaskUseCase(deps);
 

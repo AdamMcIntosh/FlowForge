@@ -131,6 +131,56 @@ describe('createUpdateTaskUseCase', () => {
     ).rejects.toThrow(TaskNotFoundError);
   });
 
+  it('throws TaskNotFoundError with TASK_NOT_FOUND code', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    const updateTask = createUpdateTaskUseCase(deps);
+
+    let error: TaskNotFoundError | undefined;
+
+    try {
+      await updateTask({
+        userId: 'user-1',
+        taskId: 'missing-task',
+        title: 'Updated',
+      });
+    } catch (caught) {
+      error = caught as TaskNotFoundError;
+    }
+
+    expect(error?.code).toBe('TASK_NOT_FOUND');
+  });
+
+  it('accepts a title at the maximum allowed length', async () => {
+    const title = 'a'.repeat(255);
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository);
+    const updateTask = createUpdateTaskUseCase(deps);
+
+    const result = await updateTask({
+      userId: 'user-1',
+      taskId: 'task-1',
+      title,
+    });
+
+    expect(result.title).toBe(title);
+    expect((await deps.taskRepository.findById('task-1'))?.title).toBe(title);
+  });
+
+  it('preserves projectId when updating fields', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository);
+    const updateTask = createUpdateTaskUseCase(deps);
+
+    const result = await updateTask({
+      userId: 'user-1',
+      taskId: 'task-1',
+      title: 'Renamed',
+    });
+
+    expect(result.projectId).toBe('project-1');
+    expect((await deps.taskRepository.findById('task-1'))?.projectId).toBe('project-1');
+  });
+
   it('throws TaskNotFoundError when the project does not exist', async () => {
     await seedTask(deps.taskRepository);
     const updateTask = createUpdateTaskUseCase(deps);

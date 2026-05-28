@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto';
 
-import { ProjectNotFoundError, Task } from '../../domain/index.js';
+import { Task } from '../../domain/index.js';
 import type { ProjectRepository } from '../../infrastructure/project/types.js';
 import type { TaskRepository } from '../../infrastructure/task/types.js';
 import type { CreateTaskInputDto, TaskResponseDto } from './dto/index.js';
+import { requireOwnedProject } from './task-access.js';
 import { toTaskResponse } from './task-mapper.js';
 
 export type CreateTaskUseCaseDeps = {
@@ -13,13 +14,7 @@ export type CreateTaskUseCaseDeps = {
 
 export function createCreateTaskUseCase(deps: CreateTaskUseCaseDeps) {
   return async function createTask(input: CreateTaskInputDto): Promise<TaskResponseDto> {
-    const project = await deps.projectRepository.findById(input.projectId);
-
-    if (project === null) {
-      throw new ProjectNotFoundError();
-    }
-
-    project.assertOwnedBy(input.userId);
+    await requireOwnedProject(deps.projectRepository, input.projectId, input.userId);
 
     const task = Task.create({
       id: randomUUID(),

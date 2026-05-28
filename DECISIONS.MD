@@ -152,6 +152,79 @@ All routes register JWT `preHandler` in `src/routes/tasks.ts`.
 **Rationale:** Unblocks assignment UI and data model without building teams/invitations. Owner-only auth remains the single gate.  
 **Consequences:** Orphan or arbitrary user ids may be stored; clients should validate assignees in UI until a membership ADR exists. Authorization gaps for assignees are intentional until roles are defined.
 
+### 2025-05-28: Task Domain & Access Control (Consolidated Design)
+**Status:** Accepted  
+**Context:** Task CRUD spans domain, application, infrastructure, and HTTP layers. Downstream agents need a single reference for entity shape, authorization boundaries, and extension points.
+
+#### Domain entity (`src/domain/task/task.ts`)
+Immutable aggregate rooted in a **Project**. Factory methods: `Task.create()` (new), `Task.reconstitute()` (from persistence). Mutations return a new instance via `update()` — `projectId` is never changed after create.
+
+| Field | Constraints |
+|-------|-------------|
+| `title` | Required, trimmed, 1–255 chars |
+| `description` | Optional, max 2000 chars; blank → `null` |
+| `status` | `TaskStatusValue`; default `TODO` |
+| `projectId` | Required, immutable |
+| `assigneeId` | Optional `UserId \| null` |
+| `createdAt` / `updatedAt` | Set on create; `updatedAt` refreshed on `update()` |
+
+Domain guards: `isInProject()` / `assertInProject(projectId)` for URL/body consistency; `assertAccessibleByProjectOwner(projectOwnerId, userId)` for auth.
+
+#### Value objects (`src/domain/task/task-status.ts`)
+`TaskStatus` enum: `TODO` | `IN_PROGRESS` | `DONE`. Parsed via `parseTaskStatus()` / `isTaskStatus()`; invalid values throw `InvalidTaskStatusError`. Mirrored in Prisma `TaskStatus` and Zod DTOs.
+
+#### Status transitions
+**No enforced state machine.** Any valid enum may be set from any other (e.g. `DONE → TODO`). `changeStatus` use case and general `update` both call `task.update({ status })`. Transition rules can be added later in the domain without changing repository contracts.
+
+#### Project association
+Every task carries exactly one `projectId`. Create/list operations receive `projectId` from the URL; get/update/delete/assign/changeStatus resolve the parent project via `task.projectId`. If the parent project is missing, callers receive `TaskNotFoundError` (404) — not a cross-owner leak.
+
+#### Assignment rules
+- Optional on create (`assigneeId` omitted → `null`).
+- Set, reassign, or clear (`null`) via `assign` use case or `PATCH /tasks/:id`.
+- **No validation** that assignee exists or belongs to the project (no membership model).
+- **Assignee identity grants zero API access** in MVP; only project ownership does.
+
+#### Authorization boundary
+**MVP: project-owner only** (not project members — no membership table exists yet).
+
+Centralized in `src/application/task/task-access.ts`:
+
+| Helper | Used by | Check |
+|--------|---------|-------|
+| `requireOwnedProject()` | create, list | `projectRepository.findById` → `project.assertOwnedBy(userId)` |
+| `requireTaskAccessibleByProjectOwner()` | get, update, delete, assign, changeStatus | load task → load parent project → `task.assertAccessibleByProjectOwner(project.ownerId, userId)` |
+
+`userId` always comes from JWT `sub` (controller); never from request body. HTTP layer applies JWT `preHandler` only — no route-level ownership logic.
+
+**Future extension (requires new ADR):** project membership / roles would replace or augment `assertAccessibleByProjectOwner` with something like `assertAccessibleByProjectMember(project, userId, role)`. Assignee read-only access would be a separate rule, not implied by `assigneeId`.
+
+#### Repository interface (`src/infrastructure/task/types.ts`)
+```ts
+interface TaskRepository {
+  save(task: Task): Promise<Task>;
+  findById(id: TaskId): Promise<Task | null>;
+  findByProjectId(projectId: ProjectId): Promise<Task[]>;
+  update(task: Task): Promise<Task>;
+  delete(id: TaskId): Promise<void>;
+}
+```
+Implementations: `createPrismaTaskRepository()` (production), `createInMemoryTaskRepository()` (tests). Interface lives in infrastructure (follows Project/User pattern); domain depends on the `Task` entity only.
+
+#### Domain errors (`src/domain/task/errors.ts`)
+| Error | Code | Typical HTTP |
+|-------|------|--------------|
+| `TaskNotFoundError` | `TASK_NOT_FOUND` | 404 |
+| `UnauthorizedTaskAccessError` | `TASK_UNAUTHORIZED` | 403 |
+| `InvalidTaskTitleError` | `TASK_INVALID_TITLE` | 422 |
+| `InvalidTaskDescriptionError` | `TASK_INVALID_DESCRIPTION` | 422 |
+| `InvalidTaskStatusError` | `TASK_INVALID_STATUS` | 422 |
+
+Related project errors (`ProjectNotFoundError`, `UnauthorizedProjectAccessError`) surface from `requireOwnedProject`. Mapped in `src/adapters/task/map-task-error.ts`.
+
+#### Application & HTTP surface
+Seven use cases via `createTaskUseCases()`: create, list, get, update, delete, assign, changeStatus. Controller routes single-field `PATCH` bodies to focused use cases (`assigneeId` only → assign; `status` only → changeStatus; otherwise → update).
+
 ---
 
 **How to add new decisions:**  

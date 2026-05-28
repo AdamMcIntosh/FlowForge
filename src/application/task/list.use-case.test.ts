@@ -81,6 +81,32 @@ describe('createListTasksUseCase', () => {
     expect(result.tasks).toEqual([]);
   });
 
+  it('maps tasks with assignees and non-default statuses', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository, {
+      id: 'task-done',
+      title: 'Finished',
+      description: null,
+      status: TaskStatus.DONE,
+      assigneeId: 'user-2',
+    });
+    const listTasks = createListTasksUseCase(deps);
+
+    const result = await listTasks({
+      userId: 'user-1',
+      projectId: 'project-1',
+    });
+
+    expect(result.tasks).toHaveLength(1);
+    expect(result.tasks[0]).toMatchObject({
+      id: 'task-done',
+      title: 'Finished',
+      status: TaskStatus.DONE,
+      assigneeId: 'user-2',
+      projectId: 'project-1',
+    });
+  });
+
   it('does not return tasks from other projects', async () => {
     await seedOwnedProject(deps.projectRepository, { id: 'project-1' });
     await seedOwnedProject(deps.projectRepository, {

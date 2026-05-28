@@ -358,6 +358,13 @@ describe('Task', () => {
       });
     });
 
+    it('cannot change projectId via update', () => {
+      const updated = task.update({ title: 'Renamed' });
+
+      expect(updated.projectId).toBe(projectId);
+      expect(updated.projectId).toBe(task.projectId);
+    });
+
     it('updates fields while preserving id, projectId, and createdAt', () => {
       const updated = task.update({
         title: '  Updated title  ',

@@ -80,6 +80,31 @@ describe('createChangeTaskStatusUseCase', () => {
     expect(persisted?.status).toBe(TaskStatus.DONE);
   });
 
+  it('preserves title, description, assignee, and projectId when only status changes', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository, {
+      title: 'Scoped task',
+      description: 'Keep me',
+      assigneeId: 'user-2',
+      status: TaskStatus.TODO,
+    });
+    const changeTaskStatus = createChangeTaskStatusUseCase(deps);
+
+    const result = await changeTaskStatus({
+      userId: 'user-1',
+      taskId: 'task-1',
+      status: TaskStatus.IN_PROGRESS,
+    });
+
+    expect(result).toMatchObject({
+      title: 'Scoped task',
+      description: 'Keep me',
+      assigneeId: 'user-2',
+      projectId: 'project-1',
+      status: TaskStatus.IN_PROGRESS,
+    });
+  });
+
   it('maps repository timestamps to ISO strings via toTaskResponse', async () => {
     await seedOwnedProject(deps.projectRepository);
     await seedTask(deps.taskRepository, { description: null });

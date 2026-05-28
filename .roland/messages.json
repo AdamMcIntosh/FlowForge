@@ -38,5 +38,14 @@
     "body": "**Subject:** Auth register duplicate consolidated — 22/22 green\n\nDuplicate `tests/auth/register.integration.test.ts` is merged and deleted. Auth integration suite is self-contained at 22 tests. Full suite still has 2 pre-existing failures in `task-repository.update.test.ts` (mock `toProps()` assertion) — outside refactor-specialist scope; executor task covers that separately.",
     "sentAt": 1779925716835,
     "deliveredTo": []
+  },
+  {
+    "id": "13a11080-4939-456a-b7cb-cf2329745c53",
+    "from": "architect",
+    "to": "lead-pm",
+    "subject": "Message from agent",
+    "body": "**Subject:** Task design doc complete — owner-only auth documented\n\nConsolidated ADR added to `DECISIONS.md` (2025-05-28). Clarifies that MVP authorization is **project-owner only**, not owner-or-member. Membership/assignee-based access is explicitly deferred with extension points noted in `task-access.ts`. Full test matrix (233 tests) already green per blackboard.",
+    "sentAt": 1779976701570,
+    "deliveredTo": []
   }
 ]

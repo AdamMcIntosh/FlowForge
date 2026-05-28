@@ -29,5 +29,9 @@ export { createDeleteTaskUseCase } from './delete.use-case.js';
 export { createGetTaskUseCase } from './get.use-case.js';
 export { createListTasksUseCase } from './list.use-case.js';
 export { createUpdateTaskUseCase } from './update.use-case.js';
+export {
+  requireOwnedProject,
+  requireTaskAccessibleByProjectOwner,
+} from './task-access.js';
 export { toTaskResponse } from './task-mapper.js';
 export type { TaskUseCaseDependencies, TaskUseCases } from './types.js';

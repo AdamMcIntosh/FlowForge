@@ -2,9 +2,9 @@
  * Integration tests for Task CRUD HTTP endpoints.
  *
  * Setup: No external infrastructure required. Uses buildServer() with in-memory
- * user, project, and task repositories (see tests/helpers/create-auth-test-app.ts).
- * Each describe block creates a fresh app via createAuthTestApp() to avoid
- * cross-test state leakage.
+ * user, project, and task repositories (see tests/helpers/create-task-integration-test-app.ts).
+ * Each describe block calls createTaskIntegrationTestApp() in beforeEach so every test
+ * gets fresh in-memory ProjectRepository and TaskRepository instances.
  *
  * HTTP helpers expect the Fastify instance: pass testApp.app (not AuthTestApp).
  * Project setup: createOwnedProject(testApp.app, accessToken).
@@ -17,10 +17,13 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { TaskStatus } from '../src/domain/task/task-status.js';
 import {
-  createAuthTestApp,
-  type AuthTestApp,
-} from './helpers/create-auth-test-app.js';
-import { registerAndGetAccessToken } from './helpers/project-http.js';
+  createTaskIntegrationTestApp,
+  type TaskIntegrationTestApp,
+} from './helpers/create-task-integration-test-app.js';
+import {
+  deleteProject,
+  registerAndGetAccessToken,
+} from './helpers/project-http.js';
 import {
   createOwnedProject,
   deleteTask,
@@ -70,10 +73,10 @@ function repeatChar(char: string, count: number): string {
 }
 
 describe('POST /projects/:id/tasks', () => {
-  let testApp: AuthTestApp;
+  let testApp: TaskIntegrationTestApp;
 
   beforeEach(async () => {
-    testApp = await createAuthTestApp();
+    testApp = await createTaskIntegrationTestApp();
   });
 
   afterEach(async () => {
@@ -371,10 +374,10 @@ describe('POST /projects/:id/tasks', () => {
 });
 
 describe('GET /projects/:id/tasks', () => {
-  let testApp: AuthTestApp;
+  let testApp: TaskIntegrationTestApp;
 
   beforeEach(async () => {
-    testApp = await createAuthTestApp();
+    testApp = await createTaskIntegrationTestApp();
   });
 
   afterEach(async () => {
@@ -504,10 +507,10 @@ describe('GET /projects/:id/tasks', () => {
 });
 
 describe('GET /tasks/:id', () => {
-  let testApp: AuthTestApp;
+  let testApp: TaskIntegrationTestApp;
 
   beforeEach(async () => {
-    testApp = await createAuthTestApp();
+    testApp = await createTaskIntegrationTestApp();
   });
 
   afterEach(async () => {
@@ -576,6 +579,28 @@ describe('GET /tasks/:id', () => {
     expect(response.json()).toEqual(taskNotFoundBody);
   });
 
+  it('returns 404 TASK_NOT_FOUND when the parent project was deleted', async () => {
+    const { accessToken } = await registerAndGetAccessToken(testApp.app);
+    const projectId = await createOwnedProject(testApp.app, accessToken);
+
+    const created = await postTask(
+      testApp.app,
+      projectId,
+      { title: 'Orphan candidate' },
+      { accessToken },
+    );
+    expect(created.statusCode).toBe(201);
+    const taskId = created.json().id as string;
+
+    const deletedProject = await deleteProject(testApp.app, projectId, { accessToken });
+    expect(deletedProject.statusCode).toBe(204);
+
+    const response = await getTask(testApp.app, taskId, { accessToken });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toEqual(taskNotFoundBody);
+  });
+
   it('returns 403 TASK_UNAUTHORIZED when another user requests the task', async () => {
     const owner = await registerAndGetAccessToken(testApp.app, {
       email: 'owner@example.com',
@@ -610,14 +635,56 @@ describe('GET /tasks/:id', () => {
 });
 
 describe('PATCH /tasks/:id', () => {
-  let testApp: AuthTestApp;
+  let testApp: TaskIntegrationTestApp;
 
   beforeEach(async () => {
-    testApp = await createAuthTestApp();
+    testApp = await createTaskIntegrationTestApp();
   });
 
   afterEach(async () => {
     await testApp.app.close();
+  });
+
+  it('advances status through TODO, IN_PROGRESS, and DONE using status-only PATCH bodies', async () => {
+    const { accessToken } = await registerAndGetAccessToken(testApp.app);
+    const projectId = await createOwnedProject(testApp.app, accessToken);
+
+    const created = await postTask(
+      testApp.app,
+      projectId,
+      { title: 'Status workflow' },
+      { accessToken },
+    );
+    expect(created.statusCode).toBe(201);
+    expect(created.json().status).toBe(TaskStatus.TODO);
+    const taskId = created.json().id as string;
+
+    const inProgress = await patchTask(
+      testApp.app,
+      taskId,
+      { status: TaskStatus.IN_PROGRESS },
+      { accessToken },
+    );
+    expect(inProgress.statusCode).toBe(200);
+    expect(inProgress.json()).toMatchObject({
+      id: taskId,
+      title: 'Status workflow',
+      status: TaskStatus.IN_PROGRESS,
+      projectId,
+    });
+
+    const done = await patchTask(
+      testApp.app,
+      taskId,
+      { status: TaskStatus.DONE },
+      { accessToken },
+    );
+    expect(done.statusCode).toBe(200);
+    expect(done.json()).toMatchObject({
+      id: taskId,
+      status: TaskStatus.DONE,
+      projectId,
+    });
   });
 
   it('returns 200 with the updated task when title and status change', async () => {
@@ -903,10 +970,10 @@ describe('PATCH /tasks/:id', () => {
 });
 
 describe('DELETE /tasks/:id', () => {
-  let testApp: AuthTestApp;
+  let testApp: TaskIntegrationTestApp;
 
   beforeEach(async () => {
-    testApp = await createAuthTestApp();
+    testApp = await createTaskIntegrationTestApp();
   });
 
   afterEach(async () => {
@@ -1017,10 +1084,10 @@ describe('DELETE /tasks/:id', () => {
 });
 
 describe('Task CRUD lifecycle', () => {
-  let testApp: AuthTestApp;
+  let testApp: TaskIntegrationTestApp;
 
   beforeEach(async () => {
-    testApp = await createAuthTestApp();
+    testApp = await createTaskIntegrationTestApp();
   });
 
   afterEach(async () => {

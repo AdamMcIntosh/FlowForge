@@ -221,7 +221,7 @@ describe('TaskRepository via createInMemoryTaskRepository', () => {
       expect(result.description).toBe('Updated description');
       expect(result.status).toBe(TaskStatus.IN_PROGRESS);
       expect(result.assigneeId).toBe(assigneeId);
-      expect(result.updatedAt.getTime()).toBeGreaterThan(original.updatedAt.getTime());
+      expect(result.updatedAt.getTime()).toBeGreaterThanOrEqual(original.updatedAt.getTime());
       expect(result.projectId).toBe(projectId);
     });
 

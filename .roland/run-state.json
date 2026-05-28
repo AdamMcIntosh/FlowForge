@@ -1,12 +1,76 @@
 {
-  "runId": "c90499e2",
+  "runId": "c339a260",
   "goal": "Implement full Task CRUD with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
-  "startedAt": 1779970632758,
-  "updatedAt": 1779970632758,
-  "status": "planning",
-  "currentWave": 0,
-  "totalTasks": 0,
-  "completedTasks": 0,
-  "tasks": [],
-  "activeTaskIds": []
+  "startedAt": 1779973830153,
+  "updatedAt": 1779973916995,
+  "status": "running",
+  "currentWave": 2,
+  "totalTasks": 8,
+  "completedTasks": 1,
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Verify Task domain completeness",
+      "agent": "executor",
+      "wave": 1,
+      "status": "done",
+      "startedAt": 1779973868983,
+      "completedAt": 1779973911102,
+      "hadBlocker": false,
+      "outputPreview": "…`update()` pattern; use cases call `update()` with focused fields.\n\n## Next Steps\n\nThe domain layer is unblocked for downstream work. No further domain changes are needed unless product requirements introduce status workflow rules or assignee-based access control (both would need new ADRs first)."
+    },
+    {
+      "id": "task-2",
+      "title": "Implement Task repository (in-memory + interface)",
+      "agent": "executor",
+      "wave": 2,
+      "status": "running",
+      "startedAt": 1779973916995
+    },
+    {
+      "id": "task-3",
+      "title": "Wire Task use-cases with authorization",
+      "agent": "executor",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-4",
+      "title": "Ensure Task controller + routes fully wired",
+      "agent": "executor",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-5",
+      "title": "Write Task unit tests (use-cases + domain)",
+      "agent": "test-author",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-6",
+      "title": "Write Task integration tests (HTTP + in-memory repo)",
+      "agent": "test-author",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-7",
+      "title": "Execute Task unit tests",
+      "agent": "test-executor",
+      "wave": 0,
+      "status": "pending"
+    },
+    {
+      "id": "task-8",
+      "title": "Execute Task integration tests",
+      "agent": "test-executor",
+      "wave": 0,
+      "status": "pending"
+    }
+  ],
+  "activeTaskIds": [
+    "task-2"
+  ]
 }

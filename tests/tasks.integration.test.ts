@@ -900,6 +900,33 @@ describe('PATCH /tasks/:id', () => {
     expect(response.json()).toEqual(taskNotFoundBody);
   });
 
+  it('returns 404 TASK_NOT_FOUND when the parent project was deleted', async () => {
+    const { accessToken } = await registerAndGetAccessToken(testApp.app);
+    const projectId = await createOwnedProject(testApp.app, accessToken);
+
+    const created = await postTask(
+      testApp.app,
+      projectId,
+      { title: 'Orphan candidate' },
+      { accessToken },
+    );
+    expect(created.statusCode).toBe(201);
+    const taskId = created.json().id as string;
+
+    const deletedProject = await deleteProject(testApp.app, projectId, { accessToken });
+    expect(deletedProject.statusCode).toBe(204);
+
+    const response = await patchTask(
+      testApp.app,
+      taskId,
+      { title: 'Should not apply' },
+      { accessToken },
+    );
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toEqual(taskNotFoundBody);
+  });
+
   it('returns 403 TASK_UNAUTHORIZED when another user attempts to update the task', async () => {
     const owner = await registerAndGetAccessToken(testApp.app, {
       email: 'owner@example.com',
@@ -961,6 +988,108 @@ describe('PATCH /tasks/:id', () => {
     expect(unchanged.json().status).toBe(TaskStatus.TODO);
   });
 
+  it('returns 403 TASK_UNAUTHORIZED when the assignee attempts assign-only PATCH', async () => {
+    const owner = await registerAndGetAccessToken(testApp.app, {
+      email: 'owner-assign-patch@example.com',
+    });
+    const assignee = await registerAndGetAccessToken(testApp.app, {
+      email: 'assignee-assign-patch@example.com',
+    });
+    const otherUser = await registerAndGetAccessToken(testApp.app, {
+      email: 'other-assign-patch@example.com',
+    });
+    const projectId = await createOwnedProject(testApp.app, owner.accessToken);
+
+    const created = await postTask(
+      testApp.app,
+      projectId,
+      { title: 'Assigned work', assigneeId: assignee.user.id },
+      { accessToken: owner.accessToken },
+    );
+    expect(created.statusCode).toBe(201);
+    const taskId = created.json().id as string;
+
+    const response = await patchTask(
+      testApp.app,
+      taskId,
+      { assigneeId: otherUser.user.id },
+      { accessToken: assignee.accessToken },
+    );
+
+    expect(response.statusCode).toBe(403);
+    expect(response.json()).toEqual(taskUnauthorizedBody);
+
+    const unchanged = await getTask(testApp.app, taskId, { accessToken: owner.accessToken });
+    expect(unchanged.statusCode).toBe(200);
+    expect(unchanged.json().assigneeId).toBe(assignee.user.id);
+  });
+
+  it('returns 403 TASK_UNAUTHORIZED when another user attempts status-only PATCH', async () => {
+    const owner = await registerAndGetAccessToken(testApp.app, {
+      email: 'owner-status-patch@example.com',
+    });
+    const intruder = await registerAndGetAccessToken(testApp.app, {
+      email: 'intruder-status-patch@example.com',
+    });
+    const projectId = await createOwnedProject(testApp.app, owner.accessToken);
+
+    const created = await postTask(
+      testApp.app,
+      projectId,
+      { title: 'Protected status' },
+      { accessToken: owner.accessToken },
+    );
+    expect(created.statusCode).toBe(201);
+    const taskId = created.json().id as string;
+
+    const response = await patchTask(
+      testApp.app,
+      taskId,
+      { status: TaskStatus.DONE },
+      { accessToken: intruder.accessToken },
+    );
+
+    expect(response.statusCode).toBe(403);
+    expect(response.json()).toEqual(taskUnauthorizedBody);
+
+    const unchanged = await getTask(testApp.app, taskId, { accessToken: owner.accessToken });
+    expect(unchanged.statusCode).toBe(200);
+    expect(unchanged.json().status).toBe(TaskStatus.TODO);
+  });
+
+  it('returns 403 TASK_UNAUTHORIZED when another user attempts assignee-only PATCH', async () => {
+    const owner = await registerAndGetAccessToken(testApp.app, {
+      email: 'owner-intruder-assign@example.com',
+    });
+    const intruder = await registerAndGetAccessToken(testApp.app, {
+      email: 'intruder-assign-patch@example.com',
+    });
+    const projectId = await createOwnedProject(testApp.app, owner.accessToken);
+
+    const created = await postTask(
+      testApp.app,
+      projectId,
+      { title: 'Protected assignee' },
+      { accessToken: owner.accessToken },
+    );
+    expect(created.statusCode).toBe(201);
+    const taskId = created.json().id as string;
+
+    const response = await patchTask(
+      testApp.app,
+      taskId,
+      { assigneeId: intruder.user.id },
+      { accessToken: intruder.accessToken },
+    );
+
+    expect(response.statusCode).toBe(403);
+    expect(response.json()).toEqual(taskUnauthorizedBody);
+
+    const unchanged = await getTask(testApp.app, taskId, { accessToken: owner.accessToken });
+    expect(unchanged.statusCode).toBe(200);
+    expect(unchanged.json().assigneeId).toBeNull();
+  });
+
   it('returns 401 AUTH_UNAUTHORIZED when no authorization header is present', async () => {
     const response = await patchTask(testApp.app, 'some-task-id', { title: 'Nope' });
 
@@ -1014,6 +1143,29 @@ describe('DELETE /tasks/:id', () => {
 
     expect(response.statusCode).toBe(404);
     expect(response.json()).toEqual(taskNotFoundBody);
+  });
+
+  it('returns 404 TASK_NOT_FOUND when the parent project was deleted', async () => {
+    const { accessToken } = await registerAndGetAccessToken(testApp.app);
+    const projectId = await createOwnedProject(testApp.app, accessToken);
+
+    const created = await postTask(
+      testApp.app,
+      projectId,
+      { title: 'Orphan candidate' },
+      { accessToken },
+    );
+    expect(created.statusCode).toBe(201);
+    const taskId = created.json().id as string;
+
+    const deletedProject = await deleteProject(testApp.app, projectId, { accessToken });
+    expect(deletedProject.statusCode).toBe(204);
+
+    const response = await deleteTask(testApp.app, taskId, { accessToken });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toEqual(taskNotFoundBody);
+    expect(await testApp.taskRepository.findById(taskId)).not.toBeNull();
   });
 
   it('returns 403 TASK_UNAUTHORIZED when another user attempts to delete the task', async () => {

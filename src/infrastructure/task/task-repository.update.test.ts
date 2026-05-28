@@ -126,6 +126,63 @@ describe('PrismaTaskRepository.update', () => {
     expect(result.createdAt).toBe(record.createdAt);
   });
 
+  it('does not include createdAt in the update payload — creation timestamp is immutable', async () => {
+    const task = Task.create({
+      id: 'task-immutable-created-at',
+      title: 'Original',
+      projectId: defaultProjectId,
+      createdAt: new Date('2025-01-01T00:00:00.000Z'),
+    }).update({ title: 'Renamed' });
+
+    vi.mocked(prisma.task.update).mockImplementation(async ({ data }) =>
+      echoCreateFromData({
+        id: task.id,
+        title: data.title as string,
+        description: data.description as string | null,
+        status: data.status as PrismaTaskStatus,
+        projectId: task.projectId,
+        assigneeId: data.assigneeId as string | null,
+        createdAt: task.createdAt,
+        updatedAt: data.updatedAt as Date,
+      }),
+    );
+
+    await repository.update(task);
+
+    const updateData = vi.mocked(prisma.task.update).mock.calls[0]?.[0]?.data;
+    expect(updateData).not.toHaveProperty('createdAt');
+  });
+
+  it('persists null assigneeId when clearing assignment', async () => {
+    const task = Task.create({
+      id: 'task-unassign',
+      title: 'Assigned',
+      projectId: defaultProjectId,
+      assigneeId,
+    }).update({ assigneeId: null });
+
+    vi.mocked(prisma.task.update).mockImplementation(async ({ data }) =>
+      echoCreateFromData({
+        id: task.id,
+        title: data.title as string,
+        description: data.description as string | null,
+        status: data.status as PrismaTaskStatus,
+        projectId: task.projectId,
+        assigneeId: data.assigneeId as string | null,
+        createdAt: task.createdAt,
+        updatedAt: data.updatedAt as Date,
+      }),
+    );
+
+    const result = await repository.update(task);
+
+    expect(prisma.task.update).toHaveBeenCalledWith({
+      where: { id: task.id },
+      data: expect.objectContaining({ assigneeId: null }),
+    });
+    expect(result.assigneeId).toBeNull();
+  });
+
   it('propagates prisma.task.update failures to the caller', async () => {
     const task = Task.create({
       id: 'task-update-fail',

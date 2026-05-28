@@ -5,6 +5,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  Task,
   TaskNotFoundError,
   TaskStatus,
   UnauthorizedTaskAccessError,
@@ -48,6 +49,40 @@ describe('createAssignTaskUseCase', () => {
 
     const persisted = await deps.taskRepository.findById('task-1');
     expect(persisted?.assigneeId).toBe('user-2');
+  });
+
+  it('returns the mapped response from the task returned by update', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository);
+    const persistedTask = Task.reconstitute({
+      id: 'task-1',
+      title: 'My Task',
+      description: 'Details',
+      status: TaskStatus.IN_PROGRESS,
+      projectId: 'project-1',
+      assigneeId: 'user-3',
+      createdAt: new Date('2025-06-01T12:00:00.000Z'),
+      updatedAt: new Date('2025-06-01T12:30:00.000Z'),
+    });
+    deps.taskRepository.update = vi.fn(async () => persistedTask);
+    const assignTask = createAssignTaskUseCase(deps);
+
+    const result = await assignTask({
+      userId: 'user-1',
+      taskId: 'task-1',
+      assigneeId: 'user-2',
+    });
+
+    expect(result).toEqual({
+      id: 'task-1',
+      title: 'My Task',
+      description: 'Details',
+      status: TaskStatus.IN_PROGRESS,
+      projectId: 'project-1',
+      assigneeId: 'user-3',
+      createdAt: '2025-06-01T12:00:00.000Z',
+      updatedAt: '2025-06-01T12:30:00.000Z',
+    });
   });
 
   it('clears the assignee when assigneeId is null', async () => {

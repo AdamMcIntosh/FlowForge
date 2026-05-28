@@ -77,7 +77,10 @@ export class Task {
   static create(input: CreateTaskInput): Task {
     const title = Task.validateTitle(input.title);
     const description = Task.validateDescription(input.description);
-    const status = input.status ?? TaskStatus.TODO;
+    const status =
+      input.status !== undefined
+        ? Task.validateStatus(input.status)
+        : TaskStatus.TODO;
     const now = input.createdAt ?? new Date();
 
     return new Task({

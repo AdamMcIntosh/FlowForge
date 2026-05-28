@@ -2,75 +2,20 @@
  * Unit tests for PrismaTaskRepository mappers (toPrismaTaskStatus, mapRecordToTask)
  * and Task.toProps round-trip. No database required — Prisma client is mocked.
  */
-import type { PrismaClient, TaskStatus as PrismaTaskStatus } from '@prisma/client';
+import type { TaskStatus as PrismaTaskStatus } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { InvalidTaskStatusError } from '../../domain/task/errors.js';
 import { TASK_STATUSES, TaskStatus } from '../../domain/task/task-status.js';
 import { Task } from '../../domain/task/task.js';
 import { createPrismaTaskRepository } from './task-repository.js';
-
-type TaskRecord = {
-  id: string;
-  title: string;
-  description: string | null;
-  status: PrismaTaskStatus;
-  projectId: string;
-  assigneeId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-const projectId = 'project-1';
-const assigneeId = 'user-2';
-
-function createTaskRecord(overrides: Partial<TaskRecord> = {}): TaskRecord {
-  return {
-    id: 'task-1',
-    title: 'Fix login',
-    description: 'Repro steps',
-    status: TaskStatus.TODO,
-    projectId,
-    assigneeId,
-    createdAt: new Date('2025-01-01T00:00:00.000Z'),
-    updatedAt: new Date('2025-01-02T00:00:00.000Z'),
-    ...overrides,
-  };
-}
-
-function createMockPrismaClient() {
-  return {
-    task: {
-      create: vi.fn(),
-      findUnique: vi.fn(),
-      findMany: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn(),
-    },
-  } as unknown as PrismaClient;
-}
-
-function echoCreateFromData(data: {
-  id: string;
-  title: string;
-  description: string | null;
-  status: PrismaTaskStatus;
-  projectId: string;
-  assigneeId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-}): TaskRecord {
-  return {
-    id: data.id,
-    title: data.title,
-    description: data.description,
-    status: data.status,
-    projectId: data.projectId,
-    assigneeId: data.assigneeId,
-    createdAt: data.createdAt,
-    updatedAt: data.updatedAt,
-  };
-}
+import {
+  assigneeId,
+  createMockPrismaClient,
+  createTaskRecord,
+  defaultProjectId,
+  echoCreateFromData,
+} from './task-repository.test-helpers.js';
 
 describe('PrismaTaskRepository mappers', () => {
   let prisma: ReturnType<typeof createMockPrismaClient>;
@@ -89,7 +34,7 @@ describe('PrismaTaskRepository mappers', () => {
           id: 'task-status-save',
           title: 'Status save',
           status,
-          projectId,
+          projectId: defaultProjectId,
         });
 
         vi.mocked(prisma.task.create).mockImplementation(async ({ data }) =>
@@ -120,7 +65,7 @@ describe('PrismaTaskRepository mappers', () => {
           id: 'task-status-update',
           title: 'Status update',
           status,
-          projectId,
+          projectId: defaultProjectId,
         });
 
         vi.mocked(prisma.task.update).mockImplementation(async ({ data }) =>
@@ -222,7 +167,7 @@ describe('PrismaTaskRepository mappers', () => {
 
       vi.mocked(prisma.task.findMany).mockResolvedValue(records);
 
-      const tasks = await repository.findByProjectId(projectId);
+      const tasks = await repository.findByProjectId(defaultProjectId);
 
       expect(tasks).toHaveLength(3);
       expect(tasks.map((task) => task.id)).toEqual(['task-a', 'task-b', 'task-c']);
@@ -241,7 +186,7 @@ describe('PrismaTaskRepository mappers', () => {
         title: 'Round trip',
         description: 'Details',
         status: TaskStatus.IN_PROGRESS,
-        projectId,
+        projectId: defaultProjectId,
         assigneeId,
         createdAt: new Date('2025-03-01T12:00:00.000Z'),
       });
@@ -270,7 +215,7 @@ describe('PrismaTaskRepository mappers', () => {
         title: 'Original',
         description: 'Before',
         status: TaskStatus.TODO,
-        projectId,
+        projectId: defaultProjectId,
         assigneeId: null,
         createdAt: new Date('2025-03-01T12:00:00.000Z'),
       });
@@ -328,7 +273,7 @@ describe('PrismaTaskRepository mappers', () => {
         title: '  Trimmed title  ',
         description: '  Trimmed description  ',
         status: TaskStatus.TODO,
-        projectId,
+        projectId: defaultProjectId,
       });
 
       vi.mocked(prisma.task.create).mockImplementation(async ({ data }) =>

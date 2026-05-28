@@ -105,6 +105,21 @@ describe('createDeleteTaskUseCase', () => {
     expect(await deps.taskRepository.findById('task-1')).not.toBeNull();
   });
 
+  it('throws UnauthorizedTaskAccessError when the assignee is not the project owner', async () => {
+    await seedOwnedProject(deps.projectRepository, { ownerId: 'user-1' });
+    await seedTask(deps.taskRepository, { assigneeId: 'user-2' });
+    const deleteTask = createDeleteTaskUseCase(deps);
+
+    await expect(
+      deleteTask({
+        userId: 'user-2',
+        taskId: 'task-1',
+      }),
+    ).rejects.toThrow(UnauthorizedTaskAccessError);
+
+    expect(await deps.taskRepository.findById('task-1')).not.toBeNull();
+  });
+
   it('propagates repository delete failures', async () => {
     await seedOwnedProject(deps.projectRepository);
     await seedTask(deps.taskRepository);

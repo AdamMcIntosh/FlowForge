@@ -2,7 +2,7 @@
  * Unit tests for createListTasksUseCase.
  * Uses fresh in-memory repositories per test (see tests/helpers/task-use-case-fixtures.ts).
  */
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   ProjectNotFoundError,
@@ -187,5 +187,19 @@ describe('createListTasksUseCase', () => {
     }
 
     expect(error?.code).toBe('PROJECT_OWNERSHIP');
+  });
+
+  it('propagates repository findByProjectId failures', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    const listError = new Error('database unavailable');
+    deps.taskRepository.findByProjectId = vi.fn().mockRejectedValue(listError);
+    const listTasks = createListTasksUseCase(deps);
+
+    await expect(
+      listTasks({
+        userId: 'user-1',
+        projectId: 'project-1',
+      }),
+    ).rejects.toThrow(listError);
   });
 });

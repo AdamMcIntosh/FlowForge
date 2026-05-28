@@ -1,12 +1,46 @@
 {
-  "runId": "3280eeff",
-  "goal": "Implement full Task CRUD with project association, user assignment, status management, and authorization (users can only access tasks within their projects)",
-  "startedAt": 1779977816897,
-  "updatedAt": 1779977816897,
-  "status": "planning",
-  "currentWave": 0,
-  "totalTasks": 0,
-  "completedTasks": 0,
-  "tasks": [],
+  "runId": "e3a89477",
+  "goal": "Implement Task getById, update, and delete use cases with proper authorization",
+  "startedAt": 1779985968368,
+  "updatedAt": 1779986222072,
+  "status": "done",
+  "currentWave": 3,
+  "totalTasks": 3,
+  "completedTasks": 3,
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Review Task get/update/delete coverage & gaps",
+      "agent": "test-strategist",
+      "wave": 1,
+      "status": "done",
+      "startedAt": 1779986034362,
+      "completedAt": 1779986059902,
+      "hadBlocker": false,
+      "outputPreview": "…pport all gaps; this is test coverage debt, not missing production behavior.\n\n**Recommendation for test-author:** Implement **G1–G4 + G8–G9** first (~8 tests). Add **G5–G7** if controller routing regressions are a concern. Defer G12–G14 unless aiming for full parity with project/auth HTTP suites."
+    },
+    {
+      "id": "task-2",
+      "title": "Write any missing unit tests for task use cases (if gaps)",
+      "agent": "test-author",
+      "wave": 2,
+      "status": "done",
+      "startedAt": 1779986068143,
+      "completedAt": 1779986099785,
+      "hadBlocker": false,
+      "outputPreview": "…k/update.use-case.test.ts src/application/task/delete.use-case.test.ts tests/tasks.integration.test.ts tests/tasks-authz-matrix.integration.test.ts\n```\n\n**Expected:** +11 new tests total (2 unit + 5 integration PATCH/DELETE + 2 authz matrix + 2 unit assignee). No external infrastructure required."
+    },
+    {
+      "id": "task-3",
+      "title": "Execute full Task use-case + integration test suite",
+      "agent": "test-executor",
+      "wave": 3,
+      "status": "done",
+      "startedAt": 1779986104955,
+      "completedAt": 1779986194009,
+      "hadBlocker": false,
+      "outputPreview": "…oader Task matrix (domain + infra + repo). This run is the **scoped use-case + HTTP integration** deliverable only; no regressions in the 155 tests executed here.\n- Harmless noise during coverage run: Vite source-map warnings for `generated/prisma-test-client/runtime/*` — does not affect results."
+    }
+  ],
   "activeTaskIds": []
 }

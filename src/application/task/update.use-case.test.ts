@@ -7,6 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   InvalidTaskDescriptionError,
   InvalidTaskTitleError,
+  Task,
   TaskNotFoundError,
   TaskStatus,
   UnauthorizedTaskAccessError,
@@ -58,6 +59,22 @@ describe('createUpdateTaskUseCase', () => {
 
     expect(result.title).toBe('Renamed Task');
     expect(result.description).toBe('Details');
+  });
+
+  it('updates only the description when title is omitted', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository);
+    const updateTask = createUpdateTaskUseCase(deps);
+
+    const result = await updateTask({
+      userId: 'user-1',
+      taskId: 'task-1',
+      description: 'New description only',
+    });
+
+    expect(result.title).toBe('My Task');
+    expect(result.description).toBe('New description only');
+    expect((await deps.taskRepository.findById('task-1'))?.title).toBe('My Task');
   });
 
   it('updates status and assigneeId', async () => {
@@ -166,6 +183,56 @@ describe('createUpdateTaskUseCase', () => {
     expect((await deps.taskRepository.findById('task-1'))?.title).toBe(title);
   });
 
+  it('returns the mapped response from the task returned by update', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository);
+    const persistedTask = Task.reconstitute({
+      id: 'task-1',
+      title: 'Repository Title',
+      description: 'Repository details',
+      status: TaskStatus.DONE,
+      projectId: 'project-1',
+      assigneeId: 'user-2',
+      createdAt: new Date('2025-06-01T12:00:00.000Z'),
+      updatedAt: new Date('2025-06-01T12:30:00.000Z'),
+    });
+    deps.taskRepository.update = vi.fn(async () => persistedTask);
+    const updateTask = createUpdateTaskUseCase(deps);
+
+    const result = await updateTask({
+      userId: 'user-1',
+      taskId: 'task-1',
+      title: 'Ignored by mock',
+    });
+
+    expect(result).toEqual({
+      id: 'task-1',
+      title: 'Repository Title',
+      description: 'Repository details',
+      status: TaskStatus.DONE,
+      projectId: 'project-1',
+      assigneeId: 'user-2',
+      createdAt: '2025-06-01T12:00:00.000Z',
+      updatedAt: '2025-06-01T12:30:00.000Z',
+    });
+  });
+
+  it('maps repository timestamps to ISO strings via toTaskResponse', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository);
+    const updateTask = createUpdateTaskUseCase(deps);
+
+    const result = await updateTask({
+      userId: 'user-1',
+      taskId: 'task-1',
+      title: 'Updated',
+    });
+
+    expect(result.createdAt).toBe('2025-01-01T00:00:00.000Z');
+    expect(result.updatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/);
+    expect(result.updatedAt).not.toBe(result.createdAt);
+  });
+
   it('preserves projectId when updating fields', async () => {
     await seedOwnedProject(deps.projectRepository);
     await seedTask(deps.taskRepository);
@@ -211,6 +278,23 @@ describe('createUpdateTaskUseCase', () => {
     expect(persisted?.title).toBe('My Task');
   });
 
+  it('throws UnauthorizedTaskAccessError when the assignee is not the project owner', async () => {
+    await seedOwnedProject(deps.projectRepository, { ownerId: 'user-1' });
+    await seedTask(deps.taskRepository, { assigneeId: 'user-2' });
+    const updateTask = createUpdateTaskUseCase(deps);
+
+    await expect(
+      updateTask({
+        userId: 'user-2',
+        taskId: 'task-1',
+        title: 'Updated',
+      }),
+    ).rejects.toThrow(UnauthorizedTaskAccessError);
+
+    const persisted = await deps.taskRepository.findById('task-1');
+    expect(persisted?.title).toBe('My Task');
+  });
+
   it('throws InvalidTaskTitleError when domain title validation fails', async () => {
     await seedOwnedProject(deps.projectRepository);
     await seedTask(deps.taskRepository);
@@ -223,6 +307,22 @@ describe('createUpdateTaskUseCase', () => {
         title: '   ',
       }),
     ).rejects.toThrow(InvalidTaskTitleError);
+  });
+
+  it('throws InvalidTaskTitleError when title exceeds max length', async () => {
+    await seedOwnedProject(deps.projectRepository);
+    await seedTask(deps.taskRepository);
+    const updateTask = createUpdateTaskUseCase(deps);
+
+    await expect(
+      updateTask({
+        userId: 'user-1',
+        taskId: 'task-1',
+        title: 'a'.repeat(256),
+      }),
+    ).rejects.toThrow(InvalidTaskTitleError);
+
+    expect((await deps.taskRepository.findById('task-1'))?.title).toBe('My Task');
   });
 
   it('throws InvalidTaskDescriptionError when description exceeds max length', async () => {

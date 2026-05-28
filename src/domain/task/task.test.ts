@@ -60,8 +60,12 @@ describe('Task', () => {
   });
 
   describe('validateStatus', () => {
-    it('parses valid status strings', () => {
-      expect(Task.validateStatus('DONE')).toBe(TaskStatus.DONE);
+    it.each([
+      ['TODO', TaskStatus.TODO],
+      ['IN_PROGRESS', TaskStatus.IN_PROGRESS],
+      ['DONE', TaskStatus.DONE],
+    ] as const)('parses %s', (input, expected) => {
+      expect(Task.validateStatus(input)).toBe(expected);
     });
 
     it('rejects invalid status strings', () => {
@@ -147,6 +151,53 @@ describe('Task', () => {
         ),
       );
     });
+
+    it('accepts titles at exactly 255 characters', () => {
+      const title = 'a'.repeat(255);
+      const task = Task.create({
+        id: 'task-1',
+        title,
+        projectId,
+      });
+
+      expect(task.title).toHaveLength(255);
+    });
+
+    it('rejects titles longer than 255 characters', () => {
+      expect(() =>
+        Task.create({
+          id: 'task-1',
+          title: 'a'.repeat(256),
+          projectId,
+        }),
+      ).toThrow(
+        new InvalidTaskTitleError('Task title must be at most 255 characters'),
+      );
+    });
+
+    it('accepts explicit null description and assigneeId', () => {
+      const task = Task.create({
+        id: 'task-1',
+        title: 'Fix bug',
+        description: null,
+        projectId,
+        assigneeId: null,
+      });
+
+      expect(task.description).toBeNull();
+      expect(task.assigneeId).toBeNull();
+    });
+
+    it('rejects invalid status on create', () => {
+      expect(() =>
+        Task.create({
+          id: 'task-1',
+          title: 'Fix bug',
+          status: 'BLOCKED' as TaskStatusValue,
+          projectId,
+        }),
+      ).toThrow(InvalidTaskStatusError);
+    });
   });
 
   describe('reconstitute', () => {
@@ -202,6 +253,36 @@ describe('Task', () => {
           updatedAt: new Date(),
         }),
       ).toThrow(InvalidTaskStatusError);
+    });
+
+    it('normalizes whitespace-only description to null on reconstitute', () => {
+      const task = Task.reconstitute({
+        id: 'task-1',
+        title: 'Valid title',
+        description: '   ',
+        status: TaskStatus.TODO,
+        projectId,
+        assigneeId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      expect(task.description).toBeNull();
+    });
+
+    it('rejects invalid description on reconstitute', () => {
+      expect(() =>
+        Task.reconstitute({
+          id: 'task-1',
+          title: 'Valid title',
+          description: 'a'.repeat(2001),
+          status: TaskStatus.TODO,
+          projectId,
+          assigneeId: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }),
+      ).toThrow(InvalidTaskDescriptionError);
     });
   });
 
@@ -429,6 +510,17 @@ describe('Task', () => {
       expect(updated.updatedAt.getTime()).toBeGreaterThanOrEqual(before);
       expect(updated.updatedAt.getTime()).toBeGreaterThanOrEqual(task.updatedAt.getTime());
     });
+
+    it('returns a new instance with advanced updatedAt when called with no changes', () => {
+      const updated = task.update({});
+
+      expect(updated).not.toBe(task);
+      expect(updated.title).toBe(task.title);
+      expect(updated.description).toBe(task.description);
+      expect(updated.status).toBe(task.status);
+      expect(updated.assigneeId).toBe(task.assigneeId);
+      expect(updated.updatedAt.getTime()).toBeGreaterThanOrEqual(task.updatedAt.getTime());
+    });
   });
 
   describe('toProps', () => {
@@ -452,6 +544,19 @@ describe('Task', () => {
         createdAt: task.createdAt,
         updatedAt: task.updatedAt,
       });
+    });
+
+    it('returns a detached copy that does not mutate when props are changed', () => {
+      const task = Task.create({
+        id: 'task-1',
+        title: 'Fix bug',
+        projectId,
+      });
+
+      const props = task.toProps();
+      props.title = 'Mutated';
+
+      expect(task.title).toBe('Fix bug');
     });
   });
 });

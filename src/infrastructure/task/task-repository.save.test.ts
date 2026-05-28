@@ -120,6 +120,38 @@ describe('PrismaTaskRepository.save', () => {
     expect(saved.projectId).toBe(otherProjectId);
   });
 
+  it('persists null description and assigneeId when the domain entity has no optional fields', async () => {
+    const task = Task.create({
+      id: 'task-save-nullables',
+      title: 'Minimal task',
+      projectId: defaultProjectId,
+    });
+
+    vi.mocked(prisma.task.create).mockImplementation(async ({ data }) =>
+      echoCreateFromData({
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        status: data.status,
+        projectId: data.projectId,
+        assigneeId: data.assigneeId,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      }),
+    );
+
+    const saved = await repository.save(task);
+
+    expect(prisma.task.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        description: null,
+        assigneeId: null,
+      }),
+    });
+    expect(saved.description).toBeNull();
+    expect(saved.assigneeId).toBeNull();
+  });
+
   it('propagates prisma.task.create failures to the caller', async () => {
     const task = Task.create({
       id: 'task-save-fail',

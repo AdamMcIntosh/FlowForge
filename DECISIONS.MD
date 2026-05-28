@@ -225,6 +225,23 @@ Related project errors (`ProjectNotFoundError`, `UnauthorizedProjectAccessError`
 #### Application & HTTP surface
 Seven use cases via `createTaskUseCases()`: create, list, get, update, delete, assign, changeStatus. Controller routes single-field `PATCH` bodies to focused use cases (`assigneeId` only → assign; `status` only → changeStatus; otherwise → update).
 
+### 2025-05-28: Task CRUD Feature Complete
+**Status:** Accepted  
+**Summary:** Task CRUD is fully implemented with project association, optional user assignment, a three-value status enum, and project-owner authorization enforced via JWT `sub` plus `requireOwnedProject` / `requireTaskAccessibleByProjectOwner` in the application layer.  
+**Context:** The team goal was end-to-end Task management: create, read, list, update, delete, assign, and change-status — scoped to projects and gated so users may only access tasks in projects they own.  
+**Decision:** Ship Task CRUD as complete across all layers:
+
+| Layer | Deliverable |
+|-------|-------------|
+| Domain | Immutable `Task` entity, `TaskStatus` (`TODO` \| `IN_PROGRESS` \| `DONE`), domain errors |
+| Application | Seven use cases (`create`, `list`, `get`, `update`, `delete`, `assign`, `changeStatus`) with Zod DTOs and centralized auth in `task-access.ts` |
+| Infrastructure | `TaskRepository` interface, Prisma + in-memory implementations |
+| Adapters / HTTP | JWT-protected routes in `src/routes/tasks.ts`; controller maps errors via `map-task-error.ts` |
+
+**Authorization model:** Every task operation derives `userId` from the JWT access token `sub` (never from the request body). Create and list call `requireOwnedProject()`; get, update, delete, assign, and change-status call `requireTaskAccessibleByProjectOwner()` — both resolve the parent project and assert the authenticated user is its owner.  
+**Rationale:** Reuses the established Project ownership model; keeps authorization in use cases rather than route-only checks; aligns with prior Task ADRs (`2025-05-27` and `2025-05-28: Task Domain & Access Control`).  
+**Consequences:** Assignees stored on a task have no API access unless they also own the project. Role-based or assignee-scoped access requires a future ADR. Test suite (domain, application, repository, HTTP integration) runs without PostgreSQL via in-memory repositories.
+
 ---
 
 **How to add new decisions:**  

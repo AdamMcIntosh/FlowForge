@@ -3236,7 +3236,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement partitioned rate limiting (by IP for anonymous, by user sub when authenticated) and add EF Core foreign key + unique composite indexes for Project-Task relationship in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -3244,9 +3244,9 @@
     ],
     "relatedIds": [],
     "id": "d6c98f23-73f8-45e1-8656-3910de0e695f",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780067849103,
-    "updatedAt": 1780067849103
+    "updatedAt": 1780077211433
   },
   {
     "type": "task",
@@ -3610,5 +3610,126 @@
     "rev": 1,
     "createdAt": 1780070337201,
     "updatedAt": 1780070337201
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items, improvements, or gaps.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "cd63b9df-57c0-4f2c-be71-13c816010843",
+    "rev": 1,
+    "createdAt": 1780077008732,
+    "updatedAt": 1780077008732
+  },
+  {
+    "type": "task",
+    "title": "Architecture & decisions review for beta readiness",
+    "content": "Review the complete FlowForge .NET 10 solution against all recorded Architecture Decisions, Coding Standards, and Project Gotchas. Confirm EF migration strategy, rate-limiting approach, CORS fail-fast, Swagger guards, and production config rules. Produce a concise list of any remaining architectural gaps, trade-offs, or pre-production items.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "architect",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "0ac4bab4-8962-4b57-8751-7e1b072c53c0",
+    "rev": 1,
+    "createdAt": 1780077036373,
+    "updatedAt": 1780077036373
+  },
+  {
+    "type": "task",
+    "title": "Security audit & hardening gap analysis",
+    "content": "Perform a focused security audit of the FlowForge solution. Verify no secrets in Production config, JWT handling, rate-limiter coverage, input validation, error responses, and all Production Hardening items that apply to the current codebase. List any OWASP issues, missing controls, or beta-blocking security gaps.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "security-auditor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "75fb3503-fec6-462d-9cbd-8ed80ae82ab2",
+    "rev": 1,
+    "createdAt": 1780077036376,
+    "updatedAt": 1780077036376
+  },
+  {
+    "type": "task",
+    "title": "Code-quality & implementation review",
+    "content": "Conduct a comprehensive code review of the FlowForge .NET 10 solution covering correctness, design, style, performance, and maintainability. Cross-check against the latest migration, composite indexes, partitioned rate limiting, FluentValidation, ProblemDetails, and structured logging. Deliver a prioritized list of remaining improvements or pre-production items.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "code-reviewer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "7de99535-47d8-4e26-8400-e289fbe31bdf",
+    "rev": 1,
+    "createdAt": 1780077036378,
+    "updatedAt": 1780077036378
+  },
+  {
+    "type": "result",
+    "title": "Result: Architecture & decisions review for beta readiness",
+    "content": "## Review\n\n**Verdict:** FlowForge is **architecturally sound for a controlled beta** (low-traffic pilot, single instance, SQLite or small SQL Server). Clean Architecture boundaries are respected, core cross-cutting concerns are implemented correctly, and the solution is in good shape for internal/beta use.\n\n**Verified today:** `dotnet build` — 0 warnings · `dotnet test` — **231/231 passed**\n\n---\n\n## Decision Compliance (Confirmed in Code)\n\n| Decision | Status | Evidence |\n|----------|--------|----------|\n| **EF migration strategy** | ✅ Compliant | Single SQL Server–authored `InitialCreate` (`20260529155708`); `FlowForgeDbContextFactory` defaults to SQL Server at design time; `ApplyMigrationsInNonProductionAsync()` auto-migrates dev/test; Production skips auto-migrate |\n| **Composite constraints** | ✅ Compliant | `(OwnerId, Name)` on Projects, `(ProjectId, Name)` on Tasks, unique email on Users; Task FK via `ProjectId` alternate key + cascade delete |\n| **Partitioned rate limiting** | ✅ Compliant | Fixed-window policy keyed by JWT `sub` (authenticated) or client IP (anonymous); separate `AuthenticatedPermitLimit` / `AnonymousPermitLimit`; `/health` excluded via `.DisableRateLimiting()` |\n| **Middleware order** | ✅ Compliant | `UseForwardedHeaders` → TraceId → `UseExceptionHandler` → security headers → Swagger → CORS → auth → authorization → `UseRateLimiter` |\n| **CORS fail-fast** | ✅ Compliant | Production throws `InvalidOperationException` when `Cors:AllowedOrigins` is empty |\n| **Swagger guard** | ✅ Compliant | `UseFlowForgeSwagger()` returns early when `IsProduction()` — no Swagger UI/JSON in prod |\n| **Production secrets** | ✅ Compliant | `Jwt:Secret` absent from `appsettings.Production.json`; startup fails fast if missing |\n| **ProblemDetails + TraceId** | ✅ Compliant | Global `IExceptionHandler`, JWT challenge/forbidden handlers, validation and 429 responses all carry `traceId` |\n| **Password policy** | ✅ Compliant | 12+ chars, upper/lower/digit/special via `Au\n…(truncated)",
+    "status": "done",
+    "author": "architect",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "c4b30217-b1d2-40f4-9f49-df54a208aa52",
+    "rev": 1,
+    "createdAt": 1780077100720,
+    "updatedAt": 1780077100720
+  },
+  {
+    "type": "result",
+    "title": "Result: Security audit & hardening gap analysis",
+    "content": "## Review\n\n**Verdict:** FlowForge is **acceptable for a controlled beta pilot** when deployed with environment-supplied secrets and a restrictive CORS allowlist. **231/231 tests pass.** No known-vulnerable NuGet packages. No beta-blocking code defects were found assuming operators follow the production checklist in `README.md`.\n\nThe main residual risk is **operational misconfiguration** (weak/missing JWT secret, placeholder SQL connection string, proxy/rate-limit setup), not missing application-layer controls for the current feature set.\n\n---\n\n## Verified Controls (Pass)\n\n| Area | Status | Evidence |\n|------|--------|----------|\n| **Production secrets** | Pass | `appsettings.Production.json` has **no** `Jwt:Secret`; startup fails fast if unset (`Program.cs` line 29–30) |\n| **JWT validation** | Pass | Issuer, audience, lifetime, signing key validated; 1-minute clock skew; unique `jti` per token |\n| **Password storage** | Pass | PBKDF2-SHA256, 100k iterations, random salt, constant-time verify; 12-char complexity policy |\n| **Rate limiting** | Pass | All auth + CRUD routes use partitioned fixed-window limiter (`sub` / IP); `/health` exempt |\n| **Input validation** | Pass | FluentValidation on auth, project, and task DTOs; returns ProblemDetails 400 |\n| **Error handling** | Pass | Global `IExceptionHandler` → RFC 7807 ProblemDetails; 500 uses generic detail |\n| **Authorization / IDOR** | Pass | Ownership enforced in `ProjectService` / `TaskService`; 404 vs 403 preserved |\n| **CORS (Production)** | Pass | Explicit allowlist; startup fails if empty |\n| **Security headers** | Pass | `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`; HSTS in Production |\n| **Swagger exposure** | Pass | Disabled in Production (`/swagger` → 404) |\n| **Auto-migration** | Pass | Skipped in Production |\n| **Dependency posture** | Pass | `dotnet list package --vulnerable` — clean |\n\n---\n\n## Issues Found\n\n### Medium — Address before public production\n\n**1. JWT s\n…(truncated)",
+    "status": "done",
+    "author": "security-auditor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "3c87098c-5b97-4ec6-983b-f6ded9e95936",
+    "rev": 1,
+    "createdAt": 1780077110340,
+    "updatedAt": 1780077110340
+  },
+  {
+    "type": "result",
+    "title": "Result: Code-quality & implementation review",
+    "content": "## Review\n\n**Verdict:** FlowForge is **beta-ready for a controlled, low-traffic pilot** (single instance, SQLite or small SQL Server, real but limited users). The solution builds cleanly (**0 warnings**), all **231/231 tests pass**, and the core architecture is sound. Clean Architecture boundaries are respected, ownership authorization is coherent end-to-end, and the recent hardening work (partitioned rate limiting, composite indexes, ProblemDetails, FluentValidation, TraceId/Serilog, production CORS/headers) is implemented correctly in code.\n\nFor anything beyond a pilot, the items below should be addressed in priority order.\n\n---\n\n### What is working well\n\n| Area | Assessment |\n|------|------------|\n| **Architecture** | Domain → Application → Infrastructure → Api dependency rule is clean. Services use primary constructors, repositories are scoped, ownership checks live in Application layer. |\n| **EF Core / migration** | `InitialCreate` migration defines SQL Server types, alternate key on `ProjectId`, FK `Tasks → Projects`, and composite unique indexes on `(OwnerId, Name)` and `(ProjectId, Name)`. Configurations match migration intent. |\n| **Auth** | PBKDF2-SHA256 (100k iterations, fixed-time compare), JWT with `sub`/`jti`/`iat`, duplicate-email race handled in `RegisterAsync`. |\n| **Error handling** | Global `IExceptionHandler` maps domain exceptions to ProblemDetails with `traceId`. JWT challenge/forbidden also return ProblemDetails. |\n| **Validation** | FluentValidation on all Auth/Project/Task DTOs; shared `NameValidationRules` and strengthened password policy (12+ chars, complexity). |\n| **Observability** | TraceId middleware (header propagation + log scope + Activity tag), Serilog console + file sinks, structured logging in services/endpoints. |\n| **Production config** | CORS fail-fast if origins empty, HSTS + security headers, Swagger disabled in Production, health check at `/health` (rate-limit exempt). |\n| **Tests** | Broad HTTP integration coverage for aut\n…(truncated)",
+    "status": "done",
+    "author": "code-reviewer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "3a70266d-b735-4956-835e-bad776789bc0",
+    "rev": 1,
+    "createdAt": 1780077169524,
+    "updatedAt": 1780077169524
   }
 ]

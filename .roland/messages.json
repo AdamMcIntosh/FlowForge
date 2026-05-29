@@ -38,5 +38,23 @@
     "body": "**Subject:** Security audit complete — beta OK with auth hardening gaps\n\nPartitioned rate limiting is implemented (not global). Primary blockers for production are **weak password policy**, **PBKDF2 DoS via unbounded passwords**, **no JWT secret length enforcement**, and **insufficient auth-specific rate limits**. Recommend assigning executor tasks H1–H5 before open beta; M1–M3 before scale. No dependency vulnerabilities found; 218/218 tests pass.",
     "sentAt": 1780069912957,
     "deliveredTo": []
+  },
+  {
+    "id": "221c367a-d8b8-4978-bb2c-3e1f247b3fb2",
+    "from": "architect",
+    "to": "lead-pm",
+    "subject": "Message from agent",
+    "body": "**Subject:** Architecture review complete — beta-ready with 6 P0 doc/config items\n\nFlowForge passes architectural review for controlled beta. All recorded decisions on migrations, partitioned rate limiting, CORS fail-fast, Swagger guards, and production secret handling are **implemented correctly in code**. **231/231 tests pass.**\n\nBlock beta sign-off documentation only on: stale `ARCHITECTURE.MD`, split ADR files, production connection-string example mismatch, and missing CI. Scale blockers (distributed rate limiting, JWT revocation, OwnerId FK) are expected and documented above — not beta blockers for a single-instance pilot.",
+    "sentAt": 1780077100719,
+    "deliveredTo": []
+  },
+  {
+    "id": "c1ee5397-e73f-4def-90fa-b9d3dd646ae2",
+    "from": "code-reviewer",
+    "to": "lead-pm",
+    "subject": "Message from agent",
+    "body": "**Subject:** Code review complete — beta-ready with 5 P0 items\n\nReview delivered. **231/231 tests pass.** Architecture and recent hardening (migration indexes, partitioned rate limits, ProblemDetails, validation, logging) are solid. **Blockers for wider rollout:** rate limiter middleware order (protected routes bypass limits when unauthenticated), duplicate project/task names return 500 not 409, no test runs real migrations, forwarded-headers proxy trust unset, JWT secret length unchecked. Recommend next executor wave tackle items 1–3 first; test-author adds migration + duplicate-name HTTP tests.",
+    "sentAt": 1780077169524,
+    "deliveredTo": []
   }
 ]

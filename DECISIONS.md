@@ -98,3 +98,8 @@ _Each section corresponds to one Roland run that produced new decisions._
 ## 2026-05-29 — Regenerate EF Core migration for SQL Server compatibility, add partitioned rate  _(run mpr3t1jj)_
 
 - [Decision: `FlowForgeDbContextFactory` now defaults to SQL Server for design-time operations so migrations are always authored against the production provider.]
+
+## 2026-05-29 — Perform a final review of the FlowForge .NET 10 solution for beta readiness and  _(run mpr7w2fq)_
+
+- [Decision: Rate limiter must run immediately after authentication and before authorization to protect all routes uniformly]
+- [Decision: Duplicate-name constraint violations must map to 409 Conflict rather than 500]

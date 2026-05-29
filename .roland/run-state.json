@@ -1,8 +1,8 @@
 {
-  "runId": "7979cfe4",
-  "goal": "Regenerate EF Core migration for SQL Server compatibility, add partitioned rate limiting improvements, and strengthen password policy in the FlowForge .NET 10 solution.",
-  "startedAt": 1780070149134,
-  "updatedAt": 1780070386509,
+  "runId": "57cc3572",
+  "goal": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items, improvements, or gaps.",
+  "startedAt": 1780077008724,
+  "updatedAt": 1780077211435,
   "status": "done",
   "currentWave": 1,
   "totalTasks": 3,
@@ -10,36 +10,36 @@
   "tasks": [
     {
       "id": "task-1",
-      "title": "Regenerate EF Core migration for SQL Server compatibility",
-      "agent": "executor",
+      "title": "Architecture & decisions review for beta readiness",
+      "agent": "architect",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780070187245,
-      "completedAt": 1780070337203,
+      "startedAt": 1780077036384,
+      "completedAt": 1780077100722,
       "hadBlocker": false,
-      "outputPreview": "…ion, delete `flowforge.db` (or run `dotnet ef database update` on a fresh file).\n- For Production SQL Server, run `dotnet ef database update` with `Database__Provider=SqlServer` and a configured connection string before deploy (auto-migration remains disabled in Production per project decisions)."
+      "outputPreview": "…k beta sign-off documentation only on: stale `ARCHITECTURE.MD`, split ADR files, production connection-string example mismatch, and missing CI. Scale blockers (distributed rate limiting, JWT revocation, OwnerId FK) are expected and documented above — not beta blockers for a single-instance pilot."
     },
     {
       "id": "task-2",
-      "title": "Add partitioned rate limiting improvements",
-      "agent": "executor",
+      "title": "Security audit & hardening gap analysis",
+      "agent": "security-auditor",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780070190249,
-      "completedAt": 1780070262015,
+      "startedAt": 1780077039385,
+      "completedAt": 1780077110343,
       "hadBlocker": false,
-      "outputPreview": "…No** — no request DTO changes |\n| Rate limiting | **Yes** | Enhanced partitioned limiter with per-client fairness |\n| Structured logging | **No** — no new log paths |\n| Error responses | **No** — existing 429 ProblemDetails unchanged |\n| CancellationToken | **No** — no new async service methods |"
+      "outputPreview": "…vel security defect blocks a **controlled beta** if operators supply a strong JWT secret, real SQL connection string, and correct CORS origins. The three medium configuration gaps (secret validation, SQL placeholder, proxy trust) should be closed before opening to untrusted users or high traffic."
     },
     {
       "id": "task-3",
-      "title": "Strengthen password policy",
-      "agent": "executor",
+      "title": "Code-quality & implementation review",
+      "agent": "code-reviewer",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780070262016,
-      "completedAt": 1780070325789,
+      "startedAt": 1780077100724,
+      "completedAt": 1780077169526,
       "hadBlocker": false,
-      "outputPreview": "…dy passed through `ValidateAsync` |\n\n**Note:** `ValidationEndpointTests` may fail in this workspace if another in-flight change left pending EF model changes (`PendingModelChangesWarning` on startup). That is unrelated to this password work; auth E2E coverage is confirmed via `AuthEndpointTests`."
+      "outputPreview": "…routes bypass limits when unauthenticated), duplicate project/task names return 500 not 409, no test runs real migrations, forwarded-headers proxy trust unset, JWT secret length unchecked. Recommend next executor wave tackle items 1–3 first; test-author adds migration + duplicate-name HTTP tests."
     }
   ],
   "activeTaskIds": []

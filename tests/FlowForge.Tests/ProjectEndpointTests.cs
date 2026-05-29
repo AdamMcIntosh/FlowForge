@@ -43,6 +43,7 @@ public class ProjectEndpointTests : IClassFixture<ProjectEndpointWebApplicationF
         var created = await createResponse.Content.ReadFromJsonAsync<ProjectResponse>();
         Assert.NotNull(created);
         Assert.Equal("My Project", created.Name);
+        Assert.NotEqual(Guid.Empty, created.OwnerId);
 
         var listResponse = await SendAuthorizedAsync(HttpMethod.Get, "/projects", token);
         Assert.Equal(HttpStatusCode.OK, listResponse.StatusCode);
@@ -51,6 +52,7 @@ public class ProjectEndpointTests : IClassFixture<ProjectEndpointWebApplicationF
         Assert.NotNull(listed);
         Assert.Single(listed);
         Assert.Equal(created.Id, listed[0].Id);
+        Assert.Equal(created.OwnerId, listed[0].OwnerId);
 
         var getResponse = await SendAuthorizedAsync(HttpMethod.Get, $"/projects/{created.Id}", token);
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
@@ -58,6 +60,7 @@ public class ProjectEndpointTests : IClassFixture<ProjectEndpointWebApplicationF
         var fetched = await getResponse.Content.ReadFromJsonAsync<ProjectResponse>();
         Assert.NotNull(fetched);
         Assert.Equal("My Project", fetched.Name);
+        Assert.Equal(created.OwnerId, fetched.OwnerId);
 
         var updateResponse = await SendAuthorizedAsync(
             HttpMethod.Put,
@@ -70,6 +73,8 @@ public class ProjectEndpointTests : IClassFixture<ProjectEndpointWebApplicationF
         var updated = await updateResponse.Content.ReadFromJsonAsync<ProjectResponse>();
         Assert.NotNull(updated);
         Assert.Equal("Renamed Project", updated.Name);
+        Assert.Equal(created.Id, updated.Id);
+        Assert.Equal(created.OwnerId, updated.OwnerId);
 
         var deleteResponse = await SendAuthorizedAsync(HttpMethod.Delete, $"/projects/{created.Id}", token);
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
@@ -79,11 +84,81 @@ public class ProjectEndpointTests : IClassFixture<ProjectEndpointWebApplicationF
     }
 
     [Fact]
-    public async Task GetProject_WithoutToken_ReturnsUnauthorized()
+    public async Task ListProjects_ReturnsOnlyProjectsOwnedByAuthenticatedUser()
     {
-        var response = await _client.GetAsync("/projects");
+        var ownerAToken = await RegisterAndGetTokenAsync($"project-owner-a-{Guid.NewGuid():N}@example.com");
+        var ownerBToken = await RegisterAndGetTokenAsync($"project-owner-b-{Guid.NewGuid():N}@example.com");
+
+        var ownerAProject = await CreateProjectAsync(ownerAToken, "Owner A Project");
+        var ownerBProject = await CreateProjectAsync(ownerBToken, "Owner B Project");
+
+        var ownerAListResponse = await SendAuthorizedAsync(HttpMethod.Get, "/projects", ownerAToken);
+        Assert.Equal(HttpStatusCode.OK, ownerAListResponse.StatusCode);
+
+        var ownerAList = await ownerAListResponse.Content.ReadFromJsonAsync<List<ProjectResponse>>();
+        Assert.NotNull(ownerAList);
+        Assert.Single(ownerAList);
+        Assert.Equal(ownerAProject.Id, ownerAList[0].Id);
+        Assert.Equal(ownerAProject.OwnerId, ownerAList[0].OwnerId);
+
+        var ownerBListResponse = await SendAuthorizedAsync(HttpMethod.Get, "/projects", ownerBToken);
+        Assert.Equal(HttpStatusCode.OK, ownerBListResponse.StatusCode);
+
+        var ownerBList = await ownerBListResponse.Content.ReadFromJsonAsync<List<ProjectResponse>>();
+        Assert.NotNull(ownerBList);
+        Assert.Single(ownerBList);
+        Assert.Equal(ownerBProject.Id, ownerBList[0].Id);
+        Assert.Equal(ownerBProject.OwnerId, ownerBList[0].OwnerId);
+        Assert.NotEqual(ownerAProject.OwnerId, ownerBProject.OwnerId);
+    }
+
+    [Theory]
+    [InlineData("POST", "/projects")]
+    [InlineData("GET", "/projects")]
+    [InlineData("GET", "/projects/00000000-0000-0000-0000-000000000001")]
+    [InlineData("PUT", "/projects/00000000-0000-0000-0000-000000000001")]
+    [InlineData("DELETE", "/projects/00000000-0000-0000-0000-000000000001")]
+    public async Task ProjectEndpoints_WithoutToken_ReturnUnauthorized(string method, string path)
+    {
+        using var request = new HttpRequestMessage(new HttpMethod(method), path);
+
+        if (method is "POST" or "PUT")
+        {
+            request.Content = JsonContent.Create(new CreateProjectRequest("Unauthorized Attempt"));
+        }
+
+        var response = await _client.SendAsync(request);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateProject_WithEmptyName_ReturnsBadRequest()
+    {
+        var token = await RegisterAndGetTokenAsync($"project-empty-create-{Guid.NewGuid():N}@example.com");
+
+        var response = await SendAuthorizedAsync(
+            HttpMethod.Post,
+            "/projects",
+            token,
+            new CreateProjectRequest("   "));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateProject_WithEmptyName_ReturnsBadRequest()
+    {
+        var token = await RegisterAndGetTokenAsync($"project-empty-update-{Guid.NewGuid():N}@example.com");
+        var project = await CreateProjectAsync(token, "Valid Name");
+
+        var response = await SendAuthorizedAsync(
+            HttpMethod.Put,
+            $"/projects/{project.Id}",
+            token,
+            new UpdateProjectRequest(""));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
@@ -91,31 +166,97 @@ public class ProjectEndpointTests : IClassFixture<ProjectEndpointWebApplicationF
     {
         var ownerToken = await RegisterAndGetTokenAsync($"project-owner-a-{Guid.NewGuid():N}@example.com");
         var otherToken = await RegisterAndGetTokenAsync($"project-owner-b-{Guid.NewGuid():N}@example.com");
+        var project = await CreateProjectAsync(ownerToken, "Owner A Project");
 
+        var response = await SendAuthorizedAsync(HttpMethod.Get, $"/projects/{project.Id}", otherToken);
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateProject_WhenOwnedByAnotherUser_ReturnsForbidden()
+    {
+        var ownerToken = await RegisterAndGetTokenAsync($"project-update-owner-{Guid.NewGuid():N}@example.com");
+        var otherToken = await RegisterAndGetTokenAsync($"project-update-other-{Guid.NewGuid():N}@example.com");
+        var project = await CreateProjectAsync(ownerToken, "Owner Project");
+
+        var response = await SendAuthorizedAsync(
+            HttpMethod.Put,
+            $"/projects/{project.Id}",
+            otherToken,
+            new UpdateProjectRequest("Stolen Rename"));
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+        var ownerView = await SendAuthorizedAsync(HttpMethod.Get, $"/projects/{project.Id}", ownerToken);
+        var unchanged = await ownerView.Content.ReadFromJsonAsync<ProjectResponse>();
+        Assert.NotNull(unchanged);
+        Assert.Equal("Owner Project", unchanged.Name);
+    }
+
+    [Fact]
+    public async Task DeleteProject_WhenOwnedByAnotherUser_ReturnsForbidden()
+    {
+        var ownerToken = await RegisterAndGetTokenAsync($"project-delete-owner-{Guid.NewGuid():N}@example.com");
+        var otherToken = await RegisterAndGetTokenAsync($"project-delete-other-{Guid.NewGuid():N}@example.com");
+        var project = await CreateProjectAsync(ownerToken, "Protected Project");
+
+        var response = await SendAuthorizedAsync(HttpMethod.Delete, $"/projects/{project.Id}", otherToken);
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+        var ownerView = await SendAuthorizedAsync(HttpMethod.Get, $"/projects/{project.Id}", ownerToken);
+        Assert.Equal(HttpStatusCode.OK, ownerView.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetProject_WhenMissing_ReturnsNotFound()
+    {
+        var token = await RegisterAndGetTokenAsync($"project-missing-get-{Guid.NewGuid():N}@example.com");
+
+        var response = await SendAuthorizedAsync(HttpMethod.Get, $"/projects/{Guid.NewGuid()}", token);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateProject_WhenMissing_ReturnsNotFound()
+    {
+        var token = await RegisterAndGetTokenAsync($"project-missing-update-{Guid.NewGuid():N}@example.com");
+
+        var response = await SendAuthorizedAsync(
+            HttpMethod.Put,
+            $"/projects/{Guid.NewGuid()}",
+            token,
+            new UpdateProjectRequest("Ghost Project"));
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeleteProject_WhenMissing_ReturnsNotFound()
+    {
+        var token = await RegisterAndGetTokenAsync($"project-missing-delete-{Guid.NewGuid():N}@example.com");
+
+        var response = await SendAuthorizedAsync(HttpMethod.Delete, $"/projects/{Guid.NewGuid()}", token);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    private async Task<ProjectResponse> CreateProjectAsync(string token, string name)
+    {
         var createResponse = await SendAuthorizedAsync(
             HttpMethod.Post,
             "/projects",
-            ownerToken,
-            new CreateProjectRequest("Owner A Project"));
+            token,
+            new CreateProjectRequest(name));
 
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
         var created = await createResponse.Content.ReadFromJsonAsync<ProjectResponse>();
         Assert.NotNull(created);
 
-        var response = await SendAuthorizedAsync(HttpMethod.Get, $"/projects/{created.Id}", otherToken);
-
-        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task GetProject_WhenMissing_ReturnsNotFound()
-    {
-        var token = await RegisterAndGetTokenAsync($"project-missing-{Guid.NewGuid():N}@example.com");
-
-        var response = await SendAuthorizedAsync(HttpMethod.Get, $"/projects/{Guid.NewGuid()}", token);
-
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        return created;
     }
 
     private async Task<string> RegisterAndGetTokenAsync(string email)

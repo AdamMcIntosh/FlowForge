@@ -43,6 +43,7 @@ app.MapHealthChecks("/health");
 app.MapAuthEndpoints();
 app.MapMeEndpoints();
 app.MapProjectEndpoints();
+app.MapTaskEndpoints();
 
 app.Run();
 

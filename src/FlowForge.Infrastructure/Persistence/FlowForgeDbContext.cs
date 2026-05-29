@@ -1,3 +1,4 @@
+using DomainTask = FlowForge.Domain.Tasks.Task;
 using FlowForge.Domain.Projects;
 using FlowForge.Domain.Users;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,8 @@ public class FlowForgeDbContext(DbContextOptions<FlowForgeDbContext> options) : 
     public DbSet<User> Users => Set<User>();
 
     public DbSet<Project> Projects => Set<Project>();
+
+    public DbSet<DomainTask> Tasks => Set<DomainTask>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

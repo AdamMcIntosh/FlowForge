@@ -1,5 +1,6 @@
 using FlowForge.Application.Common.Interfaces;
 using FlowForge.Domain.Projects;
+using FlowForge.Domain.Tasks;
 using FlowForge.Domain.Users;
 using FlowForge.Infrastructure.Authentication;
 using FlowForge.Infrastructure.Persistence;
@@ -27,6 +28,7 @@ public static class DependencyInjection
         services.AddDbContext<FlowForgeDbContext>(options => configureDbContext(options));
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
+        services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
 
         return services;

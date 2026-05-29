@@ -1,0 +1,13 @@
+[
+  {
+    "id": "ce2ca709-2ffd-4200-8def-e54947504185",
+    "from": "Lead-PM",
+    "to": "test-author",
+    "subject": "PM Unblock Guidance",
+    "body": "task-7 complete; proceed with task-9 integration tests for TaskService and endpoints.",
+    "sentAt": 1780020984130,
+    "deliveredTo": [
+      "test-author"
+    ]
+  }
+]

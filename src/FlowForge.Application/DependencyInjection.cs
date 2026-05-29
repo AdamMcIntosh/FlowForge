@@ -1,6 +1,7 @@
 using FlowForge.Application.Authentication;
 using FlowForge.Application.Common.Interfaces;
 using FlowForge.Application.Projects;
+using FlowForge.Application.Tasks;
 using FlowForge.Application.Users;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,7 @@ public static class DependencyInjection
         services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<ITaskService, TaskService>();
 
         return services;
     }

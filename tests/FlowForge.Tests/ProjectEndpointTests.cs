@@ -496,13 +496,15 @@ public sealed class ProjectEndpointTests : IClassFixture<ProjectEndpointWebAppli
     }
 }
 
-public sealed class ProjectCreateRateLimitTests : IClassFixture<ProjectCreateRateLimitWebApplicationFactory>
+public sealed class ProjectCreateRateLimitTests : IClassFixture<ProjectCreateRateLimitTestFixture>
 {
-    private readonly HttpClient _client;
+    private readonly HttpClient _setupClient;
+    private readonly HttpClient _rateLimitClient;
 
-    public ProjectCreateRateLimitTests(ProjectCreateRateLimitWebApplicationFactory factory)
+    public ProjectCreateRateLimitTests(ProjectCreateRateLimitTestFixture fixture)
     {
-        _client = factory.CreateClient();
+        _setupClient = fixture.SetupClient;
+        _rateLimitClient = fixture.RateLimitClient;
     }
 
     [Fact]
@@ -511,6 +513,7 @@ public sealed class ProjectCreateRateLimitTests : IClassFixture<ProjectCreateRat
         var token = await RegisterAndGetTokenAsync($"project-rate-{Guid.NewGuid():N}@example.com");
 
         var first = await SendAuthorizedAsync(
+            _rateLimitClient,
             HttpMethod.Post,
             "/projects",
             token,
@@ -518,6 +521,7 @@ public sealed class ProjectCreateRateLimitTests : IClassFixture<ProjectCreateRat
         Assert.Equal(HttpStatusCode.Created, first.StatusCode);
 
         var second = await SendAuthorizedAsync(
+            _rateLimitClient,
             HttpMethod.Post,
             "/projects",
             token,
@@ -525,6 +529,7 @@ public sealed class ProjectCreateRateLimitTests : IClassFixture<ProjectCreateRat
         Assert.Equal(HttpStatusCode.Created, second.StatusCode);
 
         var limited = await SendAuthorizedAsync(
+            _rateLimitClient,
             HttpMethod.Post,
             "/projects",
             token,
@@ -540,7 +545,7 @@ public sealed class ProjectCreateRateLimitTests : IClassFixture<ProjectCreateRat
 
     private async Task<string> RegisterAndGetTokenAsync(string email)
     {
-        var registerResponse = await _client.PostAsJsonAsync(
+        var registerResponse = await _setupClient.PostAsJsonAsync(
             "/register",
             new AuthRequest(email, "SecurePass123!"));
 
@@ -552,7 +557,8 @@ public sealed class ProjectCreateRateLimitTests : IClassFixture<ProjectCreateRat
         return registered.AccessToken;
     }
 
-    private async Task<HttpResponseMessage> SendAuthorizedAsync(
+    private static async Task<HttpResponseMessage> SendAuthorizedAsync(
+        HttpClient client,
         HttpMethod method,
         string path,
         string token,
@@ -566,17 +572,65 @@ public sealed class ProjectCreateRateLimitTests : IClassFixture<ProjectCreateRat
             request.Content = JsonContent.Create(body);
         }
 
-        return await _client.SendAsync(request);
+        return await client.SendAsync(request);
+    }
+}
+
+// Rate-limit assertions use a dedicated PermitLimit=2 factory so setup calls
+// (register, project create) on the shared-database setup factory do not
+// consume the low-limit window.
+public sealed class ProjectCreateRateLimitTestFixture : IDisposable
+{
+    private readonly SqliteConnection _connection = new("Data Source=:memory:");
+    private readonly ProjectCreateRateLimitWebApplicationFactory _setupFactory;
+    private readonly ProjectCreateRateLimitWebApplicationFactory _rateLimitFactory;
+
+    public ProjectCreateRateLimitTestFixture()
+    {
+        _connection.Open();
+        _setupFactory = new ProjectCreateRateLimitWebApplicationFactory(_connection, permitLimit: "10000");
+        _rateLimitFactory = new ProjectCreateRateLimitWebApplicationFactory(_connection, permitLimit: "2");
+        SetupClient = _setupFactory.CreateClient();
+        RateLimitClient = _rateLimitFactory.CreateClient();
+    }
+
+    public HttpClient SetupClient { get; }
+
+    public HttpClient RateLimitClient { get; }
+
+    public void Dispose()
+    {
+        SetupClient.Dispose();
+        RateLimitClient.Dispose();
+        _rateLimitFactory.Dispose();
+        _setupFactory.Dispose();
+        _connection.Dispose();
     }
 }
 
 public sealed class ProjectCreateRateLimitWebApplicationFactory : WebApplicationFactory<Program>, IDisposable
 {
-    private readonly SqliteConnection _connection = new("Data Source=:memory:");
+    private readonly SqliteConnection _connection;
+    private readonly bool _ownsConnection;
+    private readonly string _permitLimit;
 
-    public ProjectCreateRateLimitWebApplicationFactory()
+    public ProjectCreateRateLimitWebApplicationFactory(
+        SqliteConnection? connection = null,
+        string permitLimit = "2")
     {
-        _connection.Open();
+        if (connection is null)
+        {
+            _connection = new SqliteConnection("Data Source=:memory:");
+            _connection.Open();
+            _ownsConnection = true;
+        }
+        else
+        {
+            _connection = connection;
+            _ownsConnection = false;
+        }
+
+        _permitLimit = permitLimit;
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -587,7 +641,7 @@ public sealed class ProjectCreateRateLimitWebApplicationFactory : WebApplication
         builder.UseSetting("Jwt:Audience", "FlowForge");
         builder.UseSetting("Jwt:Secret", "FlowForge-Dev-Secret-Key-At-Least-32-Chars!");
         builder.UseSetting("Jwt:ExpiryMinutes", "60");
-        builder.UseSetting("RateLimiting:PermitLimit", "2");
+        builder.UseSetting("RateLimiting:PermitLimit", _permitLimit);
         builder.UseSetting("RateLimiting:WindowSeconds", "60");
 
         builder.ConfigureTestServices(services =>
@@ -615,7 +669,11 @@ public sealed class ProjectCreateRateLimitWebApplicationFactory : WebApplication
     public new void Dispose()
     {
         base.Dispose();
-        _connection.Dispose();
+
+        if (_ownsConnection)
+        {
+            _connection.Dispose();
+        }
     }
 }
 

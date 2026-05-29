@@ -4,9 +4,6 @@ _Updated automatically after each run. Edit manually at any time._
 
 ## Architecture Decisions
 
-- Used primary constructor injection (`class Foo(IBar bar)`) across all services and repositories for conciseness
-- SQLite chosen as default dev provider; SQL Server remains production-only via `Database:Provider` + environment-specific appsettings.
-- Automatic `MigrateAsync` is deliberately disabled in Production; explicit migration runs are required for SQL Server.
 - Fixed-window rate limiter chosen as the single policy for all auth/CRUD endpoints.
 - N/A (no new decisions)
 - Centralized exception-to-ProblemDetails mapping lives in `GlobalExceptionHandler` (not per-endpoint).
@@ -23,13 +20,13 @@ _Updated automatically after each run. Edit manually at any time._
 - ASP.NET Core configuration sources (appsettings + env vars) are the single source of truth; `.env` files are never auto-loaded.
 - Serilog is enabled by default via `Serilog:Enabled` configuration key; tests can disable it to preserve custom `ILoggerProvider` instances.
 - Single global `RateLimitPolicies.FixedWindow` policy continues to protect auth + CRUD endpoints.
+- N/A (no architectural changes).
+- None new (documentation only).
+- Rate limiting remains a single global FixedWindow policy (simplicity trade-off accepted for beta).
+- EF relationships and unique constraints were intentionally omitted in the initial migration (now flagged as P0).
 
 ## Coding Standards
 
-- Request DTOs are validated with `IValidator<T>` injected into minimal API handlers; `ValidateAsync(..., cancellationToken)` + `ToProblemDetailsResult()` pattern is now the standard.
-- Validators placed under `src/FlowForge.Api/Validation/` following existing folder convention.
-- Shared reusable rules extracted to `NameValidationRules.cs`.
-- Validators placed in `src/FlowForge.Api/Validation/` and named `*RequestValidator`.
 - Shared rules live in `*ValidationRules.cs` as extension methods.
 - Tests split by layer (unit validator tests + HTTP integration tests).
 - Swagger operation metadata is attached via `.WithMetadata(new SwaggerOperationAttribute(...))` on minimal API routes.
@@ -46,6 +43,10 @@ _Updated automatically after each run. Edit manually at any time._
 - All new endpoints use `RequireRateLimiting`, `IValidator<T>`, `CancellationToken`, and `ILogger<T>`.
 - Logging configuration lives in `Logging/SerilogLoggingExtensions.cs` following the existing `Api/*Extensions.cs` pattern.
 - Rate-limit test fixtures keep main factories at `PermitLimit=10000` and use separate low-limit factories.
+- Rate-limit test fixtures must use a high-limit “setup” factory for registration / prerequisite creates and a low-limit factory exclusively for the assertions under test; both factories share one open SQLite connection.
+- None new.
+- All endpoints use primary-constructor minimal APIs and FluentValidation.
+- ProblemDetails + traceId on every error response (including 429).
 
 ## Past Mistakes
 
@@ -64,6 +65,9 @@ _Updated automatically after each run. Edit manually at any time._
 - [×2] Never place secrets in `appsettings.Production.json` (confirmed Jwt secret is omitted).
 - Never disable Serilog globally in production configs; the `Enabled` flag must remain `true` by default.
 - Never set `PermitLimit=2` on a global policy when setup calls also hit rate-limited endpoints.
+- Never reuse a single low-PermitLimit factory for both setup and rate-limit assertions — setup calls consume permits and cause the third create to hit 429 on the second attempt instead of the third.
+- None encountered in this run.
+- Never rely on InMemory uniqueness behavior to protect production DB (root cause: EF indexes were non-unique while repositories enforced uniqueness).
 
 ## Preferences
 
@@ -75,6 +79,8 @@ _Updated automatically after each run. Edit manually at any time._
 - Swagger remains a Development / test-only surface; never enabled in Production.
 - Swagger UI only in Development; disabled in Production.
 - `CollectCoverage=false` by default so normal `dotnet test` remains fast.
+- None surfaced.
+- Production connection strings must use SQL auth + `Encrypt=True` (avoid Windows `Trusted_Connection`).
 
 ## Project Gotchas
 
@@ -94,11 +100,12 @@ _Updated automatically after each run. Edit manually at any time._
 - Health-check endpoint is explicitly excluded from rate limiting via `.DisableRateLimiting()`.
 - `UseSerilog()` clears custom logger providers, which is why the TraceId test factory must set `Serilog:Enabled=false`.
 - `RemoveEfCoreRegistrations` is `internal static` so rate-limit factories can reuse it.
+- Rate-limit counters are per `WebApplicationFactory` instance; separate factories are required to isolate permit windows even when the database is shared.
+- None new.
+- Relative `logs/` path for Serilog file sink will fail in read-only containers.
 
 ## Proven Patterns
 
-- Test doubles (`InMemoryUserRepository`) live in `Infrastructure` so both unit tests and future integration tests can share the same fake
-- Co-locating a `*EndpointWebApplicationFactory : WebApplicationFactory<Program>` (with shared SQLite connection + `RemoveEfCoreRegistrations`) inside the same file as the test class enables fast, realistic HTTP integration tests that exercise the full DI pipeline, auth middleware, and real EF Core repositories.
 - Splitting test-author by layer (endpoint factories vs. repository tests) allowed parallel execution.
 - Splitting migration generation + verification into a dedicated executor task allowed clean parallel review.
 - Centralizing policy names in a static class allows easy reuse across endpoint groups.
@@ -116,6 +123,9 @@ _Updated automatically after each run. Edit manually at any time._
 - Splitting test authorship by layer (endpoint vs service vs validator) allowed parallel execution with zero conflicts.
 - Splitting the Serilog registration into a reusable extension method allowed clean conditional enabling without polluting `Program.cs`.
 - Splitting test-author by layer allowed parallel execution of coverage expansion and test execution.
+- Composite fixture with two factories sharing one `SqliteConnection` cleanly separates setup traffic from the rate-limit window while preserving JWT validity.
+- None new.
+- Splitting test-author responsibility by layer (endpoint vs repository) allowed parallel execution with zero conflicts.
 
 ## Anti-Patterns
 
@@ -134,7 +144,10 @@ _Updated automatically after each run. Edit manually at any time._
 - [Hardcoding connection strings or JWT secrets] — root cause: violates 12-factor and startup validation; example: earlier dev versions had fallback secrets in appsettings.
 - [Hard-coding log levels or sink paths] — root cause: violates 12-factor config; example: previous manual `WriteTo.Console()` calls in code.
 - [global rate-limit fixture with insufficient permits] — root cause: single policy counter shared across register + CRUD; example: `ProjectCreateRateLimitTests` and `TaskCreateRateLimitTests`.
+- [Single-factory rate-limit tests] — root cause: all HTTP calls share the same permit counter; example: original `ProjectCreateRateLimitTests` and `TaskCreateRateLimitTests`.
+- None new.
+- [Copy-paste of `TryGetOwnerId` helper] — root cause: duplicated in two endpoint files; example: `ProjectEndpoints.cs` and `TaskEndpoints.cs`.
 
 ---
 
-_Last updated: 2026-05-29 · run mpr1lt64 · Review and expand integration test coverage for key flows (a_
+_Last updated: 2026-05-29 · run mpr2axf2 · Perform a final review of the FlowForge .NET 10 solution for_

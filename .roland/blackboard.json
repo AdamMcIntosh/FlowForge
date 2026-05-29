@@ -2755,7 +2755,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items or improvements.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -2763,9 +2763,9 @@
     ],
     "relatedIds": [],
     "id": "6418d888-1134-4afb-8525-8e60b2d91dd9",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780066211944,
-    "updatedAt": 1780066211944
+    "updatedAt": 1780067276541
   },
   {
     "type": "task",
@@ -2825,7 +2825,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Add Serilog structured logging configuration with console + file sinks and basic production logging levels in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -2833,9 +2833,9 @@
     ],
     "relatedIds": [],
     "id": "8fc5a11f-2d6b-4560-9aef-47dda7673abd",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780066247544,
-    "updatedAt": 1780066247544
+    "updatedAt": 1780067550788
   },
   {
     "type": "task",
@@ -2876,7 +2876,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Review and expand integration test coverage for key flows (auth, project, task) and raise coverage threshold if needed in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -2884,9 +2884,9 @@
     ],
     "relatedIds": [],
     "id": "32c482ac-ad35-48d3-9d5d-f8b0841213fe",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780066452466,
-    "updatedAt": 1780066452466
+    "updatedAt": 1780067716567
   },
   {
     "type": "task",
@@ -3078,5 +3078,158 @@
     "rev": 1,
     "createdAt": 1780066916640,
     "updatedAt": 1780066916640
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Fix rate-limit test flakiness in ProjectCreateRateLimitTests and TaskCreateRateLimitTests by adjusting PermitLimit or setup in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "98d92665-53ef-40e7-88bd-8ffc01d50941",
+    "rev": 1,
+    "createdAt": 1780067174794,
+    "updatedAt": 1780067174794
+  },
+  {
+    "type": "task",
+    "title": "Fix rate-limit test flakiness in ProjectCreateRateLimitTests and TaskCreateRateLimitTests",
+    "content": "⚠️ .NET TEST CONVENTIONS — MANDATORY: Use xUnit. All test classes must be `public sealed`. Use `[Fact]` and `[Theory]` attributes. Mock dependencies with NSubstitute or Moq. Never use `Thread.Sleep` — use `Task.Delay` with CancellationToken. Integration tests must use WebApplicationFactory<Program> with a separate test database — never the production database.\n\nAlways create fresh instances of services, repositories, and DbContext per test — never reuse a module-level singleton across tests. Use `beforeEach` (JS) or the xUnit constructor pattern (.NET) to initialise state. Cross-test state leakage causes flaky, order-dependent failures.\n\nUpdate ProjectCreateRateLimitTests and TaskCreateRateLimitTests (in tests/FlowForge.Api.IntegrationTests/) to follow the established pattern: keep the main factory at PermitLimit=10000, introduce a separate low-limit factory only for the rate-limit assertions, and ensure no setup calls share the low-limit counter. Align with existing rate-limit test fixtures in the solution.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "7d2bac37-9154-4a88-bf91-232bc138e1a0",
+    "rev": 1,
+    "createdAt": 1780067192485,
+    "updatedAt": 1780067192485
+  },
+  {
+    "type": "result",
+    "title": "Result: Fix rate-limit test flakiness in ProjectCreateRateLimitTests and TaskCreateRateLimitTests",
+    "content": "## Coverage\n\nFixed rate-limit flakiness in `ProjectCreateRateLimitTests` and `TaskCreateRateLimitTests` by splitting setup from rate-limit assertions, matching the pattern described in the task and the test-executor note.\n\n### Root cause\n\nBoth tests used a single factory with `PermitLimit=2` for all HTTP calls. Setup traffic (`POST /register`, and for tasks also `POST /projects`) consumed permits before the intended CRUD assertions ran, so the third create often returned 429 on the second attempt instead of the third.\n\n### Fix\n\nIntroduced composite fixtures with **two factories sharing one SQLite in-memory connection**:\n\n| Factory | PermitLimit | Used for |\n|---------|-------------|----------|\n| Setup | `10000` | Register, project create (task test only) |\n| Rate-limit | `2` | Only the three create calls under test |\n\nRate limit counters are per app instance, so setup on the high-limit factory no longer affects the low-limit window. The shared DB keeps JWT auth valid across both clients.\n\n### Files changed\n\n**`tests/FlowForge.Tests/ProjectEndpointTests.cs`**\n- `ProjectCreateRateLimitTestFixture` — owns shared connection + setup/rate-limit factories\n- `ProjectCreateRateLimitTests` — register via `SetupClient`; project creates via `RateLimitClient`\n- `ProjectCreateRateLimitWebApplicationFactory` — accepts shared connection + configurable `permitLimit`\n\n**`tests/FlowForge.Tests/TaskEndpointTests.cs`**\n- Same pattern for task create rate limiting\n- Register + project create on `SetupClient`; task creates on `RateLimitClient`\n\nBuild succeeds with 0 warnings. Per author role, tests were not executed — test-executor should run:\n\n```bash\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --filter \"FullyQualifiedName~ProjectCreateRateLimitTests|FullyQualifiedName~TaskCreateRateLimitTests\"\n```",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "d2d38cd8-527d-40c4-93b7-efd26ffb519d",
+    "rev": 1,
+    "createdAt": 1780067252308,
+    "updatedAt": 1780067252308
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Update README.md and .env.example with clear production JWT secret and database connection string guidance in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "a5e411e3-2833-4147-b0c5-d6b4b86c403a",
+    "rev": 1,
+    "createdAt": 1780067475258,
+    "updatedAt": 1780067475258
+  },
+  {
+    "type": "task",
+    "title": "Update README.md and .env.example with production JWT and DB guidance",
+    "content": "Update README.md and create/update .env.example with clear, production-ready guidance for JWT secret (never in appsettings.Production.json; use user-secrets or environment variables) and database connection strings (SQLite default for non-Production, SqlServer only when Database:Provider=SqlServer or ASPNETCORE_ENVIRONMENT=Production). Align with existing architecture decisions on config loading, provider selection, and secret hygiene. Keep all instructions concise and example-driven.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "c1969277-81f9-40c4-9a45-7f68521fc741",
+    "rev": 1,
+    "createdAt": 1780067493395,
+    "updatedAt": 1780067493395
+  },
+  {
+    "type": "result",
+    "title": "Result: Update README.md and .env.example with production JWT and DB guidance",
+    "content": "## Documentation\n\nUpdated [`README.md`](README.md) and [`.env.example`](.env.example) with production-ready JWT and database configuration guidance aligned to the architecture decisions and current code (`AddInfrastructure`, `appsettings.Production.json` without `Jwt:Secret`, startup validation in `Program.cs`).\n\n### Summary\n\n**README.md — Configuration section**\n\n- Documented config precedence: `appsettings.json` → environment file → user secrets (Development) → environment variables.\n- Added **JWT secret** table: Development may use `appsettings.json`, user secrets, or env vars; Production must use env/secret store — never `appsettings.Production.json`.\n- Included examples: `openssl rand -base64 48` for production, and `dotnet user-secrets set \"Jwt:Secret\" ...` for local overrides.\n- Added **Database connection string** section with provider selection rules:\n  - SQLite when `Database:Provider` is unset or `Sqlite`\n  - SQL Server when `Database:Provider=SqlServer` or `ASPNETCORE_ENVIRONMENT=Production` (via `appsettings.Production.json`)\n- Added copy-paste examples for Development (SQLite), Production (SQL Server + secrets), and optional local SQL Server.\n- Clarified that the connection string in `appsettings.Production.json` is a template — production must override via environment.\n- Expanded the **Production deployment checklist** with explicit secret-hygiene and connection-string override steps.\n\n**`.env.example`**\n\n- Reorganized into **Local development** (SQLite defaults) and **Production** (commented SQL Server block) sections.\n- Documented config precedence, double-underscore env var convention, and `.env` export workflow.\n- JWT guidance: dev placeholder allowed; user-secrets command shown; production block uses `REPLACE_ME` placeholders.\n- Removed production CORS origin from the active dev section (moved to commented production block).\n\nBoth files are concise and example-driven, matching existing decisions on SQLite-for-non-Production, SQL Server for Produc\n…(truncated)",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "1221adda-9f78-47fa-8e4a-0c9c715faf33",
+    "rev": 1,
+    "createdAt": 1780067523637,
+    "updatedAt": 1780067523637
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items, improvements, or gaps.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "d4223c2a-9651-4276-8560-27c951beda12",
+    "rev": 1,
+    "createdAt": 1780067624372,
+    "updatedAt": 1780067624372
+  },
+  {
+    "type": "task",
+    "title": "Beta-readiness review of FlowForge .NET 10 solution",
+    "content": "Perform a final comprehensive review of the entire FlowForge .NET 10 solution for beta readiness. Examine architecture, security posture, production configuration, error handling, logging, rate limiting, health checks, Swagger guards, CORS, secrets management, migrations, test coverage gaps, and any remaining pre-production items or improvements. Produce a clear, prioritized list of remaining gaps, risks, and recommended fixes. Reference all relevant Architecture Decisions and Project Memory bullets about production hardening, secrets, Serilog, Swagger, rate limiting, and CORS. Output the findings as a concise report.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "critic",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "6816419c-a3b4-4d04-8f71-0ae057e0171f",
+    "rev": 1,
+    "createdAt": 1780067636767,
+    "updatedAt": 1780067636767
+  },
+  {
+    "type": "result",
+    "title": "Result: Beta-readiness review of FlowForge .NET 10 solution",
+    "content": "## Review\n\nFlowForge is **beta-ready for a controlled, low-traffic pilot** with real users on SQLite or a small SQL Server instance. Clean Architecture boundaries are respected, **214/214 tests pass**, and the production-hardening work called out in `DECISIONS.md` and project memory is largely in place: ProblemDetails error handling, FluentValidation, TraceId/Serilog logging, dev-only Swagger, strict Production CORS with startup fail-fast, security headers + HSTS, health checks, and explicit Production migration policy.\n\nThe solution is **not production-ready** without addressing data-integrity gaps, rate-limit partitioning, SQL Server migration risk, and operational tooling (CI/CD, split health probes, deployment artifacts). Several docs are stale relative to the codebase.\n\n---\n\n## Issues Found\n\n### P0 — Fix before any public beta or Production deploy\n\n| # | Issue | Evidence | Risk | Recommended fix |\n|---|--------|----------|------|-----------------|\n| 1 | **Global rate limiter, not per-client** | `RateLimitingExtensions.cs` uses a single `AddFixedWindowLimiter` with no `PartitionedRateLimiter` / IP / user key. README env table says “per client” (`RateLimiting__PermitLimit`). | One abusive client exhausts the shared bucket for everyone; auth endpoints share the same window as CRUD. Conflicts with ADR: *“single global FixedWindow rate-limit policy”* — acceptable for simplicity, not for multi-tenant beta. | Partition by `RemoteIpAddress` (and optionally authenticated `sub`). Apply a **stricter policy** on `/register` and `/login`. Update README to match behavior. |\n| 2 | **No EF relationship or FK between `Project` and `Task`** | `TaskConfiguration.cs` maps `ProjectId` as a plain column; migration has no FK. `ProjectRepository.DeleteAsync` removes the project only. | Deleting a project leaves orphan tasks; invalid `ProjectId` values can persist. No referential integrity. | Add `HasOne/WithMany` (or explicit FK), choose `DeleteBehavior.Cascade` or block delete when t\n…(truncated)",
+    "status": "done",
+    "author": "critic",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "8d109caf-773b-4ebf-b916-360ae31d9579",
+    "rev": 1,
+    "createdAt": 1780067687753,
+    "updatedAt": 1780067687753
   }
 ]

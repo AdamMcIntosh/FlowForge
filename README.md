@@ -50,20 +50,89 @@ curl -s -X POST "$BASE/projects/$PROJECT_ID/tasks" \
 
 ## Configuration
 
-ASP.NET Core merges `appsettings.json`, environment-specific files (`appsettings.Development.json`, `appsettings.Production.json`), and environment variables. Use double underscores for nested keys (e.g. `Jwt__Secret` → `Jwt:Secret`).
+ASP.NET Core merges configuration in this order (later wins):
 
-Copy [`.env.example`](.env.example) to `.env` as a reference. The app does **not** auto-load `.env` files — export variables before running:
+1. `appsettings.json`
+2. `appsettings.{Environment}.json` (e.g. `appsettings.Production.json`)
+3. User secrets (Development only, when configured)
+4. Environment variables
+
+Use double underscores for nested environment keys (e.g. `Jwt__Secret` → `Jwt:Secret`).
+
+Copy [`.env.example`](.env.example) to `.env` as a local reference. The app does **not** auto-load `.env` files — export variables before running:
 
 ```bash
 set -a && source .env && set +a
 dotnet run --project src/FlowForge.Api
 ```
 
-Or set individual variables:
+### JWT secret (required)
+
+`Jwt:Secret` is the HMAC signing key for access tokens. It must be **at least 32 characters**. The app fails fast at startup if it is missing.
+
+| Environment | Where to set `Jwt:Secret` | Do **not** |
+|-------------|---------------------------|------------|
+| **Development** | `appsettings.json` (default dev value), **user secrets**, or env var | Commit real secrets to git |
+| **Production** | Environment variable or secret store (Azure Key Vault, AWS Secrets Manager, etc.) | Put the secret in `appsettings.Production.json` |
+
+`appsettings.Production.json` intentionally omits `Jwt:Secret`. Provide it at deploy time:
 
 ```bash
-export Jwt__Secret="your-secret-at-least-32-characters-long"
+# Linux / containers / CI
+export Jwt__Secret="$(openssl rand -base64 48)"
+```
+
+**Local override with user secrets** (recommended over editing committed appsettings):
+
+```bash
+cd src/FlowForge.Api
+dotnet user-secrets init
+dotnet user-secrets set "Jwt:Secret" "your-local-secret-at-least-32-characters-long"
+dotnet run
+```
+
+User secrets use colon notation (`Jwt:Secret`), not double underscores.
+
+### Database connection string (required)
+
+`ConnectionStrings:DefaultConnection` must always be set. Provider selection is controlled by `Database:Provider` in `AddInfrastructure` (`FlowForge.Infrastructure/DependencyInjection.cs`):
+
+| Condition | Provider used | Typical connection string |
+|-----------|---------------|---------------------------|
+| `Database:Provider` unset or `Sqlite` | **SQLite** | `Data Source=flowforge.db` |
+| `Database:Provider=SqlServer` | **SQL Server** | `Server=...;Database=FlowForge;...` |
+| `ASPNETCORE_ENVIRONMENT=Production` | **SQL Server** (via `appsettings.Production.json`) | Override with your production SQL Server string |
+
+**Rule of thumb:** SQLite for all non-Production work; SQL Server when `Database:Provider=SqlServer` or when running under the Production environment profile.
+
+**Development (SQLite — zero setup):**
+
+```bash
+export Database__Provider=Sqlite
 export ConnectionStrings__DefaultConnection="Data Source=flowforge.db"
+dotnet run --project src/FlowForge.Api
+```
+
+These match the defaults in `appsettings.json` — you usually do not need to set them locally.
+
+**Production (SQL Server — secrets via environment):**
+
+```bash
+export ASPNETCORE_ENVIRONMENT=Production
+export Database__Provider=SqlServer
+export ConnectionStrings__DefaultConnection="Server=sql.example.com;Database=FlowForge;User Id=flowforge_app;Password=<from-secret-store>;Encrypt=True;TrustServerCertificate=False;"
+export Jwt__Secret="<from-secret-store>"
+export Cors__AllowedOrigins__0="https://app.example.com"
+```
+
+The placeholder connection string in `appsettings.Production.json` is a template only — **always override** `ConnectionStrings__DefaultConnection` (and credentials) via environment or your host's secret injection.
+
+**Optional: SQL Server locally** (e.g. Docker):
+
+```bash
+export Database__Provider=SqlServer
+export ConnectionStrings__DefaultConnection="Server=localhost,1433;Database=FlowForge;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;"
+dotnet run --project src/FlowForge.Api
 ```
 
 ### Environment variables
@@ -71,9 +140,9 @@ export ConnectionStrings__DefaultConnection="Data Source=flowforge.db"
 | Variable | Required | Default (Development) | Description |
 |----------|----------|---------------------|-------------|
 | `ASPNETCORE_ENVIRONMENT` | No | `Development` | `Development`, `Staging`, or `Production` |
-| `ConnectionStrings__DefaultConnection` | **Yes** | `Data Source=flowforge.db` | Database connection string |
+| `ConnectionStrings__DefaultConnection` | **Yes** | `Data Source=flowforge.db` | Database connection string — override in Production |
 | `Database__Provider` | No | `Sqlite` | `Sqlite` or `SqlServer` |
-| `Jwt__Secret` | **Yes** | Dev value in `appsettings.json` | HMAC signing key (≥ 32 chars). **Must be set via environment in Production** — not stored in `appsettings.Production.json` |
+| `Jwt__Secret` | **Yes** | Dev value in `appsettings.json` | HMAC signing key (≥ 32 chars). **Required via env/secret store in Production** |
 | `Jwt__Issuer` | No | `FlowForge` | JWT issuer claim |
 | `Jwt__Audience` | No | `FlowForge` | JWT audience claim |
 | `Jwt__ExpiryMinutes` | No | `60` | Access token lifetime in minutes |
@@ -95,14 +164,12 @@ The application fails fast at startup when:
 
 ## Database
 
-FlowForge uses **SQLite by default** for local development and testing. **SQL Server** is configured for Production via `appsettings.Production.json`.
+FlowForge uses **SQLite by default** for local development and testing. **SQL Server** is used in Production (or whenever `Database:Provider=SqlServer`).
 
-| Setting | Development (default) | Production |
-|---------|----------------------|------------|
-| `Database:Provider` | `Sqlite` | `SqlServer` |
-| `ConnectionStrings:DefaultConnection` | `Data Source=flowforge.db` | SQL Server connection string |
-
-Provider selection happens in `AddInfrastructure` (`FlowForge.Infrastructure/DependencyInjection.cs`). Set `Database:Provider` to `Sqlite` or `SqlServer`; if omitted, **Sqlite** is used.
+| Setting | Development / local (default) | Production |
+|---------|------------------------------|------------|
+| `Database:Provider` | `Sqlite` | `SqlServer` (set in `appsettings.Production.json`) |
+| `ConnectionStrings:DefaultConnection` | `Data Source=flowforge.db` | SQL Server string — **must be supplied via environment** |
 
 **Non-Production:** migrations apply automatically on startup (`ApplyMigrationsInNonProductionAsync`).
 
@@ -111,20 +178,12 @@ Provider selection happens in `AddInfrastructure` (`FlowForge.Infrastructure/Dep
 ```bash
 export ASPNETCORE_ENVIRONMENT=Production
 export Database__Provider=SqlServer
-export ConnectionStrings__DefaultConnection="Server=...;Database=FlowForge;..."
-export Jwt__Secret="your-production-secret-at-least-32-chars"
+export ConnectionStrings__DefaultConnection="Server=sql.example.com;Database=FlowForge;User Id=flowforge_app;Password=<secret>;Encrypt=True;"
+export Jwt__Secret="<secret>"
 
 dotnet ef database update \
   --project src/FlowForge.Infrastructure \
   --startup-project src/FlowForge.Api
-```
-
-**Switch to SQL Server locally** (override via environment):
-
-```bash
-export Database__Provider=SqlServer
-export ConnectionStrings__DefaultConnection="Server=localhost;Database=FlowForge;Trusted_Connection=True;TrustServerCertificate=True;"
-dotnet run --project src/FlowForge.Api
 ```
 
 Integration tests use SQLite in-memory via `WebApplicationFactory` overrides; no external database is required for `dotnet test`.
@@ -189,12 +248,13 @@ Each request receives a **TraceId** correlation ID:
 ### Checklist
 
 1. Set `ASPNETCORE_ENVIRONMENT=Production`
-2. Provide **`Jwt__Secret`** via environment or secret store (never commit production secrets)
-3. Configure **`ConnectionStrings__DefaultConnection`** for SQL Server
-4. Set **`Cors__AllowedOrigins__*`** to your frontend origin(s) — startup fails if empty
-5. Review **`AllowedHosts`**, rate limits, and logging levels in `appsettings.Production.json`
-6. Run **`dotnet ef database update`** before starting the app (auto-migration is disabled in Production)
-7. Serve behind HTTPS — HSTS is enabled in Production
+2. Provide **`Jwt__Secret`** via environment or secret store — **never** in `appsettings.Production.json` or source control
+3. Override **`ConnectionStrings__DefaultConnection`** with your production SQL Server string (do not rely on the placeholder in `appsettings.Production.json`)
+4. Confirm **`Database__Provider=SqlServer`** (default when Production profile loads)
+5. Set **`Cors__AllowedOrigins__*`** to your frontend origin(s) — startup fails if empty
+6. Review **`AllowedHosts`**, rate limits, and logging levels in `appsettings.Production.json`
+7. Run **`dotnet ef database update`** before starting the app (auto-migration is disabled in Production)
+8. Serve behind HTTPS — HSTS is enabled in Production
 
 ### Security headers
 

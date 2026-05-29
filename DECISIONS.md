@@ -67,3 +67,16 @@ _Each section corresponds to one Roland run that produced new decisions._
 ## 2026-05-29 — Review and expand integration test coverage for key flows (auth, project, task)  _(run mpr1lt64)_
 
 - [Decision: keep single global FixedWindow rate-limit policy for simplicity; document that test fixtures must account for setup requests]
+
+## 2026-05-29 — Fix rate-limit test flakiness in ProjectCreateRateLimitTests and TaskCreateRateL _(run mpr21ait)_
+
+- [Decision: composite rate-limit test fixtures with dual PermitLimit factories sharing one SQLite connection were chosen to eliminate setup traffic from the low-limit window while keeping auth tokens valid]
+
+## 2026-05-29 — Update README.md and .env.example with clear production JWT secret and database  _(run mpr27qd1)_
+
+- [Decision: N/A — no new architectural decisions recorded in this documentation-only run]
+
+## 2026-05-29 — Perform a final review of the FlowForge .NET 10 solution for beta readiness and  _(run mpr2axf2)_
+
+- [Decision: Global FixedWindow rate limiting accepted for beta simplicity; per-client partitioning required before multi-tenant scale]
+- [Decision: EF must enforce composite unique indexes on (ProjectId, Name) for Tasks and (OwnerId, Name) for Projects to match InMemory behavior]

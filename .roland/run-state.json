@@ -1,112 +1,35 @@
 {
-  "runId": "f0d4802f",
-  "goal": "Rewrite the entire FlowForge application from Node.js to .NET 10 using ASP.NET Core, Entity Framework Core, and SQL Server. Use Clean Architecture with Domain, Application, Infrastructure, and API layers. Include JWT authentication, project and task CRUD with ownership authorization, and full test coverage.",
-  "startedAt": 1779994289459,
-  "updatedAt": 1779994446382,
-  "status": "running",
-  "currentWave": 2,
-  "totalTasks": 12,
-  "completedTasks": 3,
+  "runId": "8722d048",
+  "goal": "Add a basic protected /me endpoint that returns current user info using JWT authentication in the FlowForge .NET 10 solution.",
+  "startedAt": 1780012658073,
+  "updatedAt": 1780012768913,
+  "status": "done",
+  "currentWave": 1,
+  "totalTasks": 2,
+  "completedTasks": 2,
   "tasks": [
     {
       "id": "task-1",
-      "title": "Design .NET Clean Architecture mapping",
-      "agent": "architect",
+      "title": "Implement protected /me endpoint",
+      "agent": "executor",
       "wave": 1,
       "status": "done",
-      "startedAt": 1779994345310,
-      "completedAt": 1779994391518,
+      "startedAt": 1780012686862,
+      "completedAt": 1780012742022,
       "hadBlocker": false,
-      "outputPreview": "…E-DOTNET.md](ARCHITECTURE-DOTNET.md) is ready for the solution-skeleton executor. Next agent should scaffold the four projects, add `AddApplication`/`AddInfrastructure` extension methods, and port Domain entities first (no behavior change), then Application abstractions before EF implementations."
+      "outputPreview": "… Handler reads `sub` claim → `GetByIdAsync` → returns `{ \"id\": \"...\", \"email\": \"...\" }`\n\n## Test Results\n\nAll **24 tests pass**, including the two new `/me` endpoint tests.\n\n## Next Steps\n\nThe doc-writer task can document the `/me` endpoint with a Bearer token example and expected response shape."
     },
     {
       "id": "task-2",
-      "title": "Explore current codebase for migration inventory",
-      "agent": "explore",
+      "title": "Document the new /me endpoint",
+      "agent": "doc-writer",
       "wave": 1,
       "status": "done",
-      "startedAt": 1779994348320,
-      "completedAt": 1779994387094,
+      "startedAt": 1780012689866,
+      "completedAt": 1780012707976,
       "hadBlocker": false,
-      "outputPreview": "… DB strategy** (SQLite Prisma + in-memory repos) maps to Testcontainers + in-memory fakes in .NET.\n4. **No `.csproj` files exist** — solution skeleton task is truly greenfield.\n\nRecommend attaching this inventory to `DECISIONS-DOTNET.md` or a new `MIGRATION-INVENTORY.md` for downstream executors."
-    },
-    {
-      "id": "task-3",
-      "title": "Define long-term .NET technology choices",
-      "agent": "vision",
-      "wave": 1,
-      "status": "done",
-      "startedAt": 1779994387097,
-      "completedAt": 1779994435892,
-      "hadBlocker": false,
-      "outputPreview": "…on with pinned packages from the doc\n- **architect** — can reference ADRs instead of re-deciding stack\n- **test-author** — three-tier test strategy (unit / HTTP in-memory / Testcontainers) is defined\n\nNo blockers — inventory from the explore agent is referenced; no conflicting requirements found."
-    },
-    {
-      "id": "task-4",
-      "title": "Create .NET solution skeleton",
-      "agent": "executor",
-      "wave": 2,
-      "status": "running",
-      "startedAt": 1779994446382
-    },
-    {
-      "id": "task-5",
-      "title": "Implement JWT authentication domain & application layer",
-      "agent": "executor",
-      "wave": 0,
-      "status": "pending"
-    },
-    {
-      "id": "task-6",
-      "title": "Implement project CRUD with ownership authorization",
-      "agent": "executor",
-      "wave": 0,
-      "status": "pending"
-    },
-    {
-      "id": "task-7",
-      "title": "Implement task CRUD with ownership authorization",
-      "agent": "executor",
-      "wave": 0,
-      "status": "pending"
-    },
-    {
-      "id": "task-8",
-      "title": "Write unit tests for auth use cases (.NET)",
-      "agent": "test-author",
-      "wave": 0,
-      "status": "pending"
-    },
-    {
-      "id": "task-9",
-      "title": "Write unit tests for project and task use cases",
-      "agent": "test-author",
-      "wave": 0,
-      "status": "pending"
-    },
-    {
-      "id": "task-10",
-      "title": "Execute all .NET unit tests",
-      "agent": "test-executor",
-      "wave": 0,
-      "status": "pending"
-    },
-    {
-      "id": "task-11",
-      "title": "Write integration tests for auth and CRUD endpoints",
-      "agent": "test-author",
-      "wave": 0,
-      "status": "pending"
-    },
-    {
-      "id": "task-12",
-      "title": "Execute integration test suite",
-      "agent": "test-executor",
-      "wave": 0,
-      "status": "pending"
+      "outputPreview": "…er + expected fields\n\n## Summary\n\nDocumentation is complete and unblocked. The protected `/me` endpoint is documented with a copy-paste `curl` example, Bearer token usage, and the expected JSON response. No blockers — the executor’s `/me` implementation was already in place when this was written."
     }
   ],
-  "activeTaskIds": [
-    "task-4"
-  ]
+  "activeTaskIds": []
 }

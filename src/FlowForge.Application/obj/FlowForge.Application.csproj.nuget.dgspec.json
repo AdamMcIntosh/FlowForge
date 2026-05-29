@@ -1,32 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Application\\FlowForge.Application.csproj": {}
+    "/home/adammcintosh/projects/FlowForge/src/FlowForge.Application/FlowForge.Application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Application\\FlowForge.Application.csproj": {
+    "/home/adammcintosh/projects/FlowForge/src/FlowForge.Application/FlowForge.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Application\\FlowForge.Application.csproj",
+        "projectUniqueName": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Application/FlowForge.Application.csproj",
         "projectName": "FlowForge.Application",
-        "projectPath": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Application\\FlowForge.Application.csproj",
-        "packagesPath": "C:\\Users\\amcintosh1\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Application\\obj\\",
+        "projectPath": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Application/FlowForge.Application.csproj",
+        "packagesPath": "/home/adammcintosh/.nuget/packages/",
+        "outputPath": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Application/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\amcintosh1\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/adammcintosh/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,8 +27,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Domain\\FlowForge.Domain.csproj": {
-                "projectPath": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Domain\\FlowForge.Domain.csproj"
+              "/home/adammcintosh/projects/FlowForge/src/FlowForge.Domain/FlowForge.Domain.csproj": {
+                "projectPath": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Domain/FlowForge.Domain.csproj"
               }
             }
           }
@@ -57,13 +50,9 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
-            "FluentValidation": {
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
-              "version": "[11.11.0, )"
-            },
-            "FluentValidation.DependencyInjectionExtensions": {
-              "target": "Package",
-              "version": "[11.11.0, )"
+              "version": "[10.0.8, )"
             }
           },
           "imports": [
@@ -82,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/home/adammcintosh/.dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -360,29 +349,22 @@
         }
       }
     },
-    "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Domain\\FlowForge.Domain.csproj": {
+    "/home/adammcintosh/projects/FlowForge/src/FlowForge.Domain/FlowForge.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Domain\\FlowForge.Domain.csproj",
+        "projectUniqueName": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Domain/FlowForge.Domain.csproj",
         "projectName": "FlowForge.Domain",
-        "projectPath": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Domain\\FlowForge.Domain.csproj",
-        "packagesPath": "C:\\Users\\amcintosh1\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Domain\\obj\\",
+        "projectPath": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Domain/FlowForge.Domain.csproj",
+        "packagesPath": "/home/adammcintosh/.nuget/packages/",
+        "outputPath": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Domain/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\amcintosh1\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/adammcintosh/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -424,7 +406,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/home/adammcintosh/.dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

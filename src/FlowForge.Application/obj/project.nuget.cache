@@ -1,12 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "+AR7ek1kfeU=",
+  "dgSpecHash": "hchyZrf8u/E=",
   "success": true,
-  "projectFilePath": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Application\\FlowForge.Application.csproj",
+  "projectFilePath": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Application/FlowForge.Application.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\amcintosh1\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
-    "C:\\Users\\amcintosh1\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.11.0\\fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
-    "C:\\Users\\amcintosh1\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.1.0\\microsoft.extensions.dependencyinjection.abstractions.2.1.0.nupkg.sha512"
+    "/home/adammcintosh/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.8/microsoft.extensions.dependencyinjection.abstractions.10.0.8.nupkg.sha512"
   ],
   "logs": []
 }

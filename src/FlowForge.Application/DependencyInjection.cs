@@ -1,4 +1,6 @@
-using FluentValidation;
+using FlowForge.Application.Authentication;
+using FlowForge.Application.Common.Interfaces;
+using FlowForge.Application.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FlowForge.Application;
@@ -7,7 +9,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+        services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
+        services.AddScoped<IUserService, UserService>();
+
         return services;
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8ye0zvQuCj0=",
+  "dgSpecHash": "rB6nvTtFXHE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\amcintosh1\\source\\repos\\FlowForge\\src\\FlowForge.Domain\\FlowForge.Domain.csproj",
+  "projectFilePath": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Domain/FlowForge.Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

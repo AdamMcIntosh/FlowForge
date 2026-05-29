@@ -1,12 +1,14 @@
 using FlowForge.Application.Common.Interfaces;
 using FlowForge.Domain.Users;
+using Microsoft.Extensions.Logging;
 
 namespace FlowForge.Application.Users;
 
 public class UserService(
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
-    IJwtTokenService jwtTokenService) : IUserService
+    IJwtTokenService jwtTokenService,
+    ILogger<UserService> logger) : IUserService
 {
     public Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
         userRepository.GetByIdAsync(id, cancellationToken);
@@ -27,6 +29,7 @@ public class UserService(
             ?? throw new InvalidOperationException($"User with id '{id}' was not found.");
 
         await userRepository.DeleteAsync(user, cancellationToken);
+        logger.LogInformation("User deleted with {UserId}", id);
     }
 
     public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default) =>
@@ -61,6 +64,7 @@ public class UserService(
             throw;
         }
 
+        logger.LogInformation("User registered with {UserId}", user.Id);
         return CreateAuthResult(user);
     }
 
@@ -75,9 +79,11 @@ public class UserService(
         if (user?.PasswordHash is null
             || !passwordHasher.VerifyPassword(password, user.PasswordHash.Value))
         {
+            logger.LogWarning("Login failed for invalid credentials");
             throw new InvalidCredentialsException();
         }
 
+        logger.LogInformation("User logged in with {UserId}", user.Id);
         return CreateAuthResult(user);
     }
 

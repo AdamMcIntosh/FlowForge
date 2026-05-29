@@ -9,5 +9,14 @@
     "deliveredTo": [
       "test-author"
     ]
+  },
+  {
+    "id": "72766334-9bbc-46ad-9e6d-41fb6fed0cbe",
+    "from": "test-executor",
+    "to": "test-author",
+    "subject": "Message from agent",
+    "body": "**Subject:** Fix Project/Task rate-limit tests — global policy consumes setup permits\n\n`ProjectCreateRateLimitTests` and `TaskCreateRateLimitTests` fail because `PermitLimit=2` applies globally to register + CRUD endpoints. Register (and project create for task test) exhaust the window before the intended CRUD assertions. `AuthRegisterRateLimitTests` is fine (single-endpoint). Options: bump permit limit in those fixtures to `3`/`4`, split rate-limit policies per endpoint group in implementation, or avoid rate-limited setup calls (e.g. direct DB seed + JWT helper).",
+    "sentAt": 1780066700617,
+    "deliveredTo": []
   }
 ]

@@ -21,7 +21,7 @@ FlowForge is a Task and Project management system built with **.NET 10** using *
 ## Technology Stack
 
 - **Framework:** .NET 10 + ASP.NET Core
-- **ORM:** Entity Framework Core 10 with SQL Server (SQLite in tests)
+- **ORM:** Entity Framework Core 10 with SQLite (dev/local) and SQL Server (production)
 - **Authentication:** JWT Bearer (PBKDF2 password hashing)
 - **Testing:** xUnit + WebApplicationFactory + SQLite in-memory
 - **API Style:** Minimal APIs
@@ -97,7 +97,7 @@ Services use **primary constructor injection** and accept `CancellationToken can
 
 InMemory repositories use Prisma-style semantics (null on missing lookups; `InvalidOperationException` on constraint violations). **Note:** InMemory enforces globally unique project names; EF allows duplicate names across owners.
 
-Integration tests use real EF Core on SQLite via `AddInfrastructure(options => options.UseSqlite(...))`, not InMemory repositories.
+`AddInfrastructure(IConfiguration)` selects the provider from `Database:Provider` (default **Sqlite**). Production sets `SqlServer` in `appsettings.Production.json`. Integration tests use real EF Core on SQLite via `AddInfrastructure(options => options.UseSqlite(...))` or the configuration overload with `Database:Provider=Sqlite`, not InMemory repositories.
 
 ### API
 

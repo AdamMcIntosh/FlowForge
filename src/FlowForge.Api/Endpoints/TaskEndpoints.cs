@@ -1,9 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using FlowForge.Application.Projects;
+using FlowForge.Api.Exceptions;
+using FlowForge.Api.Logging;
+using FlowForge.Api.RateLimiting;
+using FlowForge.Api.Validation;
 using FlowForge.Application.Tasks;
 using FlowForge.Domain.Users;
-using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
+using Swashbuckle.AspNetCore.Annotations;
 using DomainTask = FlowForge.Domain.Tasks.Task;
 
 namespace FlowForge.Api.Endpoints;
@@ -13,13 +17,34 @@ public static class TaskEndpoints
     public static RouteGroupBuilder MapTaskEndpoints(this WebApplication app)
     {
         var tasks = app.MapGroup("/projects/{projectId:guid}/tasks")
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .RequireRateLimiting(RateLimitPolicies.FixedWindow)
+            .WithTags("Tasks");
 
-        tasks.MapPost("/", CreateTaskAsync);
-        tasks.MapGet("/", ListTasksAsync);
-        tasks.MapGet("/{taskId:guid}", GetTaskByIdAsync);
-        tasks.MapPut("/{taskId:guid}", UpdateTaskAsync);
-        tasks.MapDelete("/{taskId:guid}", DeleteTaskAsync);
+        tasks.MapPost("/", CreateTaskAsync)
+            .WithMetadata(new SwaggerOperationAttribute(
+                summary: "Create a task",
+                description: "Creates a task in the specified project when the authenticated user owns the project."));
+
+        tasks.MapGet("/", ListTasksAsync)
+            .WithMetadata(new SwaggerOperationAttribute(
+                summary: "List tasks",
+                description: "Returns all tasks in the specified project when the authenticated user owns the project."));
+
+        tasks.MapGet("/{taskId:guid}", GetTaskByIdAsync)
+            .WithMetadata(new SwaggerOperationAttribute(
+                summary: "Get a task by id",
+                description: "Returns a single task when it exists in the owned project."));
+
+        tasks.MapPut("/{taskId:guid}", UpdateTaskAsync)
+            .WithMetadata(new SwaggerOperationAttribute(
+                summary: "Update a task",
+                description: "Renames a task in the specified project when the authenticated user owns the project."));
+
+        tasks.MapDelete("/{taskId:guid}", DeleteTaskAsync)
+            .WithMetadata(new SwaggerOperationAttribute(
+                summary: "Delete a task",
+                description: "Deletes a task from the specified project when the authenticated user owns the project."));
 
         return tasks;
     }
@@ -28,7 +53,9 @@ public static class TaskEndpoints
         Guid projectId,
         CreateTaskRequest request,
         ClaimsPrincipal user,
+        IValidator<CreateTaskRequest> validator,
         ITaskService taskService,
+        ILogger<TaskEndpointLogs> logger,
         CancellationToken cancellationToken)
     {
         var ownerIdResult = TryGetOwnerId(user);
@@ -37,28 +64,19 @@ public static class TaskEndpoints
             return ownerIdResult.Error;
         }
 
-        if (string.IsNullOrWhiteSpace(request.Name))
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (validationResult.ToProblemDetailsResult() is { } validationError)
         {
-            return BadRequest("Task name is required.");
+            return validationError;
         }
 
-        try
-        {
-            var task = await taskService.CreateAsync(projectId, ownerIdResult.OwnerId!, request.Name, cancellationToken);
-            return Results.Created($"/projects/{projectId}/tasks/{task.Id}", ToResponse(task));
-        }
-        catch (ProjectNotFoundException ex)
-        {
-            return NotFound(ex.Message, "Project not found");
-        }
-        catch (UnauthorizedProjectAccessException ex)
-        {
-            return Forbidden(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var task = await taskService.CreateAsync(projectId, ownerIdResult.OwnerId!, request.Name, cancellationToken);
+        logger.LogInformation(
+            "Create task endpoint succeeded for {TaskId} in project {ProjectId} and owner {OwnerId}",
+            task.Id,
+            projectId,
+            ownerIdResult.OwnerId!.Value);
+        return Results.Created($"/projects/{projectId}/tasks/{task.Id}", ToResponse(task));
     }
 
     private static async Task<IResult> ListTasksAsync(
@@ -73,19 +91,8 @@ public static class TaskEndpoints
             return ownerIdResult.Error;
         }
 
-        try
-        {
-            var tasks = await taskService.GetAllAsync(projectId, ownerIdResult.OwnerId!, cancellationToken);
-            return Results.Ok(tasks.Select(ToResponse));
-        }
-        catch (ProjectNotFoundException ex)
-        {
-            return NotFound(ex.Message, "Project not found");
-        }
-        catch (UnauthorizedProjectAccessException ex)
-        {
-            return Forbidden(ex.Message);
-        }
+        var tasks = await taskService.GetAllAsync(projectId, ownerIdResult.OwnerId!, cancellationToken);
+        return Results.Ok(tasks.Select(ToResponse));
     }
 
     private static async Task<IResult> GetTaskByIdAsync(
@@ -101,23 +108,8 @@ public static class TaskEndpoints
             return ownerIdResult.Error;
         }
 
-        try
-        {
-            var task = await taskService.GetByIdAsync(projectId, taskId, ownerIdResult.OwnerId!, cancellationToken);
-            return Results.Ok(ToResponse(task));
-        }
-        catch (ProjectNotFoundException ex)
-        {
-            return NotFound(ex.Message, "Project not found");
-        }
-        catch (UnauthorizedProjectAccessException ex)
-        {
-            return Forbidden(ex.Message);
-        }
-        catch (TaskNotFoundException ex)
-        {
-            return NotFound(ex.Message, "Task not found");
-        }
+        var task = await taskService.GetByIdAsync(projectId, taskId, ownerIdResult.OwnerId!, cancellationToken);
+        return Results.Ok(ToResponse(task));
     }
 
     private static async Task<IResult> UpdateTaskAsync(
@@ -125,7 +117,9 @@ public static class TaskEndpoints
         Guid taskId,
         UpdateTaskRequest request,
         ClaimsPrincipal user,
+        IValidator<UpdateTaskRequest> validator,
         ITaskService taskService,
+        ILogger<TaskEndpointLogs> logger,
         CancellationToken cancellationToken)
     {
         var ownerIdResult = TryGetOwnerId(user);
@@ -134,37 +128,24 @@ public static class TaskEndpoints
             return ownerIdResult.Error;
         }
 
-        if (string.IsNullOrWhiteSpace(request.Name))
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (validationResult.ToProblemDetailsResult() is { } validationError)
         {
-            return BadRequest("Task name is required.");
+            return validationError;
         }
 
-        try
-        {
-            var task = await taskService.UpdateAsync(
-                projectId,
-                taskId,
-                ownerIdResult.OwnerId!,
-                request.Name,
-                cancellationToken);
-            return Results.Ok(ToResponse(task));
-        }
-        catch (ProjectNotFoundException ex)
-        {
-            return NotFound(ex.Message, "Project not found");
-        }
-        catch (UnauthorizedProjectAccessException ex)
-        {
-            return Forbidden(ex.Message);
-        }
-        catch (TaskNotFoundException ex)
-        {
-            return NotFound(ex.Message, "Task not found");
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var task = await taskService.UpdateAsync(
+            projectId,
+            taskId,
+            ownerIdResult.OwnerId!,
+            request.Name,
+            cancellationToken);
+        logger.LogInformation(
+            "Update task endpoint succeeded for {TaskId} in project {ProjectId} and owner {OwnerId}",
+            task.Id,
+            projectId,
+            ownerIdResult.OwnerId!.Value);
+        return Results.Ok(ToResponse(task));
     }
 
     private static async Task<IResult> DeleteTaskAsync(
@@ -172,6 +153,7 @@ public static class TaskEndpoints
         Guid taskId,
         ClaimsPrincipal user,
         ITaskService taskService,
+        ILogger<TaskEndpointLogs> logger,
         CancellationToken cancellationToken)
     {
         var ownerIdResult = TryGetOwnerId(user);
@@ -180,23 +162,13 @@ public static class TaskEndpoints
             return ownerIdResult.Error;
         }
 
-        try
-        {
-            await taskService.DeleteAsync(projectId, taskId, ownerIdResult.OwnerId!, cancellationToken);
-            return Results.NoContent();
-        }
-        catch (ProjectNotFoundException ex)
-        {
-            return NotFound(ex.Message, "Project not found");
-        }
-        catch (UnauthorizedProjectAccessException ex)
-        {
-            return Forbidden(ex.Message);
-        }
-        catch (TaskNotFoundException ex)
-        {
-            return NotFound(ex.Message, "Task not found");
-        }
+        await taskService.DeleteAsync(projectId, taskId, ownerIdResult.OwnerId!, cancellationToken);
+        logger.LogInformation(
+            "Delete task endpoint succeeded for {TaskId} in project {ProjectId} and owner {OwnerId}",
+            taskId,
+            projectId,
+            ownerIdResult.OwnerId!.Value);
+        return Results.NoContent();
     }
 
     private static TaskResponse ToResponse(DomainTask task) =>
@@ -209,50 +181,33 @@ public static class TaskEndpoints
 
         if (string.IsNullOrWhiteSpace(subClaim) || !Guid.TryParse(subClaim, out var userId))
         {
-            return (null, Results.Json(
-                new ProblemDetails
-                {
-                    Title = "Unauthorized",
-                    Detail = "The access token is missing a valid subject claim.",
-                    Status = StatusCodes.Status401Unauthorized,
-                },
-                statusCode: StatusCodes.Status401Unauthorized));
+            return (null, ProblemDetailsResults.Unauthorized("The access token is missing a valid subject claim."));
         }
 
         return (UserId.From(userId), null);
     }
-
-    private static IResult BadRequest(string detail) =>
-        Results.BadRequest(new ProblemDetails
-        {
-            Title = "Invalid request",
-            Detail = detail,
-            Status = StatusCodes.Status400BadRequest,
-        });
-
-    private static IResult NotFound(string detail, string title) =>
-        Results.NotFound(new ProblemDetails
-        {
-            Title = title,
-            Detail = detail,
-            Status = StatusCodes.Status404NotFound,
-        });
-
-    private static IResult Forbidden(string detail) =>
-        Results.Json(
-            new ProblemDetails
-            {
-                Title = "Forbidden",
-                Detail = detail,
-                Status = StatusCodes.Status403Forbidden,
-            },
-            statusCode: StatusCodes.Status403Forbidden);
 }
 
+/// <summary>
+/// Request body for creating a task.
+/// </summary>
+/// <param name="Name">Display name of the task.</param>
 public sealed record CreateTaskRequest(string Name);
 
+/// <summary>
+/// Request body for updating a task.
+/// </summary>
+/// <param name="Name">Updated display name of the task.</param>
 public sealed record UpdateTaskRequest(string Name);
 
+/// <summary>
+/// Task resource returned by task endpoints.
+/// </summary>
+/// <param name="Id">Unique identifier of the task.</param>
+/// <param name="ProjectId">Unique identifier of the parent project.</param>
+/// <param name="Name">Display name of the task.</param>
+/// <param name="CreatedAt">UTC timestamp when the task was created.</param>
+/// <param name="UpdatedAt">UTC timestamp when the task was last updated.</param>
 public sealed record TaskResponse(
     Guid Id,
     Guid ProjectId,

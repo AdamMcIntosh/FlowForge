@@ -1,9 +1,10 @@
 using FlowForge.Domain.Projects;
 using FlowForge.Domain.Users;
+using Microsoft.Extensions.Logging;
 
 namespace FlowForge.Application.Projects;
 
-public class ProjectService(IProjectRepository projectRepository) : IProjectService
+public class ProjectService(IProjectRepository projectRepository, ILogger<ProjectService> logger) : IProjectService
 {
     public Task<Project> GetByIdAsync(Guid id, UserId ownerId, CancellationToken cancellationToken = default) =>
         GetOwnedProjectAsync(id, ownerId, cancellationToken);
@@ -20,6 +21,10 @@ public class ProjectService(IProjectRepository projectRepository) : IProjectServ
 
         var project = new Project(ownerId, name);
         await projectRepository.AddAsync(project, cancellationToken);
+        logger.LogInformation(
+            "Project created with {ProjectId} for owner {OwnerId}",
+            project.Id,
+            ownerId.Value);
         return project;
     }
 
@@ -32,6 +37,10 @@ public class ProjectService(IProjectRepository projectRepository) : IProjectServ
         var project = await GetOwnedProjectAsync(id, ownerId, cancellationToken);
         project.Rename(name);
         await projectRepository.UpdateAsync(project, cancellationToken);
+        logger.LogInformation(
+            "Project updated with {ProjectId} for owner {OwnerId}",
+            project.Id,
+            ownerId.Value);
         return project;
     }
 
@@ -39,6 +48,10 @@ public class ProjectService(IProjectRepository projectRepository) : IProjectServ
     {
         var project = await GetOwnedProjectAsync(id, ownerId, cancellationToken);
         await projectRepository.DeleteAsync(project, cancellationToken);
+        logger.LogInformation(
+            "Project deleted with {ProjectId} for owner {OwnerId}",
+            id,
+            ownerId.Value);
     }
 
     public Task<Project?> GetByNameAsync(string name, CancellationToken cancellationToken = default) =>

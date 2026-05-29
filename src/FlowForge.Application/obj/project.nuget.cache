@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "hchyZrf8u/E=",
+  "dgSpecHash": "hUK03OBRonI=",
   "success": true,
   "projectFilePath": "/home/adammcintosh/projects/FlowForge/src/FlowForge.Application/FlowForge.Application.csproj",
   "expectedPackageFiles": [
-    "/home/adammcintosh/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.8/microsoft.extensions.dependencyinjection.abstractions.10.0.8.nupkg.sha512"
+    "/home/adammcintosh/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.8/microsoft.extensions.dependencyinjection.abstractions.10.0.8.nupkg.sha512",
+    "/home/adammcintosh/.nuget/packages/microsoft.extensions.logging.abstractions/10.0.8/microsoft.extensions.logging.abstractions.10.0.8.nupkg.sha512"
   ],
   "logs": []
 }

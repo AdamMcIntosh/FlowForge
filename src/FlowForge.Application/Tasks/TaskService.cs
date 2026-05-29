@@ -3,10 +3,14 @@ using FlowForge.Domain.Projects;
 using FlowForge.Domain.Tasks;
 using FlowForge.Domain.Users;
 using DomainTask = FlowForge.Domain.Tasks.Task;
+using Microsoft.Extensions.Logging;
 
 namespace FlowForge.Application.Tasks;
 
-public class TaskService(IProjectService projectService, ITaskRepository taskRepository) : ITaskService
+public class TaskService(
+    IProjectService projectService,
+    ITaskRepository taskRepository,
+    ILogger<TaskService> logger) : ITaskService
 {
     public async System.Threading.Tasks.Task<DomainTask> GetByIdAsync(
         Guid projectId,
@@ -36,6 +40,11 @@ public class TaskService(IProjectService projectService, ITaskRepository taskRep
         var project = await projectService.GetByIdAsync(projectId, ownerId, cancellationToken);
         var task = new DomainTask(project.ProjectId, name);
         await taskRepository.AddAsync(task, cancellationToken);
+        logger.LogInformation(
+            "Task created with {TaskId} in project {ProjectId} for owner {OwnerId}",
+            task.Id,
+            projectId,
+            ownerId.Value);
         return task;
     }
 
@@ -50,6 +59,11 @@ public class TaskService(IProjectService projectService, ITaskRepository taskRep
         var task = await GetTaskForProjectAsync(taskId, project.ProjectId, cancellationToken);
         task.Rename(name);
         await taskRepository.UpdateAsync(task, cancellationToken);
+        logger.LogInformation(
+            "Task updated with {TaskId} in project {ProjectId} for owner {OwnerId}",
+            taskId,
+            projectId,
+            ownerId.Value);
         return task;
     }
 
@@ -62,6 +76,11 @@ public class TaskService(IProjectService projectService, ITaskRepository taskRep
         var project = await projectService.GetByIdAsync(projectId, ownerId, cancellationToken);
         var task = await GetTaskForProjectAsync(taskId, project.ProjectId, cancellationToken);
         await taskRepository.DeleteAsync(task, cancellationToken);
+        logger.LogInformation(
+            "Task deleted with {TaskId} in project {ProjectId} for owner {OwnerId}",
+            taskId,
+            projectId,
+            ownerId.Value);
     }
 
     private async System.Threading.Tasks.Task<DomainTask> GetTaskForProjectAsync(

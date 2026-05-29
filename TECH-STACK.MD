@@ -4,7 +4,7 @@
 - **.NET Version**: .NET 10 (latest)
 - **Web Framework**: ASP.NET Core 10 with Minimal APIs
 - **ORM**: Entity Framework Core 10
-- **Database**: SQL Server (production), SQLite in-memory (testing)
+- **Database**: SQLite file (`flowforge.db`) for dev/local; SQL Server for production; SQLite in-memory for tests
 
 ## Architecture & Patterns
 - **Architecture Style**: Clean Architecture (Domain → Application → Infrastructure → API)
@@ -39,4 +39,4 @@
 - EF Migrations: `dotnet ef migrations add` / `dotnet ef database update`
 - Solution Format: `.slnx` (modern .NET solution file)
 
-Last Updated: May 2025
+Last Updated: May 2026

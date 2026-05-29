@@ -2,10 +2,11 @@ using DomainTask = FlowForge.Domain.Tasks.Task;
 using FlowForge.Domain.Projects;
 using FlowForge.Domain.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace FlowForge.Infrastructure.Persistence.Repositories;
 
-public class TaskRepository(FlowForgeDbContext context) : ITaskRepository
+public class TaskRepository(FlowForgeDbContext context, ILogger<TaskRepository> logger) : ITaskRepository
 {
     public async System.Threading.Tasks.Task<DomainTask?> GetByIdAsync(
         Guid id,
@@ -54,6 +55,7 @@ public class TaskRepository(FlowForgeDbContext context) : ITaskRepository
     {
         await context.Tasks.AddAsync(task, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
+        logger.LogDebug("Persisted task add for {TaskId} in project {ProjectId}", task.Id, task.ProjectId.Value);
     }
 
     public async System.Threading.Tasks.Task UpdateAsync(
@@ -62,6 +64,7 @@ public class TaskRepository(FlowForgeDbContext context) : ITaskRepository
     {
         context.Tasks.Update(task);
         await context.SaveChangesAsync(cancellationToken);
+        logger.LogDebug("Persisted task update for {TaskId} in project {ProjectId}", task.Id, task.ProjectId.Value);
     }
 
     public async System.Threading.Tasks.Task DeleteAsync(
@@ -70,6 +73,7 @@ public class TaskRepository(FlowForgeDbContext context) : ITaskRepository
     {
         context.Tasks.Remove(task);
         await context.SaveChangesAsync(cancellationToken);
+        logger.LogDebug("Persisted task delete for {TaskId} in project {ProjectId}", task.Id, task.ProjectId.Value);
     }
 
     public async System.Threading.Tasks.Task<DomainTask?> FindByNameForProjectAsync(

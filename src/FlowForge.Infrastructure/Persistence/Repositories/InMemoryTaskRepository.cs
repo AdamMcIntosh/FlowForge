@@ -113,27 +113,22 @@ public class InMemoryTaskRepository : ITaskRepository
 
         lock (_sync)
         {
-            if (!_tasksById.TryGetValue(task.Id, out var existing))
+            if (!_tasksById.ContainsKey(task.Id))
             {
                 throw new InvalidOperationException($"Task with id '{task.Id}' was not found.");
             }
 
             var newNameKey = ProjectNameKey(task.ProjectId, task.Name);
-            var existingNameKey = ProjectNameKey(existing.ProjectId, existing.Name);
 
-            if (!string.Equals(existingNameKey, newNameKey, StringComparison.Ordinal)
-                && _tasksByProjectAndName.ContainsKey(newNameKey))
+            if (_tasksByProjectAndName.TryGetValue(newNameKey, out var conflicting)
+                && conflicting.Id != task.Id)
             {
                 throw new InvalidOperationException(
                     $"A task with name '{task.Name}' already exists in project '{task.ProjectId.Value}'.");
             }
 
-            if (!string.Equals(existingNameKey, newNameKey, StringComparison.Ordinal))
-            {
-                _tasksByProjectAndName.Remove(existingNameKey);
-                _tasksByProjectAndName[newNameKey] = task;
-            }
-
+            RemoveNameIndexEntriesForTask(task.Id);
+            _tasksByProjectAndName[newNameKey] = task;
             _tasksById[task.Id] = task;
         }
 
@@ -175,6 +170,19 @@ public class InMemoryTaskRepository : ITaskRepository
         {
             _tasksByProjectAndName.TryGetValue(nameKey, out var task);
             return System.Threading.Tasks.Task.FromResult(task);
+        }
+    }
+
+    private void RemoveNameIndexEntriesForTask(Guid taskId)
+    {
+        var staleKeys = _tasksByProjectAndName
+            .Where(entry => entry.Value.Id == taskId)
+            .Select(entry => entry.Key)
+            .ToList();
+
+        foreach (var key in staleKeys)
+        {
+            _tasksByProjectAndName.Remove(key);
         }
     }
 

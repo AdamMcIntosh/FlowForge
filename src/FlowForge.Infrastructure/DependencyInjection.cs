@@ -13,12 +13,19 @@ namespace FlowForge.Infrastructure;
 
 public static class DependencyInjection
 {
+    public const string SqliteProvider = "Sqlite";
+    public const string SqlServerProvider = "SqlServer";
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
 
-        return services.AddInfrastructure(options => options.UseSqlServer(connectionString));
+        var provider = configuration["Database:Provider"] ?? SqliteProvider;
+
+        return provider.Equals(SqlServerProvider, StringComparison.OrdinalIgnoreCase)
+            ? services.AddInfrastructure(options => options.UseSqlServer(connectionString))
+            : services.AddInfrastructure(options => options.UseSqlite(connectionString));
     }
 
     public static IServiceCollection AddInfrastructure(

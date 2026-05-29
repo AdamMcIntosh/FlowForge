@@ -1,0 +1,69 @@
+# Architecture Decision Records
+
+_Auto-updated by Roland after each run. Edit manually at any time._
+_Each section corresponds to one Roland run that produced new decisions._
+
+## 2026-05-29 — Update the FlowForge .NET 10 solution to use SQLite by default for development a _(run mpqzjb77)_
+
+- [Decision: SQLite is the default provider for all non-Production environments; SQL Server is selected only when `Database:Provider=SqlServer` or `ASPNETCORE_ENVIRONMENT=Production`]
+
+## 2026-05-29 — Generate the initial EF Core migration for User, Project, and Task entities and  _(run mpqzno46)_
+
+- [Decision: Startup auto-migration is intentionally skipped in Production so that `dotnet ef database update` (or CI/CD) remains the explicit, auditable mechanism for SQL Server schema changes]
+
+## 2026-05-29 — Add rate limiting middleware to all auth and CRUD endpoints in the FlowForge .NE _(run mpqzsb2o)_
+
+- [Decision: Rate limiting uses ASP.NET Core's built-in AddRateLimiter + fixed-window policy applied uniformly to all auth/CRUD route groups]
+
+## 2026-05-29 — Fix the pre-existing failing InMemoryTaskRepository duplicate-name update test i _(run mpqzw5fd)_
+
+- N/A (no new decisions to record)
+
+## 2026-05-29 — Implement global exception handling and standardize all error responses to use P _(run mpr00vmh)_
+
+- [Decision: Use `IExceptionHandler` + `AddProblemDetails` for all error responses — ensures RFC 7807 compliance and consistent `traceId` without per-endpoint duplication]
+
+## 2026-05-29 — Add input validation using FluentValidation for all Project and Task endpoints i _(run mpr04vwj)_
+
+- [Decision: FluentValidation chosen for request DTO validation with shared NameValidationRules and ProblemDetails error mapping to keep error responses consistent across the API]
+
+## 2026-05-29 — Add input validation using FluentValidation for all Project and Task endpoints i _(run mpr0dk4o)_
+
+- [Decision: Use FluentValidation with shared NameValidationRules for all Project/Task request DTOs — rationale: centralizes length/trim rules and keeps validators thin]
+
+## 2026-05-29 — Add FluentValidation to the Auth (register and login) endpoints and update READM _(run mpr0ir1c)_
+
+- N/A — no new decisions requiring documentation.
+
+## 2026-05-29 — Add Swagger/OpenAPI with XML comments, JWT security definitions, and basic endpo _(run mpr0n2g1)_
+
+- [Decision: Swagger/OpenAPI is added as Development-only tooling with JWT Bearer security definitions and XML comments; Production guard prevents exposure]
+
+## 2026-05-29 — Add structured logging with correlation IDs (TraceId) across all endpoints and s _(run mpr0rm66)_
+
+- [Decision: Use middleware-scoped `ILogger` for TraceId propagation] — chosen because it guarantees correlation ID on every log without repeating it in every call site or message template.
+
+## 2026-05-29 — Add health checks (database + basic) and structured logging with correlation IDs _(run mpr0xatz)_
+
+- [Decision: Health checks use the lightweight `AddDbContextCheck<T>` instead of a custom `IHealthCheck` implementation — rationale: reuses the already-registered `FlowForgeDbContext` with zero additional code.]
+- [Decision: TraceId is stored both on `HttpContext.Items` and as an `Activity` tag so it is available to both ProblemDetails and distributed tracing exporters.]
+
+## 2026-05-29 — Expand integration tests for auth flows and ensure good coverage for Project/Tas _(run mpr1413r)_
+
+- N/A — no new architectural decisions recorded this run.
+
+## 2026-05-29 — Add production-ready configuration (CORS, security headers, rate limit tuning, l _(run mpr18z6j)_
+
+- [Decision: Production CORS origins are validated at startup and the app fails if the list is empty — ensures misconfiguration is impossible to miss in Production]
+
+## 2026-05-29 — Finalize README.md with complete local setup instructions, environment variables _(run mpr1du8h)_
+
+- [Decision: Rate limiting is applied to all route groups (including anonymous auth endpoints) via a single fixed-window policy to protect the entire surface]
+
+## 2026-05-29 — Add Serilog structured logging configuration with console + file sinks and basic _(run mpr1hf1v)_
+
+- [Decision: Serilog structured logging with console + file sinks and environment-specific levels was chosen over Microsoft.Extensions.Logging defaults to enable TraceId enrichment and compact JSON file output for production diagnostics]
+
+## 2026-05-29 — Review and expand integration test coverage for key flows (auth, project, task)  _(run mpr1lt64)_
+
+- [Decision: keep single global FixedWindow rate-limit policy for simplicity; document that test fixtures must account for setup requests]

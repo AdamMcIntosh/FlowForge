@@ -1,10 +1,11 @@
 using FlowForge.Domain.Projects;
 using FlowForge.Domain.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace FlowForge.Infrastructure.Persistence.Repositories;
 
-public class ProjectRepository(FlowForgeDbContext context) : IProjectRepository
+public class ProjectRepository(FlowForgeDbContext context, ILogger<ProjectRepository> logger) : IProjectRepository
 {
     public async Task<Project?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
@@ -48,18 +49,21 @@ public class ProjectRepository(FlowForgeDbContext context) : IProjectRepository
     {
         await context.Projects.AddAsync(project, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
+        logger.LogDebug("Persisted project add for {ProjectId}", project.Id);
     }
 
     public async Task UpdateAsync(Project project, CancellationToken cancellationToken = default)
     {
         context.Projects.Update(project);
         await context.SaveChangesAsync(cancellationToken);
+        logger.LogDebug("Persisted project update for {ProjectId}", project.Id);
     }
 
     public async Task DeleteAsync(Project project, CancellationToken cancellationToken = default)
     {
         context.Projects.Remove(project);
         await context.SaveChangesAsync(cancellationToken);
+        logger.LogDebug("Persisted project delete for {ProjectId}", project.Id);
     }
 
     public async Task<Project?> FindByNameAsync(string name, CancellationToken cancellationToken = default)

@@ -1363,7 +1363,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Write HTTP integration tests for Project CRUD endpoints with ownership authorization in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -1371,9 +1371,9 @@
     ],
     "relatedIds": [],
     "id": "d388a451-6f56-4baa-9bda-a09fb7f23ae6",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780019888057,
-    "updatedAt": 1780019888057
+    "updatedAt": 1780063091675
   },
   {
     "type": "task",
@@ -1414,7 +1414,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Update ARCHITECTURE.md and DECISIONS.md with full current state of User and Project implementation in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -1422,9 +1422,9 @@
     ],
     "relatedIds": [],
     "id": "8b2d8bb5-aa35-4290-9776-87b91f286171",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780020288075,
-    "updatedAt": 1780020288075
+    "updatedAt": 1780063325719
   },
   {
     "type": "task",
@@ -1500,7 +1500,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Implement Project-Task relationship (tasks belong to projects) with ownership authorization in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -1508,9 +1508,9 @@
     ],
     "relatedIds": [],
     "id": "9b2f2fb5-a2d1-44e4-a535-0d20a0f81e62",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780020565355,
-    "updatedAt": 1780020565355
+    "updatedAt": 1780063532353
   },
   {
     "type": "task",
@@ -1896,5 +1896,1187 @@
     "rev": 1,
     "createdAt": 1780021146185,
     "updatedAt": 1780021146185
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Update the FlowForge .NET 10 solution to use SQLite by default for development and local testing, while keeping SQL Server support for production. Update connection strings, DbContext configuration, appsettings, .env.example, and documentation accordingly.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "8a7ed2d5-2fb9-4ccc-95b4-b932465dbf3c",
+    "rev": 2,
+    "createdAt": 1780062976631,
+    "updatedAt": 1780063704848
+  },
+  {
+    "type": "task",
+    "title": "Switch default DB provider to SQLite for dev/local testing",
+    "content": "Update FlowForge solution to default to SQLite for development and local testing while retaining SQL Server for production. Modify DbContext configuration (via AddInfrastructure or equivalent), connection string handling in appsettings*.json, .env.example, and any environment-specific logic. Update relevant documentation (README or docs folder) to describe the dual-provider setup and how to switch. Preserve all existing DI patterns and CancellationToken conventions. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js). 3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID. 4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "90ca04a6-ee46-4441-ba40-71ac1fb748e0",
+    "rev": 1,
+    "createdAt": 1780062993071,
+    "updatedAt": 1780062993071
+  },
+  {
+    "type": "result",
+    "title": "Result: Switch default DB provider to SQLite for dev/local testing",
+    "content": "## Implementation\n\nFlowForge now defaults to **SQLite** for development and local testing, with **SQL Server** retained for production via environment-specific configuration.\n\n## Changes Made\n\n### `DependencyInjection.cs`\n\n- Added `SqliteProvider` / `SqlServerProvider` constants.\n- `AddInfrastructure(IConfiguration)` reads `Database:Provider` (defaults to **Sqlite** when unset) and calls `UseSqlite` or `UseSqlServer` accordingly.\n- The `Action<DbContextOptionsBuilder>` overload is unchanged for tests that inject SQLite directly.\n\n### Configuration\n\n| File | Change |\n|------|--------|\n| `appsettings.json` | `Database:Provider=Sqlite`, `Data Source=flowforge.db` |\n| `appsettings.Development.json` | Same SQLite defaults |\n| `appsettings.Production.json` | **New** — `SqlServer` + SQL Server connection string |\n| `.env.example` | SQLite provider and file connection string |\n\n### Tests\n\n- `HealthEndpointTests` — switched from SQL Server LocalDB to SQLite (`Database:Provider` + in-memory connection).\n- HTTP test factories (`Auth`, `Project`, `Task`) — set `Database:Provider=Sqlite` for consistency.\n\n### Documentation & misc\n\n- `README.md` — new **Database** section (dual-provider setup, switching, EF commands).\n- `ARCHITECTURE.MD`, `Decisions.MD`, `TECH-STACK.MD` — updated to reflect SQLite-first dev and SQL Server production.\n- `.gitignore` — ignores `*.db`, `*.db-shm`, `*.db-wal`.\n\n## Test Results\n\n```\ndotnet build FlowForge.slnx  → 0 warnings, 0 errors\ndotnet test (filtered: Health, Auth, UserService integration) → 15/15 passed\ndotnet test (full suite) → 128/129 passed\n```\n\nThe single failure (`InMemoryTaskRepositoryTests.UpdateAsync_WhenRenamingToDuplicateNameInProject_Throws`) predates this work and is unrelated to database provider configuration.\n\n## End-to-end verification\n\n- `Program.cs` → `AddInfrastructure(builder.Configuration)` → provider selection from config.\n- Development run uses SQLite (`flowforge.db`) without SQL Server.\n- Production (`ASPNETCORE_ENVIRONM\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "84ac9c79-8784-410c-9561-2ebc6052b182",
+    "rev": 1,
+    "createdAt": 1780063061959,
+    "updatedAt": 1780063061959
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Generate the initial EF Core migration for User, Project, and Task entities and update the FlowForge .NET 10 solution to apply it correctly with SQLite.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "93a0fe41-6346-44b3-acb3-4db00f9f8741",
+    "rev": 2,
+    "createdAt": 1780063179994,
+    "updatedAt": 1780063925609
+  },
+  {
+    "type": "task",
+    "title": "Generate and apply initial EF Core migration for User, Project, Task with SQLite",
+    "content": "Generate the first EF Core migration for the existing User, Project, and Task entities and ensure the FlowForge .NET 10 solution applies it correctly against SQLite in non-Production environments. Run `dotnet ef migrations add InitialCreate --project src/FlowForge.Infrastructure --startup-project src/FlowForge.Api` (or equivalent) then verify `dotnet ef database update` succeeds. Keep all provider selection inside `DependencyInjection.AddInfrastructure`. Do not alter production path or appsettings.Production.json.\n⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations.\n⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "05a6452c-c4d8-412a-a6fb-aff02c9d81ce",
+    "rev": 1,
+    "createdAt": 1780063202273,
+    "updatedAt": 1780063202273
+  },
+  {
+    "type": "result",
+    "title": "Result: Generate and apply initial EF Core migration for User, Project, Task with SQLite",
+    "content": "## Implementation\n\nGenerated the initial EF Core migration for **Users**, **Projects**, and **Tasks**, verified `dotnet ef database update` succeeds against SQLite, and wired automatic migration application on startup in non-Production environments.\n\n## Changes Made\n\n### Migration files (generated)\n- `src/FlowForge.Infrastructure/Migrations/20260529140041_InitialCreate.cs` — creates `Users`, `Projects`, and `Tasks` tables with indexes (unique email, project/task lookups)\n- `FlowForgeDbContextModelSnapshot.cs` and designer companion\n\n### Design-time factory\n- `src/FlowForge.Infrastructure/Persistence/FlowForgeDbContextFactory.cs` — `IDesignTimeDbContextFactory` using SQLite so `dotnet ef` commands work without touching production config\n\n### Startup migration wiring\n- `src/FlowForge.Infrastructure/Persistence/DatabaseMigrationExtensions.cs` — `ApplyMigrationsInNonProductionAsync()` skips Production, calls `MigrateAsync` elsewhere\n- `src/FlowForge.Api/Program.cs` — invokes migration apply before the request pipeline starts\n\n### EF CLI support\n- `src/FlowForge.Api/FlowForge.Api.csproj` — added `Microsoft.EntityFrameworkCore.Design` (PrivateAssets) required by the startup project for `dotnet ef`\n\nProvider selection remains exclusively in `DependencyInjection.AddInfrastructure` (SQLite default, SQL Server for Production). `appsettings.Production.json` was not modified.\n\n## Verification\n\n| Step | Result |\n|------|--------|\n| `dotnet ef migrations add InitialCreate` | Success |\n| `dotnet ef database update` | Success — `20260529140041_InitialCreate` applied |\n| SQLite schema | `Users`, `Projects`, `Tasks`, `__EFMigrationsHistory` present |\n| App startup (Development) | Logs confirm migration check; \"database is already up to date\" |\n| Full test suite | **128/129 passed** (1 pre-existing failure in `InMemoryTaskRepositoryTests.UpdateAsync_WhenRenamingToDuplicateNameInProject_Throws`, unrelated to migrations) |\n\n## Production Hardening Checklist\n\n| Item | Applies? |\n|------|\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "a9c16cc1-08dc-4b91-b367-4136503bdd05",
+    "rev": 1,
+    "createdAt": 1780063293650,
+    "updatedAt": 1780063293650
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add rate limiting middleware to all auth and CRUD endpoints in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "1779141a-5305-49d8-a289-4b2cd2ecf9e5",
+    "rev": 2,
+    "createdAt": 1780063396372,
+    "updatedAt": 1780064129642
+  },
+  {
+    "type": "task",
+    "title": "Add rate limiting middleware to auth and CRUD endpoints",
+    "content": "Add ASP.NET Core RateLimiter middleware (fixed-window) to FlowForge.Api and apply it to all auth and CRUD endpoints. Configure via builder.Services.AddRateLimiter and app.UseRateLimiter in Program.cs. Ensure the policy protects login, register, and all Project/Task/User endpoints.\n⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why.\n⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "fe634b5b-91fe-4b62-9330-7220a5c43764",
+    "rev": 1,
+    "createdAt": 1780063414445,
+    "updatedAt": 1780063414445
+  },
+  {
+    "type": "result",
+    "title": "Result: Add rate limiting middleware to auth and CRUD endpoints",
+    "content": "## Implementation\n\nAdded ASP.NET Core fixed-window rate limiting to FlowForge.Api, wired end-to-end through DI, middleware, and all auth/CRUD endpoint groups.\n\n## Changes Made\n\n### Rate limiting infrastructure\n\n**New file:** `src/FlowForge.Api/RateLimiting/RateLimitingExtensions.cs`\n\n- Defines `RateLimitPolicies.FixedWindow` policy name\n- `AddFlowForgeRateLimiting()` registers `AddRateLimiter` with a fixed-window limiter (configurable `PermitLimit` / `WindowSeconds`)\n- Rejected requests return **429** with RFC 7807 `ProblemDetails` and optional `Retry-After` header\n\n### Pipeline wiring — `Program.cs`\n\n- `builder.Services.AddFlowForgeRateLimiting(builder.Configuration)`\n- `app.UseRateLimiter()` after auth/authorization, before endpoint mapping\n\n### Endpoint protection\n\nApplied `.RequireRateLimiting(RateLimitPolicies.FixedWindow)` on all route groups:\n\n| Group | Endpoints |\n|-------|-----------|\n| `AuthEndpoints` | `POST /register`, `POST /login` |\n| `MeEndpoints` | `GET /me` |\n| `ProjectEndpoints` | `POST/GET/PUT/DELETE /projects` |\n| `TaskEndpoints` | `POST/GET/PUT/DELETE /projects/{projectId}/tasks` |\n\n`/health` is intentionally **not** rate-limited (operational probe, not auth/CRUD).\n\n### Configuration\n\n- `appsettings.json`: `RateLimiting:PermitLimit=100`, `WindowSeconds=60`\n- `.env.example`: matching override keys added\n\n### Tests\n\n- **New:** `RateLimitEndpointTests` — verifies 429 + ProblemDetails when limit exceeded on `/login`\n- **Updated:** Auth/Project/Task test factories set `PermitLimit=10000` to avoid flaky tests\n\n## Test Results\n\n- Rate limit test: **1/1 passed**\n- All endpoint tests (auth, project, task, health, rate limit): **42/42 passed**\n- Build: **0 warnings, 0 errors**\n\n## Production Hardening Checklist\n\n| Item | Applies? | Notes |\n|------|----------|-------|\n| EF Core migrations | **No** | No schema changes |\n| Secrets/config | **Partial** | Limits loaded via `IConfiguration`; no hardcoded secrets added |\n| Input validation | **No** | Out of scop\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "5b7a8c3f-1c78-41d8-bbaf-22019b38a4f5",
+    "rev": 1,
+    "createdAt": 1780063497947,
+    "updatedAt": 1780063497947
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Fix the pre-existing failing InMemoryTaskRepository duplicate-name update test in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "24a23254-0ebb-4b12-ab51-fbfc0681e7a1",
+    "rev": 2,
+    "createdAt": 1780063575677,
+    "updatedAt": 1780064479919
+  },
+  {
+    "type": "task",
+    "title": "Fix duplicate-name guard in InMemoryTaskRepository.UpdateAsync",
+    "content": "Investigate and repair the failing UpdateAsync_WhenRenamingToDuplicateNameInProject_Throws test in InMemoryTaskRepository. Ensure the name-uniqueness check (per-project) correctly detects and throws InvalidOperationException on rename collisions. Verify the test passes after the change. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js). 3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID. 4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ae7b8b8d-adf5-422f-ac24-3d3b0831b485",
+    "rev": 1,
+    "createdAt": 1780063619154,
+    "updatedAt": 1780063619154
+  },
+  {
+    "type": "result",
+    "title": "Result: Fix duplicate-name guard in InMemoryTaskRepository.UpdateAsync",
+    "content": "## Implementation\n\nFixed the duplicate-name guard in `InMemoryTaskRepository.UpdateAsync`. The failing test and the full suite (**130/130**) now pass.\n\n## Root Cause\n\nThe test calls `second.Rename(\"First\")` before `UpdateAsync(second)`. Because the repository stores the same object reference in `_tasksById`, `existing.Name` and `task.Name` were both already `\"First\"` when `UpdateAsync` ran. The old logic only checked for duplicates when `existingNameKey != newNameKey`, so the collision with the other task named `\"First\"` was never detected.\n\n## Changes Made\n\n**`src/FlowForge.Infrastructure/Persistence/Repositories/InMemoryTaskRepository.cs`**\n\n1. **Duplicate detection** — Look up the target `(projectId, name)` key and throw if another task (different `Id`) already owns it, instead of comparing old vs new name keys on the same reference.\n\n2. **Index maintenance** — Added `RemoveNameIndexEntriesForTask` to drop all name-index entries for a task by `Id` before re-indexing. This keeps `_tasksByProjectAndName` correct when the entity is renamed in memory before `UpdateAsync`.\n\n## Test Results\n\n| Scope | Result |\n|-------|--------|\n| `UpdateAsync_WhenRenamingToDuplicateNameInProject_Throws` | Pass |\n| All `InMemoryTaskRepositoryTests` (16) | Pass |\n| Full suite (130) | Pass |",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "b9282583-8548-47b9-99ce-8135232e161a",
+    "rev": 1,
+    "createdAt": 1780063678819,
+    "updatedAt": 1780063678819
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement global exception handling and standardize all error responses to use ProblemDetails consistently across the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "2d171a45-5b51-4d58-baa0-0db1647df038",
+    "rev": 2,
+    "createdAt": 1780063796253,
+    "updatedAt": 1780064752092
+  },
+  {
+    "type": "task",
+    "title": "Implement global exception handling with ProblemDetails",
+    "content": "Add global exception handling middleware (or UseExceptionHandler) that converts all unhandled exceptions and explicit error paths to RFC 7807 ProblemDetails responses with consistent structure, status codes, and titles. Register ProblemDetails services, ensure every endpoint and error path uses it, and never leak stack traces or raw exceptions. ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "d6920d4e-6065-40ac-bc24-c37140e9f490",
+    "rev": 1,
+    "createdAt": 1780063820439,
+    "updatedAt": 1780063820439
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement global exception handling with ProblemDetails",
+    "content": "## Implementation\n\nGlobal exception handling is wired end-to-end. All auth, project, and task error paths now return RFC 7807 `ProblemDetails` with consistent titles, status codes, and a `traceId` extension — without leaking stack traces or internal exception details.\n\n## Changes Made\n\n### Exception handling infrastructure (`src/FlowForge.Api/Exceptions/`)\n\n| File | Purpose |\n|------|---------|\n| `GlobalExceptionHandler.cs` | `IExceptionHandler` maps domain exceptions to safe ProblemDetails; logs expected failures at Warning, unexpected at Error with `TraceId` |\n| `ProblemDetailsResults.cs` | Shared helpers for explicit validation/auth errors (`BadRequest`, `Unauthorized`, `Forbidden`, `NotFound`, `Conflict`) |\n| `ExceptionHandlingExtensions.cs` | Registers `AddProblemDetails` + `AddExceptionHandler`; configures JWT `OnChallenge`/`OnForbidden` to return ProblemDetails |\n\n### Exception → HTTP mapping (generic messages, no internal IDs)\n\n| Exception | Status | Title |\n|-----------|--------|-------|\n| `DuplicateEmailException` | 409 | Duplicate email |\n| `InvalidCredentialsException` | 401 | Invalid credentials |\n| `ProjectNotFoundException` | 404 | Project not found |\n| `UnauthorizedProjectAccessException` | 403 | Forbidden |\n| `TaskNotFoundException` | 404 | Task not found |\n| `ArgumentException` | 400 | Invalid request (user-safe validation message) |\n| All others | 500 | Internal server error |\n\n### Pipeline & endpoints\n\n- **`Program.cs`**: `AddFlowForgeExceptionHandling()`, `UseExceptionHandler()` (before auth), JWT bearer events for 401/403 ProblemDetails\n- **`AuthEndpoints`**, **`ProjectEndpoints`**, **`TaskEndpoints`**, **`MeEndpoints`**: Removed per-handler try/catch; explicit validation uses `ProblemDetailsResults`\n- **`RateLimitingExtensions`**: 429 responses now include `traceId` and `instance`\n\n### Tests\n\nAdded `ExceptionHandlingEndpointTests.cs` (6 tests) covering:\n- Unauthenticated `/me` → 401 ProblemDetails\n- Duplicate register, wrong login, empty proje\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "91bf84e8-9f28-45f9-9efe-c29e0c4c06a0",
+    "rev": 1,
+    "createdAt": 1780063903861,
+    "updatedAt": 1780063903861
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add input validation using FluentValidation for all Project and Task endpoints in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "966f3bf0-9bd2-469c-ab39-68f68bf9512e",
+    "rev": 2,
+    "createdAt": 1780063983239,
+    "updatedAt": 1780064950102
+  },
+  {
+    "type": "task",
+    "title": "Add FluentValidation for Project and Task endpoints",
+    "content": "Add FluentValidation to all Project and Task endpoints. Create validators for request DTOs, register in DI, and ensure invalid inputs return RFC 7807 ProblemDetails (400). Follow existing endpoint structure and error conventions.\n⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations.\n⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ea5ab96d-06ad-4a98-b6b8-0171cc58c5ae",
+    "rev": 1,
+    "createdAt": 1780064003119,
+    "updatedAt": 1780064003119
+  },
+  {
+    "type": "result",
+    "title": "Result: Add FluentValidation for Project and Task endpoints",
+    "content": "## Implementation\n\nFluentValidation is wired end-to-end for all Project and Task request DTOs. Invalid inputs now return RFC 7807 `ProblemDetails` (400) via the existing `ProblemDetailsResults.BadRequest` helper, preserving the same title (`\"Invalid request\"`) and error messages as before.\n\n## Changes Made\n\n### Package\n- Added `FluentValidation.DependencyInjectionExtensions` to `FlowForge.Api`\n\n### Validators (`src/FlowForge.Api/Validation/`)\n- `CreateProjectRequestValidator` / `UpdateProjectRequestValidator`\n- `CreateTaskRequestValidator` / `UpdateTaskRequestValidator`\n- Shared `NameValidationRules` — required (non-whitespace) + max length aligned with domain constants (`Project.MaxNameLength`, `Task.MaxNameLength` = 200)\n- `ValidationExtensions` — DI registration + `ToProblemDetailsResult()` helper\n\n### Endpoint wiring\n- `ProjectEndpoints` — create/update handlers inject `IValidator<T>`, validate before service calls\n- `TaskEndpoints` — same pattern for create/update\n- Removed inline `string.IsNullOrWhiteSpace` checks (replaced by validators)\n\n### DI registration\n- `Program.cs` calls `builder.Services.AddFlowForgeValidation()`\n\n### Tests\n- `ValidationEndpointTests.cs` — HTTP tests for too-long names and empty/whitespace names (ProblemDetails shape)\n- `ProjectRequestValidatorTests.cs` — unit tests for validator rules\n- **145/145 tests pass**\n\n## Production Hardening Checklist\n\n| Item | Applies? | Notes |\n|------|----------|-------|\n| EF Core migrations | **No** | No schema changes |\n| Secrets/config | **No** | No config changes |\n| Input validation | **Yes — done** | FluentValidation on all Project/Task create & update request DTOs |\n| Rate limiting | **No change needed** | Already applied to endpoint groups |\n| Structured logging | **No** | Out of scope; validation returns before service layer |\n| Error responses | **Yes — done** | Validation failures return ProblemDetails (400) |\n| CancellationToken | **Yes — done** | `ValidateAsync(request, cancellationToken)` p\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "e7330d0b-06fd-478d-87bb-2a4423947854",
+    "rev": 1,
+    "createdAt": 1780064105360,
+    "updatedAt": 1780064105360
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add input validation using FluentValidation for all Project and Task endpoints in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "ef77c268-f3d9-4004-b4fd-c80791f30c7b",
+    "rev": 2,
+    "createdAt": 1780064387885,
+    "updatedAt": 1780065255741
+  },
+  {
+    "type": "task",
+    "title": "Add FluentValidation for Project and Task endpoints",
+    "content": "⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations.\n\nAdd input validation using FluentValidation for all Project and Task endpoints. Create validators in src/FlowForge.Api/Validation/, register via AddFlowForgeValidation() extension, inject IValidator<T> into handlers, and use ValidateAsync + ToProblemDetailsResult() pattern with shared NameValidationRules. Follow all coding standards and patterns from project memory.\n\n⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why.\n\nItems that do NOT apply: EF Core migrations (no schema changes), rate limiting (already applied per prior decision), structured logging additions (existing endpoints already use ILogger where needed).\n\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "baf71199-f37a-404f-b681-41a0d4857f40",
+    "rev": 1,
+    "createdAt": 1780064421439,
+    "updatedAt": 1780064421439
+  },
+  {
+    "type": "result",
+    "title": "Result: Add FluentValidation for Project and Task endpoints",
+    "content": "## Implementation\n\nFluentValidation is already wired end-to-end for all Project and Task request bodies. I verified the full stack — validators, DI registration, handler injection, ProblemDetails mapping, and tests — and ran the suite: **145/145 passed**.\n\nNo code changes were required; the deliverable matches the task spec.\n\n## Changes Made (verified)\n\n### Package & DI\n- `FluentValidation.DependencyInjectionExtensions` in `FlowForge.Api`\n- `AddFlowForgeValidation()` registered in `Program.cs` via `services.AddValidatorsFromAssemblyContaining<CreateProjectRequestValidator>()`\n\n### Validation layer (`src/FlowForge.Api/Validation/`)\n\n| File | Role |\n|------|------|\n| `NameValidationRules.cs` | Shared rules: non-whitespace required + max length (trim-aware) |\n| `CreateProjectRequestValidator` / `UpdateProjectRequestValidator` | Uses `Project.MaxNameLength` (200) |\n| `CreateTaskRequestValidator` / `UpdateTaskRequestValidator` | Uses `Task.MaxNameLength` (200) |\n| `ValidationExtensions.cs` | `AddFlowForgeValidation()` + `ToProblemDetailsResult()` → `ProblemDetailsResults.BadRequest` |\n\n### Endpoint wiring\n- **POST/PUT `/projects`** — `IValidator<CreateProjectRequest>` / `IValidator<UpdateProjectRequest>`, `ValidateAsync(..., cancellationToken)`, early return on validation failure\n- **POST/PUT `/projects/{projectId}/tasks`** — same pattern for `CreateTaskRequest` / `UpdateTaskRequest`\n- GET/DELETE routes have no request body DTOs; validation is not applicable there\n\nInvalid inputs return **400** RFC 7807 `ProblemDetails` with title `\"Invalid request\"` and domain-aligned detail messages (e.g. `\"Project name is too long.\"`).\n\n### Tests\n- `ProjectRequestValidatorTests` — unit coverage for create/update project validators\n- `ValidationEndpointTests` — HTTP integration for project create/update and task create/update validation paths\n\n## Completeness check\n\n| Check | Status |\n|-------|--------|\n| Validators created for all request DTOs | Yes (4 validators) |\n| `AddFlowForgeVal\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "65ef8dfc-7a8f-43fb-a2b4-75365cd23f6d",
+    "rev": 1,
+    "createdAt": 1780064452194,
+    "updatedAt": 1780064452194
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add FluentValidation to the Auth (register and login) endpoints and update README.md with current API usage examples in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "7e844934-21dd-46a0-a9e7-6d198bf56bef",
+    "rev": 2,
+    "createdAt": 1780064630117,
+    "updatedAt": 1780065568564
+  },
+  {
+    "type": "task",
+    "title": "Add FluentValidation to Auth endpoints",
+    "content": "Add FluentValidation for register and login request DTOs on the Auth endpoints, following the established Project/Task validation pattern. Create validators under src/FlowForge.Api/Validation/, register via AddFlowForgeValidation(), inject IValidator<T> into handlers, use ValidateAsync + ToProblemDetailsResult(), and ensure ProblemDetails error responses. ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "32bbd247-6006-44bd-8e99-dc56b74fbc5d",
+    "rev": 1,
+    "createdAt": 1780064652063,
+    "updatedAt": 1780064652063
+  },
+  {
+    "type": "task",
+    "title": "Update README.md with current API usage examples",
+    "content": "Update README.md with accurate, current API usage examples for all endpoints (Auth register/login, Project, Task) including request/response bodies, success cases, and validation error responses in ProblemDetails format.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "677cdaff-e2ec-4aca-b9e9-f2cd25ec893e",
+    "rev": 1,
+    "createdAt": 1780064652066,
+    "updatedAt": 1780064652066
+  },
+  {
+    "type": "result",
+    "title": "Result: Add FluentValidation to Auth endpoints",
+    "content": "## Implementation\n\nFluentValidation is wired end-to-end for `POST /register` and `POST /login`, following the same pattern as Project and Task endpoints.\n\n## Changes Made\n\n### Validators (`src/FlowForge.Api/Validation/`)\n\n| File | Role |\n|------|------|\n| `AuthValidationRules.cs` | Shared rules: email required, max 320 chars, format regex (aligned with domain `Email.Create`), password required |\n| `AuthRequestValidator.cs` | Validates `AuthRequest` for both register and login |\n\n### Endpoint wiring (`AuthEndpoints.cs`)\n\n- Removed manual `string.IsNullOrWhiteSpace` checks\n- Injected `IValidator<AuthRequest>` into `RegisterAsync` and `LoginAsync`\n- Both handlers call `ValidateAsync(..., cancellationToken)` + `ToProblemDetailsResult()` before service calls\n- Invalid inputs return RFC 7807 `ProblemDetails` (400) with title `\"Invalid request\"`\n\n### DI\n\nNo change needed — `AddFlowForgeValidation()` already scans the assembly via `AddValidatorsFromAssemblyContaining<CreateProjectRequestValidator>()`, so `AuthRequestValidator` is registered automatically.\n\n### Tests\n\n| File | Coverage |\n|------|----------|\n| `AuthRequestValidatorTests.cs` | 7 unit tests (empty/whitespace email & password, invalid format, too-long email, valid input) |\n| `ValidationEndpointTests.cs` | 3 HTTP integration tests (register empty email, login invalid email, register empty password) |\n\n**Test results: 155/155 passed**\n\n## Production Hardening Checklist\n\n| Item | Applies? | Status |\n|------|----------|--------|\n| EF Core migrations | No | No schema changes in this task |\n| Secrets/config | No | No config or connection string changes |\n| Input validation | **Yes** | Auth request bodies validated at API boundary; 400 ProblemDetails on failure |\n| Rate limiting | No (already done) | Auth group already has `RequireRateLimiting(FixedWindow)` — verified, not modified |\n| Structured logging | No | Validation layer matches Project/Task pattern; no new log points required |\n| Error responses | **Yes** | Val\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "efbd0d2c-1edd-45fe-8cae-cf9ce6bf838e",
+    "rev": 1,
+    "createdAt": 1780064697705,
+    "updatedAt": 1780064697705
+  },
+  {
+    "type": "result",
+    "title": "Result: Update README.md with current API usage examples",
+    "content": "## Documentation\n\nUpdated [`README.md`](README.md) with current API usage examples aligned to the live endpoints, FluentValidation rules, and ProblemDetails error handling.\n\n### What changed\n\n**API overview**\n- Documented JSON request/response conventions, JWT auth, rate limiting (429), and the shared RFC 7807 ProblemDetails shape.\n\n**Auth (`POST /register`, `POST /login`)**\n- Separate register (201) vs login (200) examples with shared request body\n- Success response: `accessToken`, `userId`, `email`\n- Validation errors (400): all four auth messages from `AuthValidationRules`\n- Business errors: duplicate email (409), invalid credentials (401)\n\n**`GET /me`**\n- Added ProblemDetails examples for 401 and 404\n\n**Projects**\n- Removed outdated “routes not yet wired” note\n- Documented all five CRUD routes with request/response bodies\n- Validation errors: `Project name is required.` / `Project name is too long.`\n- Updated domain error messages to match `GlobalExceptionHandler` (not the old placeholder text)\n\n**Tasks (new section)**\n- Full CRUD under `/projects/{projectId}/tasks` with request/response examples\n- Validation errors: `Task name is required.` / `Task name is too long.`\n- Authorization and not-found error table (403 vs 404 behavior)\n\n**Health**\n- Kept with a brief 200 OK note\n\n## Summary\n\nThe README now reflects the actual HTTP API: Auth validation via FluentValidation, ownership-scoped Project and Task CRUD, and consistent ProblemDetails error responses across validation, auth, and domain failures. Examples were taken from endpoint DTOs, validators, and integration tests (`ValidationEndpointTests`, `ExceptionHandlingEndpointTests`).",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "0432894b-9e4d-4296-8a93-aa8986020ee6",
+    "rev": 1,
+    "createdAt": 1780064726391,
+    "updatedAt": 1780064726391
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add Swagger/OpenAPI with XML comments, JWT security definitions, and basic endpoint descriptions in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "c1537689-ea9a-45e2-8ef8-3f1a186fb410",
+    "rev": 2,
+    "createdAt": 1780064831526,
+    "updatedAt": 1780065789541
+  },
+  {
+    "type": "task",
+    "title": "Add Swagger/OpenAPI with XML, JWT security, and endpoint descriptions",
+    "content": "Add Swashbuckle.AspNetCore (or Microsoft.AspNetCore.OpenApi for .NET 10) to FlowForge.Api, enable XML documentation generation, configure SwaggerGen with JWT Bearer security definition and requirement, and add [SwaggerOperation] summaries/descriptions to existing Auth, Project, Task, and Me endpoints. Ensure UI is reachable at /swagger and XML comments render. ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies: - [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error - [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup - [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422) - [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate) - [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes - [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings - [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths. Explicitly state which items do NOT apply to this task and why. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js). 3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID. 4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "595d1267-18b4-46fc-8421-842ff8d01a6f",
+    "rev": 1,
+    "createdAt": 1780064846717,
+    "updatedAt": 1780064846717
+  },
+  {
+    "type": "result",
+    "title": "Result: Add Swagger/OpenAPI with XML, JWT security, and endpoint descriptions",
+    "content": "## Implementation\n\nSwagger/OpenAPI is wired end-to-end in FlowForge.Api with JWT security, XML comments, and operation summaries on all Auth, Me, Project, and Task endpoints.\n\n## Changes Made\n\n### Packages & XML docs (`FlowForge.Api.csproj`)\n- Added `Swashbuckle.AspNetCore` 8.1.4 and `Swashbuckle.AspNetCore.Annotations` 8.1.4\n- Enabled `GenerateDocumentationFile` so request/response XML comments are emitted\n\n### Swagger configuration (`OpenApi/SwaggerExtensions.cs`)\n- Registers `AddEndpointsApiExplorer()` + `AddSwaggerGen()` with API info, XML comment inclusion, and annotations enabled\n- Defines JWT **Bearer** security scheme (`Authorization` header, `bearer` / JWT format)\n- `BearerSecurityOperationFilter` applies the security requirement only to endpoints with authorization metadata (not anonymous auth routes)\n- `UseFlowForgeSwagger()` serves UI at `/swagger` and JSON at `/swagger/v1/swagger.json` in non-Production environments\n\n### Pipeline (`Program.cs`)\n- `builder.Services.AddFlowForgeSwagger()` in DI\n- `app.UseFlowForgeSwagger()` after exception handler, before auth middleware\n\n### Endpoint metadata\nAll routes now have `[SwaggerOperation]` summaries/descriptions via `WithMetadata(new SwaggerOperationAttribute(...))` and route tags:\n\n| Group | Endpoints |\n|-------|-----------|\n| **Auth** | `POST /register`, `POST /login` |\n| **Me** | `GET /me` |\n| **Projects** | Full CRUD on `/projects` |\n| **Tasks** | Full CRUD on `/projects/{projectId}/tasks` |\n\nXML doc comments added to all request/response DTO records (`AuthRequest`, `ProjectResponse`, `TaskResponse`, etc.) so schema descriptions render in Swagger UI.\n\n### Tests (`SwaggerEndpointTests.cs`)\n- Verifies `/swagger/index.html` returns 200\n- Verifies OpenAPI JSON includes Bearer security scheme, operation summaries, and JWT security on protected routes\n\n## Test Results\n\n**157/157 tests pass** (including 2 new Swagger tests). Build: 0 warnings, 0 errors.\n\n## Production Hardening Checklist\n\n| Item | Applies? | Notes\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ca29ce26-96ee-450f-853b-302a62d8d211",
+    "rev": 1,
+    "createdAt": 1780064918210,
+    "updatedAt": 1780064918210
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add structured logging with correlation IDs (TraceId) across all endpoints and services in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "15f80138-769d-4921-b32f-72c1806c0d06",
+    "rev": 2,
+    "createdAt": 1780065043715,
+    "updatedAt": 1780065985539
+  },
+  {
+    "type": "task",
+    "title": "Implement TraceId correlation middleware and structured logging setup",
+    "content": "Add a middleware that generates/propagates a TraceId (correlation ID) on every request and stores it in HttpContext.Items / Activity. Register ILogger enrichment so every log automatically includes TraceId. Wire into Program.cs pipeline. Follow existing DI extension patterns. Ensure ILogger<T> is used with structured properties (never string interpolation). ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies: - [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error - [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup - [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422) - [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate) - [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes - [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings - [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths Explicitly state which items do NOT apply to this task and why. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js). 3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID. 4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "55ac370e-1342-450b-a113-4098180b3514",
+    "rev": 1,
+    "createdAt": 1780065067168,
+    "updatedAt": 1780065067168
+  },
+  {
+    "type": "task",
+    "title": "Propagate structured logging with TraceId across all endpoints and services",
+    "content": "Update all existing endpoints (Auth, Project, Task, Me) and any services/repositories to use ILogger<T> with structured logging that includes TraceId on key operations (create, update, delete, auth). Ensure CancellationToken propagation. Integrate with existing global exception handler and ProblemDetails. ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies: - [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error - [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup - [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422) - [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate) - [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes - [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings - [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths Explicitly state which items do NOT apply to this task and why. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js). 3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID. 4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "e1f79d96-f872-48fd-921c-8ba211a698cd",
+    "rev": 1,
+    "createdAt": 1780065067169,
+    "updatedAt": 1780065067169
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement TraceId correlation middleware and structured logging setup",
+    "content": "## Implementation\n\nTraceId correlation middleware and structured logging enrichment are wired end-to-end in FlowForge.Api.\n\n### TraceId infrastructure (`src/FlowForge.Api/Logging/`)\n\n| File | Purpose |\n|------|---------|\n| `TraceIdConstants.cs` | Shared keys for `HttpContext.Items`, headers, Activity tags, and log scope |\n| `TraceIdHttpContextExtensions.cs` | `GetTraceId()` / `SetTraceId()` — syncs `Items` and `TraceIdentifier` |\n| `TraceIdMiddleware.cs` | Propagates `X-Correlation-Id` or `X-Request-Id`, or generates a 32-char hex ID; stores in `HttpContext.Items`; tags `Activity`; echoes header on response; opens `ILogger` scope with `{ TraceId }` for the request |\n| `TraceIdLoggingExtensions.cs` | `AddFlowForgeTraceIdLogging()` + `UseFlowForgeTraceId()` — registers `IHttpContextAccessor`, enables Activity trace/span tracking |\n\n### Pipeline and integration\n\n- **`Program.cs`**: `AddFlowForgeTraceIdLogging()` in DI; `UseFlowForgeTraceId()` runs **before** `UseExceptionHandler()` so every error path has a correlation ID.\n- **Exception handling / rate limiting / JWT**: `traceId` extensions now use `HttpContext.GetTraceId()` instead of raw `TraceIdentifier`.\n- **`GlobalExceptionHandler`**: Log messages use structured placeholders only (no interpolated TraceId in the message template); TraceId comes from the middleware scope.\n- **`appsettings.json`**: `Logging:Console:IncludeScopes: true` so scope properties (including TraceId) appear in console output.\n\n### Tests\n\nAdded `TraceIdEndpointTests.cs` (5 tests): generated correlation ID, header propagation (`X-Correlation-Id`, `X-Request-Id`), and ProblemDetails `traceId` alignment for `/me` and validation errors.\n\n**162/162 tests pass.**\n\n---\n\n## Production hardening checklist\n\n| Item | Applies? | Status |\n|------|----------|--------|\n| EF Core migrations | **No** | No schema changes |\n| Secrets/config | **No** | No new secrets or connection strings |\n| Input validation | **No** | Out of scope for this task |\n| Rate limitin\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "c36349bb-7511-4058-8c51-9ee0b8ed497f",
+    "rev": 1,
+    "createdAt": 1780065128315,
+    "updatedAt": 1780065128315
+  },
+  {
+    "type": "result",
+    "title": "Result: Propagate structured logging with TraceId across all endpoints and services",
+    "content": "## Implementation\n\nStructured `ILogger<T>` logging is wired end-to-end across Auth, Project, Task, and Me endpoints, Application services, and EF Core repositories. TraceId continues to flow automatically from `TraceIdMiddleware` log scopes — no TraceId is repeated in log message templates.\n\n### Application layer\n\n- Added `Microsoft.Extensions.Logging.Abstractions` to `FlowForge.Application`.\n- **UserService**: Information logs for register, login, delete; Warning on failed login.\n- **ProjectService**: Information logs for create, update, delete with `{ProjectId}` and `{OwnerId}`.\n- **TaskService**: Information logs for create, update, delete with `{TaskId}`, `{ProjectId}`, `{OwnerId}`.\n\n### Infrastructure layer\n\n- **UserRepository**, **ProjectRepository**, **TaskRepository**: Debug logs after Add/Update/Delete persistence (audit trail without duplicating Information-level service logs).\n\n### API endpoints\n\n- Added `EndpointLogCategories.cs` with non-static marker types (`AuthEndpointLogs`, etc.) because static endpoint classes cannot be used as `ILogger<T>` type arguments.\n- **AuthEndpoints**: Information on successful register/login with `{UserId}`.\n- **MeEndpoints**: Information on profile fetch; Warning when user not found.\n- **ProjectEndpoints**: Information on create/update/delete with `{ProjectId}` and `{OwnerId}`.\n- **TaskEndpoints**: Information on create/update/delete with `{TaskId}`, `{ProjectId}`, `{OwnerId}`.\n\n### Tests\n\n- `UserServiceEfCoreFixture` now calls `services.AddLogging()` so DI can resolve `ILogger<T>` for EF repositories and services.\n\n**162/162 tests pass.**\n\n---\n\n## Production hardening checklist\n\n| Item | Applies? | Status |\n|------|----------|--------|\n| EF Core migrations | **No** | No schema changes |\n| Secrets/config | **No** | No new secrets or connection strings |\n| Input validation | **No** | Out of scope; already present on endpoints |\n| Rate limiting | **No** | Already applied; unchanged |\n| Structured logging | **Yes** | All key\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "21001db2-76f1-4464-b8bf-e539367926ce",
+    "rev": 1,
+    "createdAt": 1780065224521,
+    "updatedAt": 1780065224521
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add health checks (database + basic) and structured logging with correlation IDs in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "418d5427-00a5-4300-ad8e-9c0e070010ce",
+    "rev": 2,
+    "createdAt": 1780065308956,
+    "updatedAt": 1780066158783
+  },
+  {
+    "type": "task",
+    "title": "Add structured logging with correlation IDs (TraceId)",
+    "content": "Implement middleware-scoped ILogger with TraceId correlation ID propagation across all endpoints and services. Place logging middleware before UseExceptionHandler. Follow existing logging level conventions (repositories LogDebug, services LogInformation/LogWarning). Use AddLogging and scope enrichment. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations.\n⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why. Items that do not apply: EF Core migrations (no schema change), input validation (no new DTOs), rate limiting (no new endpoints).",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "063f43f7-58d0-4f56-bfa3-9baa5abe0eb7",
+    "rev": 1,
+    "createdAt": 1780065334759,
+    "updatedAt": 1780065334759
+  },
+  {
+    "type": "task",
+    "title": "Add health checks (basic + database)",
+    "content": "Add ASP.NET Core health checks including basic liveness and database readiness checks using the existing DbContext. Register via AddHealthChecks and map /health endpoint. Ensure the health endpoint is excluded from rate limiting per project preference. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations.\n⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why. Items that do not apply: EF Core migrations (no schema change), input validation (no new DTOs).",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "9d3f5831-8230-4342-957f-ecf0125cc25e",
+    "rev": 1,
+    "createdAt": 1780065334761,
+    "updatedAt": 1780065334761
+  },
+  {
+    "type": "result",
+    "title": "Result: Add structured logging with correlation IDs (TraceId)",
+    "content": "## Implementation\n\nStructured logging with **TraceId** correlation is wired end-to-end. The middleware runs **before** `UseExceptionHandler`, and every log in the request pipeline inherits the same scope.\n\n### TraceId infrastructure (`src/FlowForge.Api/Logging/`)\n\n| Component | Role |\n|-----------|------|\n| `TraceIdMiddleware` | Resolves/propagates TraceId from `X-Correlation-Id` or `X-Request-Id`, stores it on `HttpContext`, sets `Activity` tag, echoes `X-Correlation-Id` on the response, and opens a **request-wide** log scope via `ILoggerFactory` |\n| `TraceIdLoggingExtensions` | `AddFlowForgeTraceIdLogging()` — `AddHttpContextAccessor()`, explicit `AddLogging()` with `ActivityTrackingOptions.TraceId \\| SpanId` |\n| `TraceIdHttpContextExtensions` | `GetTraceId()` / `SetTraceId()` for ProblemDetails and handlers |\n| `TraceIdConstants` | Header names, scope key, Activity tag |\n\n### Middleware order (`Program.cs`)\n\n```53:54:src/FlowForge.Api/Program.cs\napp.UseFlowForgeTraceId();\napp.UseExceptionHandler();\n```\n\n### Logging levels (conventions)\n\n- **Repositories** (`UserRepository`, `ProjectRepository`, `TaskRepository`): `LogDebug` on Add/Update/Delete\n- **Services** (`UserService`, `ProjectService`, `TaskService`): `LogInformation` on success, `LogWarning` on failed login\n- **Endpoints** (`AuthEndpointLogs`, `ProjectEndpointLogs`, etc.): `LogInformation` on successful mutations\n- **GlobalExceptionHandler**: `LogError` for unexpected errors; `Log` at mapped level for domain exceptions (no exception detail in HTTP body)\n\nStructured templates use named placeholders (`{UserId}`, `{ProjectId}`) — no string interpolation in messages.\n\n### Changes in this pass\n\n1. **`AddFlowForgeTraceIdLogging`** — explicit `services.AddLogging()` with scope/activity enrichment (task requirement).\n2. **`TraceIdMiddleware`** — uses `ILoggerFactory.CreateLogger(\"FlowForge.Request\")` for middleware-scoped `BeginScope`, so the shared `IExternalScopeProvider` applies to all downstream `ILogger<T>` \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "788009e6-5908-4845-a037-5ee992d362b3",
+    "rev": 1,
+    "createdAt": 1780065471414,
+    "updatedAt": 1780065471414
+  },
+  {
+    "type": "result",
+    "title": "Result: Add health checks (basic + database)",
+    "content": "## Implementation\n\nASP.NET Core health checks are wired end-to-end with a **liveness** check and a **database readiness** check against the existing `FlowForgeDbContext`. The `/health` endpoint is explicitly excluded from rate limiting.\n\n## Changes Made\n\n### Health check infrastructure (`src/FlowForge.Api/HealthChecks/HealthCheckExtensions.cs`)\n\n| Check | Name | Tag | Purpose |\n|-------|------|-----|---------|\n| Liveness | `self` | `live` | Confirms the application process is running |\n| Database readiness | `database` | `ready` | `AddDbContextCheck<FlowForgeDbContext>` — verifies EF Core can connect |\n\n### Pipeline wiring — `Program.cs`\n\n- Replaced bare `AddHealthChecks()` with `AddFlowForgeHealthChecks()`\n- Mapped endpoint with explicit rate-limit exclusion:\n\n```61:61:src/FlowForge.Api/Program.cs\napp.MapHealthChecks(\"/health\").DisableRateLimiting();\n```\n\nAuth/CRUD route groups still use `.RequireRateLimiting(FixedWindow)`; `/health` does not.\n\n### Package\n\n- Added `Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore` 10.0.8 to `FlowForge.Api`\n\n### Tests — `HealthEndpointTests.cs`\n\n| Test | Verifies |\n|------|----------|\n| `GetHealth_ReturnsHealthyWhenDatabaseIsAvailable` | **200 OK** + `\"Healthy\"` body (both checks pass) |\n| `GetHealth_IsNotSubjectToRateLimiting` | Five consecutive `/health` calls succeed with `PermitLimit=1` |\n\n## Test Results\n\n**164/164 passed** (1 new test added).\n\n## Production Hardening Checklist\n\n| Item | Applies? | Notes |\n|------|----------|-------|\n| EF Core migrations | **No** | No schema changes |\n| Secrets/config | **No** | No new configuration; uses existing `DefaultConnection` |\n| Input validation | **No** | No request DTOs on `/health` |\n| Rate limiting | **Yes** | `.DisableRateLimiting()` on `/health`; verified by test |\n| Structured logging | **No** | Health checks use built-in ASP.NET Core health infrastructure; no custom logging added |\n| Error responses | **No** | Health endpoint uses standard ASP.NET Core health \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "c59af202-852a-4e73-b168-127178b7460e",
+    "rev": 1,
+    "createdAt": 1780065543175,
+    "updatedAt": 1780065543175
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Expand integration tests for auth flows and ensure good coverage for Project/Task endpoints in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "33cee920-437b-49df-8f52-a48047dc4dcf",
+    "rev": 2,
+    "createdAt": 1780065622940,
+    "updatedAt": 1780066400851
+  },
+  {
+    "type": "task",
+    "title": "Expand auth, Project, and Task integration tests",
+    "content": "⚠️ .NET TEST CONVENTIONS — MANDATORY: Use xUnit. All test classes must be `public sealed`. Use `[Fact]` and `[Theory]` attributes. Mock dependencies with NSubstitute or Moq. Never use `Thread.Sleep` — use `Task.Delay` with CancellationToken. Integration tests must use WebApplicationFactory<Program> with a separate test database — never the production database.\n\nAlways create fresh instances of services, repositories, and DbContext per test — never reuse a module-level singleton across tests. Use the xUnit constructor pattern to initialise state. Cross-test state leakage causes flaky, order-dependent failures.\n\nExpand the existing HTTP integration tests (AuthEndpointTests, ProjectEndpointTests, TaskEndpointTests) to improve coverage of auth flows (register/login/unauthorized) and CRUD operations on Project and Task endpoints. Add edge-case, error, and happy-path scenarios. Keep tests in the integration layer only; do not touch validators. Target files under tests/FlowForge.Tests/.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "9b805641-38e2-40df-9a80-916fe9ae7691",
+    "rev": 1,
+    "createdAt": 1780065662358,
+    "updatedAt": 1780065662358
+  },
+  {
+    "type": "task",
+    "title": "Execute the newly expanded integration tests",
+    "content": "Discover the test files created or modified by the test-author task in this wave (check `git diff --name-only`), then run only those files/projects with the exact command: `dotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --no-build --filter \"FullyQualifiedName~EndpointTests\"`. Report pass/fail counts and any failures with full fidelity.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "7c112843-9c07-468a-942a-2ed315b34fd3",
+    "rev": 1,
+    "createdAt": 1780065662360,
+    "updatedAt": 1780065662360
+  },
+  {
+    "type": "result",
+    "title": "Result: Expand auth, Project, and Task integration tests",
+    "content": "## Coverage\n\nExpanded HTTP integration tests in three files (integration layer only; validators unchanged). All test classes are now `public sealed` per .NET conventions.\n\n### `AuthEndpointTests.cs` (+7 tests, 13 total)\n\n| Test | Intent |\n|------|--------|\n| `Register_WithInvalidEmail_ReturnsBadRequest` | Validation on register path |\n| `Login_WithEmptyPassword_ReturnsBadRequest` | Validation on login path |\n| `Register_ReturnsJwtWithSubClaimMatchingUserId` | JWT `sub` matches `UserId` |\n| `GetMe_WithInvalidAuthorizationHeader_ReturnsUnauthorized` | Malformed/missing Bearer (theory) |\n| `GetMe_WithExpiredStyleTamperedToken_ReturnsUnauthorized` | Invalid signature → 401 |\n| `Login_WithSameCredentialsAfterRegister_ReturnsOkWithSameUserId` | Re-login identity + new token |\n\nExisting coverage retained: register/login happy path, duplicate email, wrong password, missing user, `/me` with/without token.\n\n### `ProjectEndpointTests.cs` (+7 tests, 22 total)\n\n| Test | Intent |\n|------|--------|\n| `ListProjects_WhenOwnerHasNoProjects_ReturnsEmptyList` | Empty collection |\n| `CreateProject_TrimsLeadingAndTrailingWhitespace` | Domain trim behavior |\n| `CreateProject_ReturnsLocationHeaderForCreatedResource` | 201 + `Location` |\n| `ProjectEndpoints_WithInvalidBearer_ReturnUnauthorized` | Invalid JWT |\n| `DeleteProject_WhenAlreadyDeleted_ReturnsNotFound` | Second delete → 404 |\n| `UpdateProject_WhenAlreadyDeleted_ReturnsNotFound` | Update after delete |\n| `CreateProject_MultipleProjects_AllAppearInOwnerList` | Multi-project list |\n\n### `TaskEndpointTests.cs` (+9 tests, 24 total)\n\n| Test | Intent |\n|------|--------|\n| `ListTasks_WhenProjectHasNoTasks_ReturnsEmptyList` | Empty collection |\n| `CreateTask_TrimsLeadingAndTrailingWhitespace` | Domain trim behavior |\n| `CreateTask_ReturnsLocationHeaderForCreatedResource` | 201 + `Location` |\n| `TaskEndpoints_WithInvalidBearer_ReturnUnauthorized` | Invalid JWT |\n| `UpdateTask_WhenMissing_ReturnsNotFound` | Missing task |\n| `UpdateTask_WhenP\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "61aac3ee-35c7-4418-83a9-69ef4423cc93",
+    "rev": 1,
+    "createdAt": 1780065712597,
+    "updatedAt": 1780065712597
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute the newly expanded integration tests",
+    "content": "## Test Results\n\nAll **EndpointTests** integration tests pass after the test-author expansion wave. No failures, skips, or environment blockers.\n\n### Discovery — test-author modified files (`git diff --name-only`)\n\n| File | Role |\n|------|------|\n| `tests/FlowForge.Tests/AuthEndpointTests.cs` | Expanded auth integration tests (+7) |\n| `tests/FlowForge.Tests/ProjectEndpointTests.cs` | Expanded project CRUD integration tests (+7) |\n| `tests/FlowForge.Tests/TaskEndpointTests.cs` | Expanded task CRUD integration tests (+9) |\n\nAlso touched in the same diff (not primary test-author deliverables): `HealthEndpointTests.cs`, `Fixtures/UserServiceEfCoreFixture.cs`, `FlowForge.Tests.csproj`.\n\n---\n\n### Commands run (reproduce locally)\n\n```bash\n# 1. Build (required before --no-build)\ndotnet build tests/FlowForge.Tests/FlowForge.Tests.csproj\n\n# 2. Primary run — PM-specified filter\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --no-build --filter \"FullyQualifiedName~EndpointTests\"\n\n# 3. Supplementary — test-author files only\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --no-build --filter \"FullyQualifiedName~AuthEndpointTests|FullyQualifiedName~ProjectEndpointTests|FullyQualifiedName~TaskEndpointTests\"\n\n# 4. Coverage (optional; coverlet.collector is referenced)\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --no-build --filter \"FullyQualifiedName~EndpointTests\" --collect:\"XPlat Code Coverage\"\n```\n\n**Build:** succeeded — 0 warnings, 0 errors (3.2 s)\n\n---\n\n### Summary counts\n\n| Run | Total | Passed | Failed | Skipped | Duration |\n|-----|-------|--------|--------|---------|----------|\n| `FullyQualifiedName~EndpointTests` (required) | **90** | **90** | **0** | **0** | 4.4 s |\n| Auth + Project + Task only (supplementary) | **67** | **67** | **0** | **0** | 3.0 s |\n\nThe required filter matches **all** `*EndpointTests` classes (90 tests), not only the three test-author files (67 tests). The extra 23 are from `HealthEndpointTests`, `ValidationEndpointTests\n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "18bdc7b3-bd84-496d-80ba-06530308b2fc",
+    "rev": 1,
+    "createdAt": 1780065766011,
+    "updatedAt": 1780065766011
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add production-ready configuration (CORS, security headers, rate limit tuning, logging levels) and update appsettings.Production.json in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "f96d7dc2-d536-4156-a303-30b80c88e9ff",
+    "rev": 2,
+    "createdAt": 1780065853728,
+    "updatedAt": 1780066725479
+  },
+  {
+    "type": "task",
+    "title": "Add production-ready config and update appsettings.Production.json",
+    "content": "Implement production-ready configuration in the FlowForge .NET 10 solution: add/configure CORS policy (restrictive origins for Production), security headers middleware (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy), tune the existing rate-limiter (Production-appropriate window/limits while keeping /health excluded), set appropriate logging levels and IncludeScopes. Update src/FlowForge.Api/appsettings.Production.json with the corresponding sections. Follow all existing middleware ordering conventions. ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies: - [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error - [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup - [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422) - [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate) - [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes - [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings - [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths. Explicitly state which items do NOT apply to this task and why. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js). 3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID. 4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "d7d01344-4270-4e68-9582-c85e6ca2dbb5",
+    "rev": 1,
+    "createdAt": 1780065876814,
+    "updatedAt": 1780065876814
+  },
+  {
+    "type": "result",
+    "title": "Result: Add production-ready config and update appsettings.Production.json",
+    "content": "## Implementation\n\nProduction-ready configuration is wired end-to-end: CORS, security headers, HSTS, rate-limit tuning, and logging levels are registered in DI, applied in the middleware pipeline, and reflected in `appsettings.Production.json`. **195/195 tests pass.**\n\n## Changes Made\n\n### CORS (`src/FlowForge.Api/Cors/CorsExtensions.cs`)\n\n- `AddFlowForgeCors()` registers a `FlowForge` policy\n- **Production:** only origins from `Cors:AllowedOrigins`; startup fails if the list is empty\n- **Non-Production:** permissive policy for local development\n- `UseFlowForgeCors()` runs before authentication\n\n### Security headers (`src/FlowForge.Api/Security/SecurityHeadersExtensions.cs`)\n\n- `SecurityHeadersMiddleware` sets on every response:\n  - `X-Content-Type-Options: nosniff`\n  - `X-Frame-Options: DENY`\n  - `Referrer-Policy: strict-origin-when-cross-origin`\n  - `Permissions-Policy` (restrictive feature list)\n- **Production only:** `AddHsts()` + `UseHsts()` from `Hsts:*` config\n\n### Pipeline order (`Program.cs`)\n\n```\nUseFlowForgeTraceId → UseExceptionHandler → UseFlowForgeSecurityHeaders → UseFlowForgeSwagger → UseFlowForgeCors → UseAuthentication → UseAuthorization → UseRateLimiter\n```\n\nExisting conventions preserved: TraceId before exception handler, rate limiter after auth, `/health` excluded via `.DisableRateLimiting()`.\n\n### `appsettings.Production.json`\n\n| Section | Values |\n|---------|--------|\n| **Logging** | `Default`/`Microsoft.AspNetCore`: Warning; `FlowForge`: Information; `IncludeScopes`: true |\n| **AllowedHosts** | Restricted to `flowforge.example.com;api.flowforge.example.com` |\n| **RateLimiting** | 60 requests / 60 seconds (down from dev 100) |\n| **Cors** | `https://app.flowforge.example.com` |\n| **Hsts** | 365 days, include subdomains, no preload |\n| **Jwt** | Issuer/Audience/Expiry only — **no secret** (env var required) |\n\n### Tests (`tests/FlowForge.Tests/ProductionConfigEndpointTests.cs`)\n\nFour integration tests verify security headers, CORS allow/deny beh\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ac42e9b3-bf84-4407-9eb6-8ab42901b299",
+    "rev": 1,
+    "createdAt": 1780065955509,
+    "updatedAt": 1780065955509
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Finalize README.md with complete local setup instructions, environment variables, API examples, and deployment notes for the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "4c942699-6735-4f3e-9e68-24575f20836e",
+    "rev": 2,
+    "createdAt": 1780066080598,
+    "updatedAt": 1780066980493
+  },
+  {
+    "type": "task",
+    "title": "Finalize README.md with setup, env vars, API examples, and deployment notes",
+    "content": "Update README.md with complete local setup instructions (SQLite default + optional SQL Server), all required environment variables (Jwt__Secret, Database__Provider, CORS origins, etc.), concise cURL / HTTP examples for Auth, Project, and Task endpoints, health-check usage, rate-limit behavior, and production deployment notes (migrations, config validation, security headers). Base content on existing code, appsettings, DECISIONS.md, and ARCHITECTURE.MD. Keep the document concise yet complete. This is documentation only — Production Hardening Mandate does not apply.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ab41659b-491d-4ab6-8c39-b20887805efa",
+    "rev": 1,
+    "createdAt": 1780066091895,
+    "updatedAt": 1780066091895
+  },
+  {
+    "type": "result",
+    "title": "Result: Finalize README.md with setup, env vars, API examples, and deployment notes",
+    "content": "## Documentation\n\nUpdated [`README.md`](README.md) with complete setup, configuration, operational, and deployment documentation grounded in the current codebase.\n\n### Summary\n\n**Local setup** — Added prerequisites (.NET 10 SDK), clone/restore/build/test/run workflow, Swagger URL for Development, and a quick-start script (register → project → task).\n\n**Configuration** — Documented how ASP.NET Core merges config sources, how to load `.env.example` values (not auto-loaded), and a full environment-variable table covering database, JWT, rate limiting, CORS, HSTS, and `AllowedHosts`. Called out startup validation failures (`Jwt:Secret`, connection string, empty CORS in Production).\n\n**Database** — Retained SQLite/SQL Server dual-provider docs; clarified auto-migration in non-Production vs explicit `dotnet ef database update` in Production.\n\n**Health checks** — Expanded `/health` with liveness/readiness check names, response format (`Healthy`), rate-limit exclusion, and `X-Correlation-Id` header.\n\n**Rate limiting** — New section: fixed-window policy, affected endpoint groups, dev/prod defaults (100/60 per 60s), 429 ProblemDetails shape, and `Retry-After` header.\n\n**Observability** — TraceId correlation via `X-Correlation-Id` / `X-Request-Id` request headers, response header, ProblemDetails `traceId`, and structured logging.\n\n**Production deployment** — Checklist (secrets, SQL Server, CORS, migrations, HTTPS), security headers table, CORS behavior by environment, and Swagger disabled in Production.\n\n**API examples** — Preserved all existing Auth, `/me`, Project, and Task cURL examples with validation and error tables; added `traceId` to the ProblemDetails example.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "cfb451bf-d390-4f26-a3ed-fe17aa92a86f",
+    "rev": 1,
+    "createdAt": 1780066130450,
+    "updatedAt": 1780066130450
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items or improvements.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "6418d888-1134-4afb-8525-8e60b2d91dd9",
+    "rev": 1,
+    "createdAt": 1780066211944,
+    "updatedAt": 1780066211944
+  },
+  {
+    "type": "task",
+    "title": "Comprehensive beta-readiness code review",
+    "content": "Perform a final holistic review of the entire FlowForge .NET 10 solution for beta readiness. Cover correctness, design, style, maintainability, and any obvious gaps against the architecture decisions and coding standards in project memory. Produce a concise list of remaining pre-production items or improvements.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "code-reviewer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "df537b1a-9350-476a-900e-fcf5f751f111",
+    "rev": 1,
+    "createdAt": 1780066229532,
+    "updatedAt": 1780066229532
+  },
+  {
+    "type": "task",
+    "title": "Security audit for pre-production items",
+    "content": "Audit the FlowForge solution for security issues and Production hardening gaps (OWASP, secrets, CORS, headers, rate limiting, JWT, exception handling). Cross-reference the Production decisions and gotchas in project memory. Output a focused list of any remaining pre-production security items.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "security-auditor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "1948399b-a0b6-4ae9-bd12-fab86d7b3a8d",
+    "rev": 1,
+    "createdAt": 1780066229534,
+    "updatedAt": 1780066229534
+  },
+  {
+    "type": "task",
+    "title": "Performance and scalability audit",
+    "content": "Profile the FlowForge .NET 10 solution for performance bottlenecks, EF Core query issues, caching opportunities, rate-limit tuning, and scalability concerns. Reference the architecture and production config decisions. Deliver a short list of any remaining pre-production performance improvements.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "performance-analyst",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "4d644347-a7db-4d13-8250-0898830acfbe",
+    "rev": 1,
+    "createdAt": 1780066229536,
+    "updatedAt": 1780066229536
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add Serilog structured logging configuration with console + file sinks and basic production logging levels in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "8fc5a11f-2d6b-4560-9aef-47dda7673abd",
+    "rev": 1,
+    "createdAt": 1780066247544,
+    "updatedAt": 1780066247544
+  },
+  {
+    "type": "task",
+    "title": "Add Serilog structured logging with console + file sinks",
+    "content": "Add Serilog to the FlowForge .NET 10 solution with console and file sinks plus basic production logging levels. Update Program.cs pipeline (ensure logging middleware placement respects existing TraceId/exception handler order), add required NuGet packages, configure appsettings.Development.json and appsettings.Production.json, and follow all existing logging conventions (structured templates only, no string interpolation). ⚠️ EXECUTOR CONSTRAINTS — MANDATORY: 1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally. 2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js). 3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID. 4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies: - [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error - [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup - [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422) - [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate) - [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes - [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings - [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths. Explicitly state which items do NOT apply to this task and why. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "4cf481f3-c6d5-4bce-803a-92c450535c80",
+    "rev": 1,
+    "createdAt": 1780066264156,
+    "updatedAt": 1780066264156
+  },
+  {
+    "type": "result",
+    "title": "Result: Add Serilog structured logging with console + file sinks",
+    "content": "## Implementation\n\nSerilog is wired end-to-end in FlowForge.Api with console and file sinks, environment-specific log levels, and TraceId middleware order preserved.\n\n## Changes Made\n\n### Packages (`FlowForge.Api.csproj`)\n- `Serilog.AspNetCore` 10.0.0\n- `Serilog.Settings.Configuration` 10.0.0\n- `Serilog.Sinks.Console` 6.1.1\n- `Serilog.Sinks.File` 7.0.0\n- `Serilog.Formatting.Compact` 3.0.0\n\n### New: `Logging/SerilogLoggingExtensions.cs`\n- `AddFlowForgeSerilogIfEnabled()` — reads config from `Serilog` section, enriches from `LogContext` (TraceId scopes), adds `Application` property\n- `Serilog:Enabled` flag (default `true`) so tests can opt out when they inject custom `ILoggerProvider` instances\n\n### `Program.cs`\n- Serilog configured at host startup via `builder.AddFlowForgeSerilogIfEnabled()`\n- Pipeline order unchanged: `UseFlowForgeTraceId()` → `UseExceptionHandler()` → remaining middleware\n- Startup/shutdown logging with `Log.Information` / `Log.Fatal` and `CloseAndFlushAsync()` in `finally`\n\n### Configuration\n\n| File | Levels | Sinks |\n|------|--------|-------|\n| `appsettings.json` | Default `Information`, ASP.NET/EF `Warning` | Console (structured template with `{TraceId}`), File (compact JSON, 7-day retention) |\n| `appsettings.Development.json` | Default `Debug`, `FlowForge` `Debug`, ASP.NET/EF `Information` | Console + File (3-day retention) |\n| `appsettings.Production.json` | Default `Warning`, `FlowForge` `Information` | Console + File (compact JSON, 14-day retention) |\n\nLog files write to `logs/flowforge-.log` (already gitignored).\n\n### Test update\n- `TraceIdLogScopeWebApplicationFactory` sets `Serilog:Enabled=false` because `UseSerilog()` clears custom logger providers; TraceId scope propagation is still validated via the existing capturing provider.\n\n## Test Results\n\n**195/195 passed.** Smoke test confirms console output and file sink (`logs/flowforge-20260529.log` with compact JSON).\n\n## Production Hardening Checklist\n\n| Item | Applies? | Notes |\n|------|-\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "d4bbef68-d365-4eac-a25e-11c7f74aacbb",
+    "rev": 1,
+    "createdAt": 1780066373688,
+    "updatedAt": 1780066373688
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Review and expand integration test coverage for key flows (auth, project, task) and raise coverage threshold if needed in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "32c482ac-ad35-48d3-9d5d-f8b0841213fe",
+    "rev": 1,
+    "createdAt": 1780066452466,
+    "updatedAt": 1780066452466
+  },
+  {
+    "type": "task",
+    "title": "Expand integration test coverage for auth/project/task flows",
+    "content": "⚠️ .NET TEST CONVENTIONS — MANDATORY: Use xUnit. All test classes must be `public sealed`. Use `[Fact]` and `[Theory]` attributes. Mock dependencies with NSubstitute or Moq. Never use `Thread.Sleep` — use `Task.Delay` with CancellationToken. Integration tests must use WebApplicationFactory<Program> with a separate test database — never the production database.\n\nAlways create fresh instances of services, repositories, and DbContext per test — never reuse a module-level singleton across tests. Use the xUnit constructor pattern to initialise state. Cross-test state leakage causes flaky, order-dependent failures.\n\nReview existing integration tests in AuthEndpointTests.cs, ProjectEndpointTests.cs, and TaskEndpointTests.cs. Expand coverage for the key auth, project, and task flows (happy paths, error cases, validation, rate-limit behavior). Also inspect FlowForge.Tests.csproj and raise the coverage threshold if the expanded tests justify it. Every test file must start with the required two-line WebApplicationFactory + SQLite comment. Use Guid.NewGuid() for unique emails. Override RateLimiting:PermitLimit high in factories. Limit changes to these 4 files maximum.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-author",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "82e98428-50ad-46de-8ca2-2f08d4a6faca",
+    "rev": 1,
+    "createdAt": 1780066476228,
+    "updatedAt": 1780066476228
+  },
+  {
+    "type": "task",
+    "title": "Execute the expanded integration tests",
+    "content": "Discover the test files created or modified by the test-author task in this wave (check `git diff --name-only`), then run only those files/projects. Command example: dotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --no-build --filter \"FullyQualifiedName~AuthEndpointTests|ProjectEndpointTests|TaskEndpointTests\" -l \"console;verbosity=detailed\"",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "test-executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "1438b99b-3030-4100-ae71-a1792daf0327",
+    "rev": 1,
+    "createdAt": 1780066476230,
+    "updatedAt": 1780066476230
+  },
+  {
+    "type": "result",
+    "title": "Result: Expand integration test coverage for auth/project/task flows",
+    "content": "## Coverage\n\nExpanded HTTP integration tests in the four allowed files. Build succeeds (0 warnings). Tests were not executed per author role — test-executor should run:\n\n```bash\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --filter \"FullyQualifiedName~AuthEndpointTests|FullyQualifiedName~AuthRegisterRateLimitTests|FullyQualifiedName~ProjectEndpointTests|FullyQualifiedName~ProjectCreateRateLimitTests|FullyQualifiedName~TaskEndpointTests|FullyQualifiedName~TaskCreateRateLimitTests\"\n```\n\n### `AuthEndpointTests.cs` (+6 tests)\n\n| Test | Intent |\n|------|--------|\n| `Register_WithDuplicateEmail_ReturnsConflictProblemDetails` | 409 RFC 7807 shape (`Duplicate email`) |\n| `Login_WithWrongPassword_ReturnsUnauthorizedProblemDetails` | 401 ProblemDetails (`Invalid credentials`) |\n| `Register_WithEmptyPassword_ReturnsBadRequest` | Register validation path |\n| `Login_WithMixedCaseEmailAfterRegister_ReturnsOk` | Email normalization on login |\n| `Register_WithMixedCaseEmail_StoresNormalizedEmailInResponse` | Lowercase email in `AuthResponse` |\n| `AuthRegisterRateLimitTests.Register_ExceedingPermitLimit_...` | Register rate limit (permit 2) + 429 ProblemDetails |\n\n### `ProjectEndpointTests.cs` (+7 tests)\n\n| Test | Intent |\n|------|--------|\n| `GetProject_WhenMissing_ReturnsNotFoundProblemDetails` | 404 ProblemDetails title/detail |\n| `GetProject_WhenOwnedByAnotherUser_ReturnsForbiddenProblemDetails` | 403 ownership ProblemDetails |\n| `CreateProject_WithNameTooLong_ReturnsBadRequest` | Max length validation |\n| `UpdateProject_TrimsLeadingAndTrailingWhitespace` | Rename trim behavior |\n| `CreateProject_ResponseIncludesTimestamps` | `CreatedAt` / `UpdatedAt` on create |\n| `ProjectCreateRateLimitTests.CreateProject_ExceedingPermitLimit_...` | Project POST rate limit + 429 |\n\n### `TaskEndpointTests.cs` (+7 tests)\n\n| Test | Intent |\n|------|--------|\n| `GetTask_WhenProjectOwnedByAnotherUser_ReturnsForbiddenProblemDetails` | 403 via project ownership |\n| `CreateTask_WithNameToo\n…(truncated)",
+    "status": "done",
+    "author": "test-author",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "b5c50569-3bea-43b2-b848-10922e124d22",
+    "rev": 1,
+    "createdAt": 1780066583279,
+    "updatedAt": 1780066583279
+  },
+  {
+    "type": "result",
+    "title": "Result: Execute the expanded integration tests",
+    "content": "## Test Results\n\nExecuted the test-author wave for expanded auth/project/task integration tests. **84 passed, 2 failed, 0 skipped** out of **86 filtered tests**. Full solution: **212 passed, 2 failed, 0 skipped** out of **214 total**.\n\n### Discovery — test-author modified files (`git diff --name-only`)\n\n| File | In filter scope |\n|------|-----------------|\n| `tests/FlowForge.Tests/AuthEndpointTests.cs` | Yes |\n| `tests/FlowForge.Tests/ProjectEndpointTests.cs` | Yes |\n| `tests/FlowForge.Tests/TaskEndpointTests.cs` | Yes |\n| `tests/FlowForge.Tests/FlowForge.Tests.csproj` | Yes (coverage threshold) |\n| `tests/FlowForge.Tests/Fixtures/UserServiceEfCoreFixture.cs` | No (not in this filter) |\n| `tests/FlowForge.Tests/HealthEndpointTests.cs` | No (not in this filter) |\n\nBuild: **0 warnings, 0 errors**. No environment/config blockers — SQLite in-memory, JWT, and rate limiting all initialized correctly.\n\n---\n\n### Commands Run\n\n```bash\n# 1. Build\ndotnet build tests/FlowForge.Tests/FlowForge.Tests.csproj --verbosity quiet\n\n# 2. Filtered integration tests (test-author wave)\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --no-build \\\n  --filter \"FullyQualifiedName~AuthEndpointTests|FullyQualifiedName~AuthRegisterRateLimitTests|FullyQualifiedName~ProjectEndpointTests|FullyQualifiedName~ProjectCreateRateLimitTests|FullyQualifiedName~TaskEndpointTests|FullyQualifiedName~TaskCreateRateLimitTests\" \\\n  -l \"console;verbosity=detailed\" \\\n  --logger \"trx;LogFileName=expanded-integration-tests.trx\"\n\n# 3. Re-run failing tests in isolation (confirmed reproducible)\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj --no-build \\\n  --filter \"FullyQualifiedName~ProjectCreateRateLimitTests|FullyQualifiedName~TaskCreateRateLimitTests\"\n\n# 4. Full suite\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj\n\n# 5. Coverage (full suite minus 2 failing tests, threshold check)\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj \\\n  /p:CollectCoverage=true \\\n  /p:CoverletOutput=te\n…(truncated)",
+    "status": "done",
+    "author": "test-executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "213d6280-9f88-43bc-8d29-810e037ffc0f",
+    "rev": 1,
+    "createdAt": 1780066700617,
+    "updatedAt": 1780066700617
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items, improvements, or gaps.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "8aa40b69-57ac-41bb-8f49-a9c73413c722",
+    "rev": 1,
+    "createdAt": 1780066771950,
+    "updatedAt": 1780066771950
+  },
+  {
+    "type": "task",
+    "title": "Architecture and code review for beta readiness",
+    "content": "Perform a final architecture and code review of the entire FlowForge .NET 10 solution. Verify Clean Architecture boundaries, EF Core usage, rate limiting, exception handling, validation, logging/TraceId, health checks, CORS, security headers, Swagger guards, and production config. Identify any remaining gaps, anti-patterns, or pre-production items. Output a concise list of findings and recommended fixes.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "architect",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "777e1b93-9a8b-4fe9-8523-8d2de65fa279",
+    "rev": 1,
+    "createdAt": 1780066790171,
+    "updatedAt": 1780066790171
+  },
+  {
+    "type": "task",
+    "title": "Security audit and hardening gap analysis",
+    "content": "Conduct a focused security audit of the FlowForge solution for beta readiness. Check for OWASP issues, secret leakage, JWT handling, rate-limit coverage, CORS strictness, HSTS, input validation completeness, and any Production config risks. Produce a prioritized list of remaining vulnerabilities or improvements.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "security-auditor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "98a58ba8-bef7-4b60-a1d0-1b2935fb4172",
+    "rev": 1,
+    "createdAt": 1780066790173,
+    "updatedAt": 1780066790173
+  },
+  {
+    "type": "task",
+    "title": "Performance and scalability review",
+    "content": "Review the FlowForge .NET 10 solution for performance and scalability concerns ahead of beta. Examine EF Core queries, rate limiting configuration, health-check behavior under load, logging overhead, and any obvious bottlenecks. List concrete recommendations or gaps for production readiness.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "performance-analyst",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "8254a66d-6909-43ad-867a-466be79b06aa",
+    "rev": 1,
+    "createdAt": 1780066790175,
+    "updatedAt": 1780066790175
+  },
+  {
+    "type": "result",
+    "title": "Result: Security audit and hardening gap analysis",
+    "content": "## Security Audit — FlowForge Beta Readiness\n\n**Scope:** Full review of `FlowForge.Api`, auth/infrastructure, production config, validation, middleware pipeline, and dependency posture. **212/214 tests pass** per team blackboard (2 unrelated failures); **no vulnerable NuGet packages** reported by `dotnet list package --vulnerable`.\n\n**Overall verdict:** Solid beta foundation — ownership authorization, PBKDF2 hashing, ProblemDetails error handling, production Swagger lockdown, CORS fail-fast, and security headers are in place. Several **pre-production hardening gaps** remain before treating this as production-ready.\n\n---\n\n## Strengths (Already in Good Shape)\n\n| Area | Assessment |\n|------|------------|\n| **Access control** | Project/task CRUD is JWT-protected and owner-scoped via `ProjectService` / `TaskService`. |\n| **Password storage** | PBKDF2-SHA256, 100k iterations, random salt, constant-time compare (`Pbkdf2PasswordHasher`). |\n| **JWT validation** | Issuer, audience, lifetime, signing key, 1-min clock skew; unique `jti` per token. |\n| **Error handling** | Global `IExceptionHandler` returns generic 500s; no stack traces in responses (tested). |\n| **Swagger** | Disabled in Production (`SwaggerExtensions.UseFlowForgeSwagger`). |\n| **CORS (Production)** | Explicit allowlist; startup throws if empty (`CorsExtensions`). |\n| **Security headers** | `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`; HSTS in Production. |\n| **Secrets in prod config** | `appsettings.Production.json` correctly omits `Jwt:Secret` (must come from env). |\n| **Migrations** | Auto-migrate skipped in Production (`DatabaseMigrationExtensions`). |\n| **Dependencies** | No known vulnerable packages at audit time. |\n| **Logging** | Passwords/emails not logged on auth paths; TraceId correlation present. |\n\n---\n\n## Prioritized Findings\n\n### P0 — Fix Before Production\n\n#### 1. Auth endpoints vulnerable to CPU DoS via unbounded password length\n**OWASP:** A06 (Vulnerable\n…(truncated)",
+    "status": "done",
+    "author": "security-auditor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "af7e777b-6d56-44e9-9fd4-8c0312f873a8",
+    "rev": 1,
+    "createdAt": 1780066844959,
+    "updatedAt": 1780066844959
+  },
+  {
+    "type": "result",
+    "title": "Result: Architecture and code review for beta readiness",
+    "content": "## Review\n\nFinal architecture review of the FlowForge .NET 10 solution against beta-readiness criteria. **Build: 0 warnings. Tests: 212/214 passing** (2 failures in rate-limit integration tests).\n\n---\n\n## Verdict\n\n**Near beta-ready** — Clean Architecture boundaries, auth, CRUD, validation, exception handling, logging, health checks, and production hardening are largely in place. **Do not tag beta until the two failing tests are resolved** and the rate-limiting design is clarified. Several data-integrity and operational gaps remain for production (not blocking a controlled beta).\n\n---\n\n## What Is Solid\n\n### Clean Architecture boundaries\n\n| Layer | References | Assessment |\n|-------|------------|------------|\n| Domain | None | Pure — no EF/ASP.NET |\n| Application | Domain only | Services + `IPasswordHasher`; interfaces for JWT |\n| Infrastructure | Application + Domain | EF repos, `JwtTokenService`, migrations |\n| Api | Application + Infrastructure | Thin endpoints, middleware in Api |\n\nDependency direction is correct. Domain aggregates (`User`, `Project`, `Task`) use value objects and repository interfaces as documented.\n\n### Cross-cutting concerns (verified in code)\n\n| Concern | Status | Notes |\n|---------|--------|-------|\n| Exception handling | ✅ | `GlobalExceptionHandler` + `AddProblemDetails`; `traceId` on all errors |\n| FluentValidation | ✅ | Auth, Project, Task DTOs; 400 via `ProblemDetails` |\n| TraceId / Serilog | ✅ | Middleware before `UseExceptionHandler`; console + file sinks |\n| Health checks | ✅ | Liveness + DB readiness on `/health`; rate limit disabled |\n| Rate limiting | ⚠️ | Wired on all auth/CRUD groups; **design issue** (below) |\n| CORS | ✅ | Strict origins in Production; permissive in Development |\n| Security headers | ✅ | `nosniff`, `DENY`, `Referrer-Policy`, `Permissions-Policy`; HSTS in Production |\n| Swagger guard | ✅ | `UseFlowForgeSwagger` no-ops in Production |\n| Production config | ✅ | `appsettings.Production.json`: SqlServer, CORS, HSTS, t\n…(truncated)",
+    "status": "done",
+    "author": "architect",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "5c3d44f8-eb7a-4313-ab6d-7cc3b2b73e06",
+    "rev": 1,
+    "createdAt": 1780066871492,
+    "updatedAt": 1780066871492
+  },
+  {
+    "type": "result",
+    "title": "Result: Performance and scalability review",
+    "content": "## Review\n\nFlowForge is **well-suited for a small beta** — flat domain model, `AsNoTracking` on list reads, unique email index, scoped DbContext, and rate limiting are sensible foundations. At moderate concurrency or large datasets, the main risks are **unbounded list queries**, **sequential DB round trips on every Task operation**, **health probes hitting the database**, and **missing production DB resilience tuning**. None of these block beta; several should be addressed before scaling beyond a few hundred concurrent users.\n\n**Verdict:** Beta-ready for low traffic. **Not production-scale-ready** without pagination, query consolidation, health-check split, and SQL Server pool/retry configuration.\n\n---\n\n## Issues Found\n\n### P0 — Scale blockers (address before production traffic)\n\n#### 1. Unbounded list endpoints — memory and latency grow linearly\n\n`GET /projects` and `GET /projects/{id}/tasks` load entire result sets with no pagination, sorting, or projection:\n\n```12:15:src/FlowForge.Application/Projects/ProjectService.cs\n    public Task<IReadOnlyList<Project>> GetAllAsync(UserId ownerId, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(ownerId);\n        return projectRepository.GetAllByOwnerAsync(ownerId, cancellationToken);\n```\n\n```40:49:src/FlowForge.Infrastructure/Persistence/Repositories/TaskRepository.cs\n    public async System.Threading.Tasks.Task<IReadOnlyList<DomainTask>> GetAllByProjectAsync(\n        ProjectId projectId,\n        CancellationToken cancellationToken = default)\n    {\n        ...\n        return await context.Tasks\n            .AsNoTracking()\n            .Where(task => task.ProjectId == projectId)\n            .ToListAsync(cancellationToken);\n```\n\n**Impact:** A user with 5,000 tasks loads all rows into memory, serializes full entities, and holds a DB connection for the full scan. Response time and GC pressure grow without bound.\n\n**Action:** Add cursor/offset pagination (`limit`, `cursor`/`page`) wit\n…(truncated)",
+    "status": "done",
+    "author": "performance-analyst",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "cbab8f59-2f39-47bf-818b-e34632ab1af1",
+    "rev": 1,
+    "createdAt": 1780066916640,
+    "updatedAt": 1780066916640
   }
 ]

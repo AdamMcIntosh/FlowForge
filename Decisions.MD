@@ -72,11 +72,11 @@ This document records key architectural and technical decisions for the FlowForg
 - **Rationale:** Reduces boilerplate when adding new entities.
 - **Consequences:** `UserConfiguration` and `ProjectConfiguration` are auto-discovered by `FlowForgeDbContext.OnModelCreating`. Keys use `ValueGeneratedNever()`; value objects map via explicit conversions.
 
-**Decision:** Production SQL Server; tests override to SQLite
-- **Date:** May 2025
+**Decision:** SQLite for dev/local; SQL Server for production
+- **Date:** May 2026
 - **Status:** Accepted
-- **Rationale:** Production targets SQL Server via `ConnectionStrings:DefaultConnection`; tests need no external database.
-- **Consequences:** `AddInfrastructure(IConfiguration)` registers SQL Server; test fixtures and `WebApplicationFactory` subclasses call `AddInfrastructure(options => options.UseSqlite(...))` with a shared open in-memory connection.
+- **Rationale:** Local development and `dotnet test` should not require SQL Server; production keeps SQL Server for deployment targets.
+- **Consequences:** `appsettings.json` and `appsettings.Development.json` default to `Database:Provider=Sqlite` with `Data Source=flowforge.db`. `appsettings.Production.json` sets `SqlServer`. `AddInfrastructure(IConfiguration)` reads `Database:Provider` (defaults to Sqlite when unset). Test fixtures and `WebApplicationFactory` subclasses either use the Sqlite configuration path or call `AddInfrastructure(options => options.UseSqlite(...))` with a shared open in-memory connection.
 
 ## Authentication & Security
 
@@ -112,7 +112,7 @@ This document records key architectural and technical decisions for the FlowForg
 - **Date:** May 2025
 - **Status:** Accepted
 - **Rationale:** Fast feedback loop and no external service dependency during development.
-- **Consequences:** Production uses SQL Server; tests use `Data Source=:memory:` with `EnsureCreated()`. `UserServiceEfCoreFixture` wires `AddInfrastructure` + `AddApplication` for service-layer tests; `AuthEndpointWebApplicationFactory` and `ProjectEndpointWebApplicationFactory` override DI for HTTP tests.
+- **Consequences:** Dev and tests use SQLite (`flowforge.db` or `Data Source=:memory:` with `EnsureCreated()`). Production uses SQL Server via environment-specific appsettings. `UserServiceEfCoreFixture` wires `AddInfrastructure` + `AddApplication` for service-layer tests; HTTP test factories override DI for in-memory SQLite.
 
 **Decision:** Layered test coverage for User and Project
 - **Date:** May 2026

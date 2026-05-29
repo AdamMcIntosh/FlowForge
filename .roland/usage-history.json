@@ -3234,5 +3234,103 @@
     "totalOutputTokens": 11730,
     "totalTokens": 79000,
     "totalCostUsd": 0.40264
+  },
+  {
+    "runId": "mpr85lkv",
+    "timestamp": 1780077453439,
+    "goal": "Fix P0 beta blockers: rate-limiter ordering, duplicate-name 409 handling, JWT secret length validation, production config cleanup, and refresh ARCHITECTURE.MD in the FlowForge .NET 10 solution.",
+    "wavesRun": 2,
+    "blockersEncountered": 0,
+    "durationMs": 214374,
+    "tasks": [
+      {
+        "taskId": "pm-planning",
+        "taskTitle": "Lead PM: Planning",
+        "agent": "Lead-PM",
+        "model": "grok-4.3",
+        "inputChars": 31535,
+        "outputChars": 8564,
+        "estimatedInputTokens": 7884,
+        "estimatedOutputTokens": 2141,
+        "durationMs": 39473,
+        "estimatedCostUsd": 0.07153500000000002
+      },
+      {
+        "taskId": "task-2",
+        "taskTitle": "Add JWT secret length validation and clean production config",
+        "agent": "executor",
+        "model": "composer-2.5",
+        "inputChars": 63025,
+        "outputChars": 2953,
+        "estimatedInputTokens": 15756,
+        "estimatedOutputTokens": 738,
+        "durationMs": 67563,
+        "estimatedCostUsd": 0.056124
+      },
+      {
+        "taskId": "task-1",
+        "taskTitle": "Fix rate-limiter ordering and duplicate-name 409 handling",
+        "agent": "executor",
+        "model": "composer-2.5",
+        "inputChars": 63062,
+        "outputChars": 2616,
+        "estimatedInputTokens": 15766,
+        "estimatedOutputTokens": 654,
+        "durationMs": 86100,
+        "estimatedCostUsd": 0.055145999999999994
+      },
+      {
+        "taskId": "pm-review-1",
+        "taskTitle": "Lead PM: Wave 1 Review",
+        "agent": "Lead-PM",
+        "model": "grok-4.3",
+        "inputChars": 7669,
+        "outputChars": 1395,
+        "estimatedInputTokens": 1917,
+        "estimatedOutputTokens": 349,
+        "durationMs": 16736,
+        "estimatedCostUsd": 0.01482
+      },
+      {
+        "taskId": "task-3",
+        "taskTitle": "Refresh ARCHITECTURE.MD with P0 fixes",
+        "agent": "doc-writer",
+        "model": "composer-2.5",
+        "inputChars": 71640,
+        "outputChars": 1651,
+        "estimatedInputTokens": 17910,
+        "estimatedOutputTokens": 413,
+        "durationMs": 27927,
+        "estimatedCostUsd": 0.058686
+      },
+      {
+        "taskId": "pm-synthesis",
+        "taskTitle": "Lead PM: Synthesis",
+        "agent": "Lead-PM",
+        "model": "grok-4.3",
+        "inputChars": 18749,
+        "outputChars": 9384,
+        "estimatedInputTokens": 4687,
+        "estimatedOutputTokens": 2346,
+        "durationMs": 29205,
+        "estimatedCostUsd": 0.058625
+      },
+      {
+        "taskId": "pm-retrospective",
+        "taskTitle": "Lead PM: Retrospective",
+        "agent": "Lead-PM",
+        "model": "grok-4.3",
+        "inputChars": 22814,
+        "outputChars": 1033,
+        "estimatedInputTokens": 5704,
+        "estimatedOutputTokens": 258,
+        "durationMs": 14882,
+        "estimatedCostUsd": 0.03239
+      }
+    ],
+    "totalInputTokens": 69624,
+    "totalOutputTokens": 6899,
+    "totalTokens": 76523,
+    "totalCostUsd": 0.347326
   }
 ]

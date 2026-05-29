@@ -51,8 +51,19 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         return true;
     }
 
-    private static (int StatusCode, string Title, string Detail, LogLevel LogLevel) MapException(Exception exception) =>
-        exception switch
+    private static (int StatusCode, string Title, string Detail, LogLevel LogLevel) MapException(Exception exception)
+    {
+        if (DuplicateConstraintViolationMapper.TryMap(
+                exception,
+                out var statusCode,
+                out var title,
+                out var detail,
+                out var logLevel))
+        {
+            return (statusCode, title, detail, logLevel);
+        }
+
+        return exception switch
         {
             DuplicateEmailException =>
                 (StatusCodes.Status409Conflict, "Duplicate email", "A user with this email already exists.", LogLevel.Warning),
@@ -69,4 +80,5 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
             _ =>
                 (StatusCodes.Status500InternalServerError, "Internal server error", "An unexpected error occurred.", LogLevel.Error),
         };
+    }
 }

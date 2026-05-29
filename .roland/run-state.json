@@ -1,45 +1,45 @@
 {
-  "runId": "57cc3572",
-  "goal": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items, improvements, or gaps.",
-  "startedAt": 1780077008724,
-  "updatedAt": 1780077211435,
+  "runId": "e5b92eed",
+  "goal": "Fix P0 beta blockers: rate-limiter ordering, duplicate-name 409 handling, JWT secret length validation, production config cleanup, and refresh ARCHITECTURE.MD in the FlowForge .NET 10 solution.",
+  "startedAt": 1780077453437,
+  "updatedAt": 1780077667823,
   "status": "done",
-  "currentWave": 1,
+  "currentWave": 2,
   "totalTasks": 3,
   "completedTasks": 3,
   "tasks": [
     {
       "id": "task-1",
-      "title": "Architecture & decisions review for beta readiness",
-      "agent": "architect",
+      "title": "Fix rate-limiter ordering and duplicate-name 409 handling",
+      "agent": "executor",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780077036384,
-      "completedAt": 1780077100722,
+      "startedAt": 1780077492943,
+      "completedAt": 1780077579046,
       "hadBlocker": false,
-      "outputPreview": "…k beta sign-off documentation only on: stale `ARCHITECTURE.MD`, split ADR files, production connection-string example mismatch, and missing CI. Scale blockers (distributed rate limiting, JWT revocation, OwnerId FK) are expected and documented above — not beta blockers for a single-instance pilot."
+      "outputPreview": "…g TraceId/logging unchanged |\n| Error responses | **Yes** | Duplicate-name paths now return ProblemDetails 409 |\n| CancellationToken | No | No new async paths |\n\n## Next Steps\n\nNone for this task. The doc-writer agent can refresh `ARCHITECTURE.MD` with these fixes as part of the parallel P0 wave."
     },
     {
       "id": "task-2",
-      "title": "Security audit & hardening gap analysis",
-      "agent": "security-auditor",
+      "title": "Add JWT secret length validation and clean production config",
+      "agent": "executor",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780077039385,
-      "completedAt": 1780077110343,
+      "startedAt": 1780077495945,
+      "completedAt": 1780077563513,
       "hadBlocker": false,
-      "outputPreview": "…vel security defect blocks a **controlled beta** if operators supply a strong JWT secret, real SQL connection string, and correct CORS origins. The three medium configuration gaps (secret validation, SQL placeholder, proxy trust) should be closed before opening to untrusted users or high traffic."
+      "outputPreview": "…validOperationException` (host fails to start — not an HTTP response) |\n| **CancellationToken** | No | No new async operations |\n\n## Next Steps\n\nThe doc-writer task can update `ARCHITECTURE.MD` to document the new startup validation rules and cleaned production config. No blockers from this task."
     },
     {
       "id": "task-3",
-      "title": "Code-quality & implementation review",
-      "agent": "code-reviewer",
-      "wave": 1,
+      "title": "Refresh ARCHITECTURE.MD with P0 fixes",
+      "agent": "doc-writer",
+      "wave": 2,
       "status": "done",
-      "startedAt": 1780077100724,
-      "completedAt": 1780077169526,
+      "startedAt": 1780077595789,
+      "completedAt": 1780077623719,
       "hadBlocker": false,
-      "outputPreview": "…routes bypass limits when unauthenticated), duplicate project/task names return 500 not 409, no test runs real migrations, forwarded-headers proxy trust unset, JWT secret length unchecked. Recommend next executor wave tackle items 1–3 first; test-author adds migration + duplicate-name HTTP tests."
+      "outputPreview": "… items (distributed rate limiting, JWT revocation, CI, optional OwnerId FK).\n\nThe document stays aligned with the existing top-level structure (Overview → layers → principles → stack → state → ownership → milestones) while keeping narrative length manageable for the Lead PM and downstream agents."
     }
   ],
   "activeTaskIds": []

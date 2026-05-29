@@ -3322,7 +3322,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Add EF Core foreign key and composite unique indexes for Project-Task relationship plus update migration in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -3330,9 +3330,9 @@
     ],
     "relatedIds": [],
     "id": "bf926c2d-6a14-4121-8483-741178a47fb1",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780068829613,
-    "updatedAt": 1780068829613
+    "updatedAt": 1780077667819
   },
   {
     "type": "task",
@@ -3731,5 +3731,126 @@
     "rev": 1,
     "createdAt": 1780077169524,
     "updatedAt": 1780077169524
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Fix P0 beta blockers: rate-limiter ordering, duplicate-name 409 handling, JWT secret length validation, production config cleanup, and refresh ARCHITECTURE.MD in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "2091c4d5-2241-461c-a041-186bc066e14c",
+    "rev": 1,
+    "createdAt": 1780077453445,
+    "updatedAt": 1780077453445
+  },
+  {
+    "type": "task",
+    "title": "Fix rate-limiter ordering and duplicate-name 409 handling",
+    "content": "Fix rate-limiter middleware ordering (must run immediately after auth, before authorization) and ensure duplicate-name constraint violations return 409 Conflict instead of 500. Apply changes in the appropriate middleware/exception-handler locations. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations.\n⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error. **Never squash, edit, or delete an existing migration file** — always add a new additive migration.\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why. CancellationToken, EF migrations, and input validation do not apply because this is a middleware ordering and error-mapping fix with no new async paths or schema changes.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "55c17236-b984-4375-9a7c-c4afe4095616",
+    "rev": 1,
+    "createdAt": 1780077492931,
+    "updatedAt": 1780077492931
+  },
+  {
+    "type": "task",
+    "title": "Add JWT secret length validation and clean production config",
+    "content": "Implement explicit JWT secret minimum length/entropy validation at startup (fail-fast) and clean production config files (remove any placeholders/secrets from appsettings.Production.json). ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations.\n⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error. **Never squash, edit, or delete an existing migration file** — always add a new additive migration.\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why. EF migrations, input validation, rate limiting, and CancellationToken do not apply because this is a startup validation + config file cleanup with no new endpoints, schemas, or async operations.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "d4fe4801-7f55-4078-82fd-d6913f5aa19f",
+    "rev": 1,
+    "createdAt": 1780077492934,
+    "updatedAt": 1780077492934
+  },
+  {
+    "type": "task",
+    "title": "Refresh ARCHITECTURE.MD with P0 fixes",
+    "content": "Update ARCHITECTURE.MD to document the completed P0 beta blocker fixes (rate-limiter ordering, duplicate-name 409 handling, JWT secret validation, production config cleanup) and any new decisions. Keep the document concise and aligned with existing structure.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "6923072b-bb21-4d30-a0d2-18364adb0a48",
+    "rev": 1,
+    "createdAt": 1780077492937,
+    "updatedAt": 1780077492937
+  },
+  {
+    "type": "result",
+    "title": "Result: Add JWT secret length validation and clean production config",
+    "content": "## Implementation\n\nJWT secret validation now runs at startup (fail-fast), and production config no longer contains placeholder connection strings or secrets.\n\n### JWT secret validation (startup fail-fast)\n\nAdded `JwtSecretValidator` and wired it through `AddFlowForgeJwtAuthentication` in `Program.cs`:\n\n| Check | Behavior |\n|-------|----------|\n| **Required** | Throws if `Jwt:Secret` is missing or whitespace |\n| **Minimum length** | Must be ≥ 32 characters |\n| **Entropy** | Must contain ≥ 8 distinct characters |\n| **Production placeholders** | In Production, rejects known dev/template values (e.g. `FlowForge-Dev-Secret-Key-At-Least-32-Chars!`) |\n\nDevelopment continues to use the dev secret from `appsettings.json`; Production must supply a real secret via environment or secret store.\n\n### Production config cleanup\n\nRemoved the `ConnectionStrings` block from `appsettings.Production.json` (the localhost `Trusted_Connection` placeholder). Production config now has:\n\n- No `Jwt:Secret` (must come from env/secrets)\n- No connection string placeholder (must come from `ConnectionStrings__DefaultConnection` env var)\n- Non-secret settings only: Serilog, `AllowedHosts`, `Database:Provider`, JWT issuer/audience/expiry, rate limiting, CORS, HSTS\n\n## Changes Made\n\n| File | Change |\n|------|--------|\n| `src/FlowForge.Api/Authentication/JwtSecretValidator.cs` | New validator with length, entropy, and production placeholder checks |\n| `src/FlowForge.Api/Authentication/JwtAuthenticationExtensions.cs` | New extension that validates secret then configures JWT Bearer auth |\n| `src/FlowForge.Api/Program.cs` | Replaced inline JWT setup with `AddFlowForgeJwtAuthentication` |\n| `src/FlowForge.Api/appsettings.Production.json` | Removed `ConnectionStrings` placeholder |\n| `tests/FlowForge.Tests/JwtSecretValidatorTests.cs` | 6 unit tests for validation rules |\n| `tests/FlowForge.Tests/ProductionConfigEndpointTests.cs` | Uses production-strength JWT secret (dev placeholder now rejected in Producti\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "1728a205-6cfa-4558-bd61-78e45486ba17",
+    "rev": 1,
+    "createdAt": 1780077563509,
+    "updatedAt": 1780077563509
+  },
+  {
+    "type": "result",
+    "title": "Result: Fix rate-limiter ordering and duplicate-name 409 handling",
+    "content": "## Implementation\n\nBoth P0 blockers are fixed end-to-end: middleware ordering now lets the partitioned rate limiter see authenticated users before authorization, and duplicate-name constraint violations return **409 Conflict** with RFC 7807 ProblemDetails instead of **500**.\n\n## Changes Made\n\n### 1. Rate-limiter middleware ordering — `Program.cs`\n\nReordered the pipeline so rate limiting runs immediately after authentication and before authorization:\n\n```69:71:src/FlowForge.Api/Program.cs\n    app.UseAuthentication();\n    app.UseRateLimiter();\n    app.UseAuthorization();\n```\n\nThis ensures:\n- JWT `sub` is available for per-user rate-limit partitions (`RateLimitPartitionKeyResolver`)\n- Unauthenticated requests to protected routes are still rate-limited by IP before authorization rejects them\n\n### 2. Duplicate-name 409 handling — exception handler\n\n**New file:** `src/FlowForge.Api/Exceptions/DuplicateConstraintViolationMapper.cs`\n\nMaps duplicate-name violations from:\n- **EF Core** — `DbUpdateException` with SQLite (`SQLITE_CONSTRAINT_UNIQUE`) or SQL Server (2627/2601) unique-index violations\n- **In-memory repos** — `InvalidOperationException` messages for project/task name collisions\n\n**Updated:** `GlobalExceptionHandler.cs` — checks the mapper before the default 500 fallback.\n\nResponse shape (no internal details leaked):\n- **Title:** `Duplicate name`\n- **Detail:** `A resource with this name already exists.`\n- **Status:** 409\n\n### 3. Tests — `ExceptionHandlingEndpointTests.cs`\n\nAdded HTTP integration tests exercising the EF Core path:\n- `CreateProject_WithDuplicateName_ReturnsConflictProblemDetails`\n- `CreateTask_WithDuplicateName_ReturnsConflictProblemDetails`\n\nUpdated the test factory to register `ProjectRepository` and `TaskRepository` against the shared SQLite in-memory database.\n\n## Test Results\n\n**239/239 tests pass** (full suite), including the two new duplicate-name tests and existing rate-limit tests.\n\n## Production Hardening Checklist\n\n| Item | Applies? | Statu\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "3b1c9c57-b0a3-4dda-9e06-aff7e89b1ef8",
+    "rev": 1,
+    "createdAt": 1780077579043,
+    "updatedAt": 1780077579043
+  },
+  {
+    "type": "result",
+    "title": "Result: Refresh ARCHITECTURE.MD with P0 fixes",
+    "content": "## Documentation\n\nUpdated [`ARCHITECTURE.MD`](ARCHITECTURE.MD) to reflect the completed P0 beta blocker fixes and bring the document in line with the current solution (239 passing tests, full User/Project/Task stack).\n\n## Summary\n\n**Current State** — Replaced the stale 60-test / no-Task snapshot with a concise May 2026 summary table and pointers to `DECISIONS.md` and `README.md` for detail.\n\n**P0 Beta Blocker Fixes (new section)** — Documents all four fixes with actionable detail:\n\n| Fix | Documented behavior |\n|-----|-------------------|\n| Rate-limiter ordering | `UseAuthentication` → `UseRateLimiter` → `UseAuthorization`; why `sub` partitioning works |\n| Duplicate-name 409 | `DuplicateConstraintViolationMapper` + ProblemDetails shape; EF SQLite/SQL Server + in-memory paths |\n| JWT secret validation | `JwtSecretValidator` rules (length, entropy, production placeholders); fail-fast at startup |\n| Production config | No secrets in `appsettings.Production.json`; env vars for secret and connection string |\n\n**HTTP Pipeline** — New section with middleware order and migration behavior (auto in non-Production, explicit in Production).\n\n**Project ownership** — Extended for Task authorization and consolidated exception → HTTP table (including 409 duplicate-name).\n\n**Next Major Milestones** — Trimmed completed items; kept post-beta scale/ops items (distributed rate limiting, JWT revocation, CI, optional OwnerId FK).\n\nThe document stays aligned with the existing top-level structure (Overview → layers → principles → stack → state → ownership → milestones) while keeping narrative length manageable for the Lead PM and downstream agents.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "476d9888-2e8e-432c-a2e6-c69fa654d357",
+    "rev": 1,
+    "createdAt": 1780077623716,
+    "updatedAt": 1780077623716
   }
 ]

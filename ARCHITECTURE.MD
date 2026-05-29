@@ -22,131 +22,110 @@ FlowForge is a Task and Project management system built with **.NET 10** using *
 
 - **Framework:** .NET 10 + ASP.NET Core
 - **ORM:** Entity Framework Core 10 with SQLite (dev/local) and SQL Server (production)
-- **Authentication:** JWT Bearer (PBKDF2 password hashing)
+- **Authentication:** JWT Bearer (PBKDF2 password hashing; startup secret validation)
 - **Testing:** xUnit + WebApplicationFactory + SQLite in-memory
-- **API Style:** Minimal APIs
+- **API Style:** Minimal APIs with RFC 7807 ProblemDetails, FluentValidation, Swagger/OpenAPI
 
 ## Current State (May 2026)
 
-**60/60 tests pass.** User and Project are fully implemented from domain through HTTP endpoints.
+**239/239 tests pass.** User, Project, and Task aggregates are implemented from domain through HTTP endpoints, with ownership authorization, global exception handling, partitioned rate limiting, health checks, Serilog, and production hardening.
 
-### Domain
+| Layer | Highlights |
+|-------|------------|
+| **Domain** | `User`, `Project`, `Task` aggregates; typed IDs and value objects; repository interfaces with owner/project-scoped queries |
+| **Application** | `UserService`, `ProjectService`, `TaskService`; PBKDF2 + JWT; business exceptions mapped to HTTP by the API |
+| **Infrastructure** | EF Core `InitialCreate` migration; unique indexes on email, `(OwnerId, Name)`, `(ProjectId, Name)`; typed FK Project→Task; dual EF + InMemory repositories |
+| **API** | Auth, Me, Project, Task endpoints; TraceId middleware; Serilog; CORS/security headers; Swagger (non-Production) |
 
-Shared primitives under `Common/`:
+See [DECISIONS.md](DECISIONS.md) for recorded ADRs. [README.md](README.md) covers setup, env vars, and API examples.
 
-- **`BaseEntity`** — `Id` (Guid), `CreatedAt`, `UpdatedAt`
-- **`ValueObject`** — structural equality via `GetEqualityComponents()`
+## P0 Beta Blocker Fixes (May 2026)
 
-**User aggregate** (`Users/`):
+Four pre-beta blockers were resolved in the API layer. All are covered by integration/unit tests; full suite: **239 passed**.
 
-| Type | Role |
-|------|------|
-| `User` | Aggregate root; optional `PasswordHash`; `SetPasswordHash` for updates |
-| `UserId` | Identity value object (`New()`, `From(Guid)`; rejects empty) |
-| `Email` | Normalized (trim + lowercase), max 320, regex validation |
-| `PasswordHash` | Non-empty, max 512 chars |
-| `IUserRepository` | Six async CRUD methods + `FindByEmailAsync` |
+### 1. Rate-limiter middleware ordering
 
-**Project aggregate** (`Projects/`):
+The pipeline runs rate limiting **immediately after authentication and before authorization**:
 
-| Type | Role |
-|------|------|
-| `Project` | Aggregate root; immutable `OwnerId` (`UserId`); `Rename` |
-| `ProjectId` | Same pattern as `UserId` |
-| `IProjectRepository` | Nine async methods including owner-scoped `GetByIdForOwnerAsync`, `GetAllByOwnerAsync`, plus `FindByNameAsync` |
+```
+UseAuthentication → UseRateLimiter → UseAuthorization
+```
 
-Both aggregates use a **dual-ID pattern**: `BaseEntity.Id` and typed id value (`UserId.Value`, `ProjectId.Value`) are synchronized in constructors. EF Core uses private parameterless constructors for materialization; business construction goes through public constructors with validation.
+**Why:** `RateLimitPartitionKeyResolver` keys authenticated buckets on JWT `sub`. Running the limiter after auth ensures `sub` is available for protected routes; unauthenticated traffic to those routes is still limited by client IP before authorization returns 401.
 
-Domain validation throws BCL exceptions (`ArgumentException`, `ArgumentNullException`). Application-layer services own business exceptions (duplicate email, invalid credentials, project not found, unauthorized access).
+`/health` remains excluded via `DisableRateLimiting()`.
 
-### Application
+### 2. Duplicate-name → 409 Conflict
 
-Services use **primary constructor injection** and accept `CancellationToken cancellationToken = default` on every async method.
+`DuplicateConstraintViolationMapper` (checked by `GlobalExceptionHandler` before the 500 fallback) maps duplicate project/task names to **409 Conflict** with RFC 7807 ProblemDetails:
 
-**`UserService`** (`IUserRepository`, `IPasswordHasher`, `IJwtTokenService`):
+| Field | Value |
+|-------|-------|
+| Title | `Duplicate name` |
+| Detail | `A resource with this name already exists.` |
+| Extension | `traceId` (from TraceId middleware) |
 
-- CRUD pass-through plus `GetByEmailAsync`
-- `RegisterAsync` / `LoginAsync` with PBKDF2 hashing and JWT issuance
-- `CreateAsync` has no duplicate-email guard (relies on DB unique index); only `RegisterAsync` checks proactively
+**Sources mapped:**
 
-**`ProjectService`** (`IProjectRepository`):
+- **EF Core** — `DbUpdateException` with SQLite unique constraint (`SQLITE_CONSTRAINT_UNIQUE` / error 19) or SQL Server (2627/2601)
+- **In-memory repos** — `InvalidOperationException` messages for project/task name collisions (unit tests)
 
-- Owner-scoped create, list, get, update, delete
-- `GetByNameAsync` exists but is not exposed via HTTP
+Duplicate **email** on register continues to map via `DuplicateEmailException` (same 409 shape, different title/detail).
 
-**Auth support:**
+### 3. JWT secret validation (startup fail-fast)
 
-- `Pbkdf2PasswordHasher` — PBKDF2-SHA256, 100,000 iterations; stored as `{iterations}.{base64Salt}.{base64Hash}`
-- `JwtTokenService` — `sub` = user Guid string; unique `jti`; optional roles; config from `Jwt:*` settings
+`AddFlowForgeJwtAuthentication` calls `JwtSecretValidator.Validate` before JWT Bearer is registered. The host **does not start** if validation fails (`InvalidOperationException`).
 
-### Infrastructure
+| Check | Rule |
+|-------|------|
+| Required | `Jwt:Secret` must be non-empty |
+| Length | ≥ 32 characters |
+| Entropy | ≥ 8 distinct characters |
+| Production placeholders | Rejects known dev/template secrets (e.g. `FlowForge-Dev-Secret-Key-At-Least-32-Chars!`) |
 
-**EF Core** (`FlowForgeDbContext`, primary constructor):
+Development uses the dev secret from `appsettings.json`; Production must supply a real secret via environment or secret store (`Jwt__Secret`).
 
-- `DbSet<User>`, `DbSet<Project>`
-- Configurations discovered via `ApplyConfigurationsFromAssembly`
-- `UserConfiguration` — unique index on email; value conversions for `UserId`, `Email`, `PasswordHash?`
-- `ProjectConfiguration` — indexes on `OwnerId` and `Name` (non-unique); value conversions for `ProjectId`, `OwnerId`, `Name`
+### 4. Production config cleanup
 
-**Dual repository strategy:**
+`appsettings.Production.json` contains **no secrets**:
 
-| Implementation | Registered in DI | Used for |
-|----------------|------------------|----------|
-| `UserRepository` / `ProjectRepository` | Yes (scoped) | Production and integration tests |
-| `InMemoryUserRepository` / `InMemoryProjectRepository` | No | Direct instantiation in unit tests only |
+- No `Jwt:Secret` (env/secrets only)
+- No `ConnectionStrings` placeholder (use `ConnectionStrings__DefaultConnection` env var)
+- Non-secret settings only: Serilog, `AllowedHosts`, `Database:Provider` (SqlServer), JWT issuer/audience/expiry, rate limiting, CORS, HSTS
 
-InMemory repositories use Prisma-style semantics (null on missing lookups; `InvalidOperationException` on constraint violations). **Note:** InMemory enforces globally unique project names; EF allows duplicate names across owners.
+## HTTP Pipeline (API)
 
-`AddInfrastructure(IConfiguration)` selects the provider from `Database:Provider` (default **Sqlite**). Production sets `SqlServer` in `appsettings.Production.json`. Integration tests use real EF Core on SQLite via `AddInfrastructure(options => options.UseSqlite(...))` or the configuration overload with `Database:Provider=Sqlite`, not InMemory repositories.
+Middleware order in `Program.cs` (simplified):
 
-### API
+1. Forwarded headers (when configured)
+2. TraceId correlation
+3. Exception handler (`GlobalExceptionHandler` → ProblemDetails)
+4. Security headers, Swagger (non-Production), CORS
+5. **Authentication → Rate limiter → Authorization**
+6. Endpoint mapping (Auth, Me, Projects, Tasks; `/health` without rate limit)
 
-Minimal API endpoint groups in `Endpoints/`:
-
-| Group | Auth | Routes |
-|-------|------|--------|
-| Auth | Anonymous | `POST /register`, `POST /login` |
-| Me | JWT required | `GET /me` |
-| Projects | JWT required | `POST/GET /projects`, `GET/PUT/DELETE /projects/{id:guid}` |
-
-Owner identity is extracted from JWT `sub` (or `ClaimTypes.NameIdentifier`) and parsed to `UserId.From(guid)`.
-
-### Testing
-
-| Area | Tests | Approach |
-|------|-------|----------|
-| InMemory repositories | 20 | Direct repo instantiation |
-| UserService / ProjectService | 16 | EF Core + SQLite fixture (`UserServiceEfCoreFixture`) |
-| ProjectRepository (EF) | 1 | OwnerId persistence via fixture |
-| HTTP auth + projects | 21 | WebApplicationFactory + SQLite |
-| JWT | 1 | Unit test for unique `jti` |
-| Health | 1 | `GET /health` smoke test |
-
-**Task domain:** not yet started (no source files).
+Non-Production environments auto-apply EF migrations on startup; Production requires explicit `dotnet ef database update`.
 
 ## Project ownership
 
-Projects carry an immutable `OwnerId` (`UserId`) set at construction. Authorization is enforced in **`ProjectService`** (application layer), not in HTTP middleware beyond JWT authentication.
+Projects carry an immutable `OwnerId` (`UserId`) set at construction. Tasks inherit authorization through their parent project via `TaskService` → `ProjectService.GetOwnedProjectAsync`.
 
 | Operation | Authorization |
 |-----------|---------------|
-| **Create** | Caller's `UserId` becomes `OwnerId` |
-| **List** | `GetAllByOwnerAsync(ownerId)` — never returns another user's projects |
-| **Get / update / delete** | Load via `GetByIdAsync(id)`, then compare `project.OwnerId == ownerId` |
-
-Repository owner-scoped methods (`GetByIdForOwnerAsync`, `GetAllByOwnerAsync`) exist and are used for list; get/update/delete intentionally use unscoped load plus owner comparison to preserve **404 vs 403 semantics**:
+| **Create project** | Caller's `UserId` becomes `OwnerId` |
+| **List / CRUD project** | Owner-scoped via `ProjectService` |
+| **Task CRUD** | Project must exist and caller must own it |
 
 | Exception | HTTP | Meaning |
 |-----------|------|---------|
-| `ProjectNotFoundException` | 404 Not Found | Unknown project id |
-| `UnauthorizedProjectAccessException` | 403 Forbidden | Project exists but caller is not the owner |
-
-Protected project endpoints under `/projects` require a valid JWT. The API maps application exceptions to status codes; auth endpoints use `ProblemDetails` consistently, while project endpoints mix `ProblemDetails` (401/403) with plain string bodies for some 400/404 responses.
+| `ProjectNotFoundException` / `TaskNotFoundException` | 404 | Unknown id |
+| `UnauthorizedProjectAccessException` | 403 | Resource exists but caller is not the owner |
+| Duplicate name (DB or in-memory) | 409 | Composite unique index violated |
+| `DuplicateEmailException` | 409 | Email already registered |
 
 ## Next Major Milestones
 
-- Task domain entity, repository, and ownership-scoped use cases
-- Task HTTP endpoints (following Project patterns)
-- Align project endpoint error responses with auth endpoint `ProblemDetails` style
-- EF migration strategy (currently `EnsureCreated` in tests; production migrations TBD)
-- Production-grade configuration, observability, and CI/CD pipeline
+- Distributed rate limiting / Redis backing for multi-instance deployments
+- JWT refresh tokens and revocation (`jti` blocklist)
+- CI pipeline and automated migration checks in deploy
+- Optional `OwnerId` FK to Users table for referential integrity at the DB layer

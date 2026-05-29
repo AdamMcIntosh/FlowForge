@@ -10,6 +10,7 @@ public sealed class ProductionConfigEndpointTests : IClassFixture<WebApplication
 {
     private const string AllowedOrigin = "https://app.flowforge.example.com";
     private const string DisallowedOrigin = "https://evil.example.com";
+    private const string ProductionJwtSecret = "k7P9mX2vQ4nR8wL1tY6hJ3cF5bN0sD9uA7gE2iK4oM6pZ8x";
 
     [Fact]
     public async Task GetHealth_InProduction_IncludesSecurityHeaders()
@@ -80,7 +81,7 @@ public sealed class ProductionConfigEndpointTests : IClassFixture<WebApplication
             builder.UseSetting("ConnectionStrings:DefaultConnection", "Data Source=:memory:");
             builder.UseSetting("Jwt:Issuer", "FlowForge");
             builder.UseSetting("Jwt:Audience", "FlowForge");
-            builder.UseSetting("Jwt:Secret", "FlowForge-Dev-Secret-Key-At-Least-32-Chars!");
+            builder.UseSetting("Jwt:Secret", ProductionJwtSecret);
             builder.UseSetting("Jwt:ExpiryMinutes", "60");
             builder.UseSetting("Cors:AllowedOrigins:0", AllowedOrigin);
         });

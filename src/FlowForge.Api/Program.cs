@@ -1,4 +1,4 @@
-using System.Text;
+using FlowForge.Api.Authentication;
 using FlowForge.Api.Cors;
 using FlowForge.Api.Endpoints;
 using FlowForge.Api.Exceptions;
@@ -11,8 +11,6 @@ using FlowForge.Api.Validation;
 using FlowForge.Application;
 using FlowForge.Infrastructure;
 using FlowForge.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,27 +23,7 @@ builder.Services.AddFlowForgeTraceIdLogging();
 builder.Services.AddFlowForgeExceptionHandling();
 builder.Services.AddFlowForgeValidation();
 
-var jwtSettings = builder.Configuration.GetSection("Jwt");
-var jwtSecret = jwtSettings["Secret"]
-    ?? throw new InvalidOperationException("Jwt:Secret is required.");
-
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Events = ExceptionHandlingExtensions.CreateJwtBearerProblemDetailsEvents();
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
-            ClockSkew = TimeSpan.FromMinutes(1),
-        };
-    });
+builder.Services.AddFlowForgeJwtAuthentication(builder.Configuration, builder.Environment);
 
 builder.Services.AddAuthorization();
 builder.Services.AddFlowForgeCors(builder.Configuration, builder.Environment);
@@ -67,8 +45,8 @@ try
     app.UseFlowForgeSwagger();
     app.UseFlowForgeCors();
     app.UseAuthentication();
-    app.UseAuthorization();
     app.UseRateLimiter();
+    app.UseAuthorization();
 
     app.MapHealthChecks("/health").DisableRateLimiting();
     app.MapAuthEndpoints();

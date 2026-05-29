@@ -103,3 +103,8 @@ _Each section corresponds to one Roland run that produced new decisions._
 
 - [Decision: Rate limiter must run immediately after authentication and before authorization to protect all routes uniformly]
 - [Decision: Duplicate-name constraint violations must map to 409 Conflict rather than 500]
+
+## 2026-05-29 — Fix P0 beta blockers: rate-limiter ordering, duplicate-name 409 handling, JWT se _(run mpr85lkv)_
+
+- [Decision: JWT secret must be ≥32 characters with ≥8 distinct characters and must not be a known dev placeholder in Production; validated at startup via `JwtSecretValidator`]
+- [Decision: Duplicate name violations (EF Core unique-index errors + in-memory collisions) now return RFC 7807 409 ProblemDetails via `DuplicateConstraintViolationMapper`]

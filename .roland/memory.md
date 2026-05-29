@@ -4,8 +4,6 @@ _Updated automatically after each run. Edit manually at any time._
 
 ## Architecture Decisions
 
-- `/health` must be explicitly excluded from rate limiting so readiness/liveness probes remain available under load.
-- N/A — no architectural changes this run.
 - Production CORS policy is strict (only configured origins) and fails fast at startup if the list is empty.
 - Security headers middleware is always applied; HSTS is Production-only and driven by `Hsts:*` config.
 - ASP.NET Core configuration sources (appsettings + env vars) are the single source of truth; `.env` files are never auto-loaded.
@@ -24,11 +22,11 @@ _Updated automatically after each run. Edit manually at any time._
 - Single-instance partitioned fixed-window rate limiting accepted for beta.
 - Dual-ID + alternate-key pattern retained for domain value objects.
 - SQLite dev / SQL Server prod with one migration strategy confirmed.
+- Fail-fast JWT secret validation at startup (length, entropy, production placeholder rejection) prevents misconfigured Production hosts from starting.
+- `DuplicateConstraintViolationMapper` centralizes 409 logic for both EF Core constraint codes and in-memory exception messages.
 
 ## Coding Standards
 
-- Health checks are registered via a single `AddFlowForgeHealthChecks()` extension and mapped with `.DisableRateLimiting()`.
-- All `*EndpointTests` classes are `public sealed`.
 - Every test file begins with a two-line comment describing the `WebApplicationFactory` + SQLite in-memory setup.
 - Tests use unique emails (`Guid.NewGuid()`) to prevent cross-test data leakage.
 - Extension methods follow the `AddFlowForge*` / `UseFlowForge*` naming pattern established earlier.
@@ -47,11 +45,11 @@ _Updated automatically after each run. Edit manually at any time._
 - Rate-limiting configuration uses a typed options class bound from `RateLimiting` section with safe fallback behavior.
 - Password policy rules are implemented as chained FluentValidation extensions with `[GeneratedRegex]` partial methods (consistent with existing email validation).
 - Primary constructors, immutable value objects, and repository interfaces per existing project conventions.
+- New authentication helpers live under `Authentication/`; exception mappers under `Exceptions/`.
+- All new tests are integration-style HTTP tests that exercise the full pipeline.
 
 ## Past Mistakes
 
-- Never replace the shared `ProblemDetailsResults.BadRequest` helper with ad-hoc validation error construction.
-- N/A — no pitfalls encountered in this narrow scope.
 - [×3] N/A — no new pitfalls encountered.
 - Never place `UseSwagger` / `UseSwaggerUI` before `UseExceptionHandler` (order in Program.cs was verified correct).
 - Never place logging middleware after `UseExceptionHandler` — correlation ID would be missing on error paths.
@@ -70,13 +68,15 @@ _Updated automatically after each run. Edit manually at any time._
 - Never register `UseRateLimiter()` after `UseAuthorization()` — protected routes bypass limits on 401.
 - Never leave production config files with real or plausible connection-string placeholders.
 - Failing to handle `DbUpdateException` for unique-constraint violations on project/task names (root cause: no global or per-handler mapping of EF constraint errors to 409; example: create endpoints return 500 instead of 409 ProblemDetails)
+- Never place secrets or localhost connection strings in `appsettings.Production.json`.
+- Rate-limiter middleware must run after `UseAuthentication` and before `UseAuthorization` when using `sub`-based partitioning.
 
 ## Preferences
 
 - Repository and service methods consistently accept `CancellationToken` as the final parameter with `= default`
 - Health endpoint deliberately excluded from rate limiting.
 - Shared `NameValidationRules` class is preferred over duplicating required + max-length rules.
-- [×2] N/A — no new preferences surfaced.
+- [×3] N/A — no new preferences surfaced.
 - N/A — no new preferences recorded.
 - Swagger remains a Development / test-only surface; never enabled in Production.
 - Swagger UI only in Development; disabled in Production.
@@ -90,7 +90,6 @@ _Updated automatically after each run. Edit manually at any time._
 
 ## Project Gotchas
 
-- `OnChallenge` must call `HandleResponse()` and check `HasStarted` to avoid double writes.
 - N/A — no environment or tooling surprises.
 - [×2] N/A — no new environment or tooling quirks.
 - XML file path resolution uses `AppContext.BaseDirectory` + assembly name; file may not exist in certain publish profiles (already guarded).
@@ -110,10 +109,10 @@ _Updated automatically after each run. Edit manually at any time._
 - `InMemoryProjectRepository` still uses global name uniqueness while EF uses `(OwnerId, Name)`.
 - `EnsureCreated()` in tests never validates the real migration schema.
 - `DbUpdateException` from unique constraints surfaces as 500 unless explicitly caught and mapped to RFC 7807 409
+- SQLite in-memory shared database requires explicit `ProjectRepository`/`TaskRepository` registration in the test factory for duplicate-name tests.
 
 ## Proven Patterns
 
-- Splitting validation tests by layer (unit + HTTP integration) allowed focused coverage with minimal overlap.
 - Reusing `AddValidatorsFromAssemblyContaining<CreateProjectRequestValidator>()` automatically registers new validators without DI changes.
 - Splitting validator unit tests and HTTP integration tests allowed parallel work.
 - Splitting test-authoring by layer (endpoint tests vs. validator tests) allowed parallel execution.
@@ -133,10 +132,10 @@ _Updated automatically after each run. Edit manually at any time._
 - Splitting work by layer (migration, rate-limiting middleware, validation rules) allowed three agents to execute in parallel with zero merge conflicts.
 - Three parallel specialized engineer reviews (architect, security, code) produced consistent P0 findings.
 - Running three parallel specialized reviewers (architect/security/code) on the same codebase surfaces identical P0 release blockers with zero overlap in findings
+- Splitting work by layer (executor for implementation, doc-writer for `ARCHITECTURE.MD`) allowed parallel progress with clean handoff.
 
 ## Anti-Patterns
 
-- [Comparing old vs new name keys on the same entity reference] — root cause: in-memory objects are mutated before `UpdateAsync` is called; example: the `Rename` + `UpdateAsync` sequence in the failing test.
 - [Returning raw exception messages or stack traces] — root cause: missing global handler or per-handler try/catch that re-throws; example: pre-task auth endpoints.
 - [Inline string.IsNullOrWhiteSpace checks in handlers] — root cause: validator not yet wired; example: pre-existing checks removed from Project/Task create/update handlers.
 - N/A — no anti-patterns observed.
@@ -156,7 +155,8 @@ _Updated automatically after each run. Edit manually at any time._
 - [Committing provider-specific migration snapshots without CI verification] — root cause: design-time factory locked to SQLite; example: `InitialCreate` `TEXT` columns.
 - [Placing `UseForwardedHeaders` after other middleware] — root cause: `RemoteIpAddress` would already be resolved; example: rate-limiter partition key would capture the proxy IP instead of the real client.
 - [Copy-paste `TryGetOwnerId`] — root cause: no shared `ClaimsPrincipalExtensions`; example: duplicated in `ProjectEndpoints.cs` and `TaskEndpoints.cs`.
+- [Placing dev secrets in Production config] — root cause: convenience during local testing; example: original `appsettings.Production.json` contained `Trusted_Connection` localhost string.
 
 ---
 
-_Last updated: 2026-05-29 · run mpr7w2fq · Perform a final review of the FlowForge .NET 10 solution for_
+_Last updated: 2026-05-29 · run mpr85lkv · Fix P0 beta blockers: rate-limiter ordering, duplicate-name _

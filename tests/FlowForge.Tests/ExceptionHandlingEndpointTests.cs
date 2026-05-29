@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using FlowForge.Api.Endpoints;
 using FlowForge.Application.Common.Interfaces;
+using FlowForge.Domain.Projects;
 using FlowForge.Domain.Users;
 using FlowForge.Infrastructure.Authentication;
 using FlowForge.Infrastructure.Persistence;
@@ -137,6 +138,72 @@ public class ExceptionHandlingEndpointTests : IClassFixture<ExceptionHandlingWeb
         AssertNoExceptionLeak(problem, response);
     }
 
+    [Fact]
+    public async Task CreateProject_WithDuplicateName_ReturnsConflictProblemDetails()
+    {
+        var token = await RegisterAndGetTokenAsync($"dup-project-{Guid.NewGuid():N}@example.com");
+        const string projectName = "Duplicate Project";
+
+        using var firstRequest = new HttpRequestMessage(HttpMethod.Post, "/projects");
+        firstRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        firstRequest.Content = JsonContent.Create(new CreateProjectRequest(projectName));
+
+        var firstResponse = await _client.SendAsync(firstRequest);
+        Assert.Equal(HttpStatusCode.Created, firstResponse.StatusCode);
+
+        using var duplicateRequest = new HttpRequestMessage(HttpMethod.Post, "/projects");
+        duplicateRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        duplicateRequest.Content = JsonContent.Create(new CreateProjectRequest(projectName));
+
+        var duplicateResponse = await _client.SendAsync(duplicateRequest);
+
+        Assert.Equal(HttpStatusCode.Conflict, duplicateResponse.StatusCode);
+
+        var problem = await ReadProblemDetailsAsync(duplicateResponse);
+        Assert.Equal(StatusCodes.Status409Conflict, problem.Status);
+        Assert.Equal("Duplicate name", problem.Title);
+        Assert.Equal("A resource with this name already exists.", problem.Detail);
+        AssertNoExceptionLeak(problem, duplicateResponse);
+    }
+
+    [Fact]
+    public async Task CreateTask_WithDuplicateName_ReturnsConflictProblemDetails()
+    {
+        var token = await RegisterAndGetTokenAsync($"dup-task-{Guid.NewGuid():N}@example.com");
+        const string taskName = "Duplicate Task";
+
+        using var createProjectRequest = new HttpRequestMessage(HttpMethod.Post, "/projects");
+        createProjectRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        createProjectRequest.Content = JsonContent.Create(new CreateProjectRequest("Task Host Project"));
+
+        var createProjectResponse = await _client.SendAsync(createProjectRequest);
+        Assert.Equal(HttpStatusCode.Created, createProjectResponse.StatusCode);
+
+        var project = await createProjectResponse.Content.ReadFromJsonAsync<ProjectResponse>();
+        Assert.NotNull(project);
+
+        using var firstTaskRequest = new HttpRequestMessage(HttpMethod.Post, $"/projects/{project.Id}/tasks");
+        firstTaskRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        firstTaskRequest.Content = JsonContent.Create(new CreateTaskRequest(taskName));
+
+        var firstTaskResponse = await _client.SendAsync(firstTaskRequest);
+        Assert.Equal(HttpStatusCode.Created, firstTaskResponse.StatusCode);
+
+        using var duplicateTaskRequest = new HttpRequestMessage(HttpMethod.Post, $"/projects/{project.Id}/tasks");
+        duplicateTaskRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        duplicateTaskRequest.Content = JsonContent.Create(new CreateTaskRequest(taskName));
+
+        var duplicateTaskResponse = await _client.SendAsync(duplicateTaskRequest);
+
+        Assert.Equal(HttpStatusCode.Conflict, duplicateTaskResponse.StatusCode);
+
+        var problem = await ReadProblemDetailsAsync(duplicateTaskResponse);
+        Assert.Equal(StatusCodes.Status409Conflict, problem.Status);
+        Assert.Equal("Duplicate name", problem.Title);
+        Assert.Equal("A resource with this name already exists.", problem.Detail);
+        AssertNoExceptionLeak(problem, duplicateTaskResponse);
+    }
+
     private async Task<string> RegisterAndGetTokenAsync(string email)
     {
         var registerResponse = await _client.PostAsJsonAsync(
@@ -211,6 +278,8 @@ public sealed class ExceptionHandlingWebApplicationFactory : WebApplicationFacto
 
             services.AddDbContext<FlowForgeDbContext>(options => options.UseSqlite(_connection));
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<FlowForge.Domain.Tasks.ITaskRepository, TaskRepository>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
         });
     }
@@ -239,6 +308,8 @@ public sealed class ExceptionHandlingWebApplicationFactory : WebApplicationFacto
                 d.ServiceType == typeof(FlowForgeDbContext) ||
                 d.ServiceType == typeof(DbContextOptions<FlowForgeDbContext>) ||
                 d.ServiceType == typeof(IUserRepository) ||
+                d.ServiceType == typeof(IProjectRepository) ||
+                d.ServiceType == typeof(FlowForge.Domain.Tasks.ITaskRepository) ||
                 d.ServiceType == typeof(IJwtTokenService) ||
                 (d.ServiceType.FullName?.StartsWith("Microsoft.EntityFrameworkCore", StringComparison.Ordinal) ?? false) ||
                 (d.ImplementationType?.FullName?.StartsWith("Microsoft.EntityFrameworkCore", StringComparison.Ordinal) ?? false))

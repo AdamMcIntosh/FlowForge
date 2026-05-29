@@ -108,3 +108,7 @@ _Each section corresponds to one Roland run that produced new decisions._
 
 - [Decision: JWT secret must be ≥32 characters with ≥8 distinct characters and must not be a known dev placeholder in Production; validated at startup via `JwtSecretValidator`]
 - [Decision: Duplicate name violations (EF Core unique-index errors + in-memory collisions) now return RFC 7807 409 ProblemDetails via `DuplicateConstraintViolationMapper`]
+
+## 2026-05-29 — Perform a final verification of the FlowForge .NET 10 solution and prepare beta  _(run mpr8i6nr)_
+
+- [Decision: 409 status code returned for duplicate project/task names via DuplicateConstraintViolationMapper — chosen to give clients a stable, non-500 error for the natural business rule]

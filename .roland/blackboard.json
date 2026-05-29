@@ -3373,7 +3373,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items, improvements, or gaps.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -3381,9 +3381,9 @@
     ],
     "relatedIds": [],
     "id": "a9322cdd-5268-4e1c-9186-1391e954e989",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780069837889,
-    "updatedAt": 1780069837889
+    "updatedAt": 1780078209160
   },
   {
     "type": "task",
@@ -3852,5 +3852,91 @@
     "rev": 1,
     "createdAt": 1780077623716,
     "updatedAt": 1780077623716
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Perform a final verification of the FlowForge .NET 10 solution and prepare beta release notes.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "b8900f63-0004-442a-b9a0-18f63640437a",
+    "rev": 1,
+    "createdAt": 1780078040636,
+    "updatedAt": 1780078040636
+  },
+  {
+    "type": "task",
+    "title": "Final verification review of FlowForge .NET 10 solution",
+    "content": "Perform a comprehensive final verification of the entire FlowForge .NET 10 solution for beta readiness. Confirm: rate-limiter ordering (after auth, before authz), 409 handling for duplicate names via DuplicateConstraintViolationMapper, composite unique indexes on (OwnerId, Name) and (ProjectId, Name), JWT secret validation at startup, Production config safety, EF migration state, health checks, structured logging with TraceId, Swagger guard, and absence of any P0 blockers. Report all findings with file/line references.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "critic",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "d69addd2-eb36-46bc-a456-f9b250c17cc0",
+    "rev": 1,
+    "createdAt": 1780078077096,
+    "updatedAt": 1780078077096
+  },
+  {
+    "type": "task",
+    "title": "Prepare beta release notes",
+    "content": "Synthesize beta release notes from DECISIONS.md, project memory, and the critic review output. Include: key features delivered, architectural decisions, breaking changes, known limitations, setup instructions, and upgrade notes. Produce a clean CHANGELOG or RELEASE-NOTES.md entry suitable for the beta tag.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "e3757f37-f783-4c10-84c6-5d575d672ca9",
+    "rev": 1,
+    "createdAt": 1780078077099,
+    "updatedAt": 1780078077099
+  },
+  {
+    "type": "result",
+    "title": "Result: Final verification review of FlowForge .NET 10 solution",
+    "content": "## Review\n\n**Verdict: FlowForge is beta-ready for a controlled, low-traffic pilot** (single instance, SQLite or small SQL Server, environment-supplied secrets). All previously flagged **P0 blockers are resolved in code**. Independent verification today: **`dotnet build` — 0 warnings**, **`dotnet test` — 239/239 passed**, **no vulnerable NuGet packages**.\n\n---\n\n## P0 Verification Checklist\n\n| Requirement | Status | Evidence |\n|-------------|--------|----------|\n| Rate limiter after auth, before authz | ✅ | ```47:49:src/FlowForge.Api/Program.cs``` — `UseAuthentication()` → `UseRateLimiter()` → `UseAuthorization()` |\n| Partitioned rate limiting (sub / IP) | ✅ | ```55:72:src/FlowForge.Api/RateLimiting/RateLimitingExtensions.cs```; resolver at ```12:27:src/FlowForge.Api/RateLimiting/RateLimitPartitionKeyResolver.cs``` |\n| `/health` excluded from rate limit | ✅ | ```51:51:src/FlowForge.Api/Program.cs``` — `.DisableRateLimiting()` |\n| Auth + CRUD endpoints rate-limited | ✅ | `.RequireRateLimiting(...)` on `AuthEndpoints`, `ProjectEndpoints`, `TaskEndpoints`, `MeEndpoints` |\n| Duplicate-name → **409** via mapper | ✅ | ```12:33:src/FlowForge.Api/Exceptions/DuplicateConstraintViolationMapper.cs```; wired in ```56:64:src/FlowForge.Api/Exceptions/GlobalExceptionHandler.cs``` |\n| 409 integration tests | ✅ | ```142:205:tests/FlowForge.Tests/ExceptionHandlingEndpointTests.cs``` |\n| Composite unique `(OwnerId, Name)` | ✅ | ```39:40:src/FlowForge.Infrastructure/Persistence/Configurations/ProjectConfiguration.cs```; migration ```69:73:src/FlowForge.Infrastructure/Migrations/20260529155708_InitialCreate.cs``` |\n| Composite unique `(ProjectId, Name)` | ✅ | ```44:45:src/FlowForge.Infrastructure/Persistence/Configurations/TaskConfiguration.cs```; migration ```75:79:src/FlowForge.Infrastructure/Migrations/20260529155708_InitialCreate.cs``` |\n| Task FK → Project via alternate key | ✅ | ```34:38:src/FlowForge.Infrastructure/Persistence/Configurations/TaskConfiguration.cs```; migration ```61\n…(truncated)",
+    "status": "done",
+    "author": "critic",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "887d128e-3ec4-451b-8645-7c255fbe1ee2",
+    "rev": 1,
+    "createdAt": 1780078124694,
+    "updatedAt": 1780078124694
+  },
+  {
+    "type": "result",
+    "title": "Result: Prepare beta release notes",
+    "content": "## Documentation\n\nCreated [`RELEASE-NOTES.md`](RELEASE-NOTES.md) — a beta release document suitable for tagging `v0.1.0-beta`.\n\n## Summary\n\nThe release notes synthesize [DECISIONS.md](DECISIONS.md), [ARCHITECTURE.MD](ARCHITECTURE.MD), [README.md](README.md), and the final critic verification into a single beta-ready artifact.\n\n### What's included\n\n| Section | Content |\n|---------|---------|\n| **Key features** | User/Project/Task CRUD, JWT auth, ownership authorization, EF Core (SQLite/SQL Server), FluentValidation, ProblemDetails, partitioned rate limiting, Serilog/TraceId, health checks, Swagger (dev-only) |\n| **Architect decisions** | Clean Architecture layers, DB provider strategy, migration policy, middleware ordering, 409 duplicate-name mapping, JWT validation, CORS fail-fast |\n| **Breaking changes** | Marked as initial beta; documents stable contract requirements (password policy, JWT secret, 409 for duplicates, ownership model, rate limits, manual prod migrations) |\n| **Known limitations** | P1 items from critic review (no pagination, no OwnerId FK, no refresh tokens, HS256 JWT, manual migrations) plus P2 post-beta improvements |\n| **Setup instructions** | Local SQLite quick start, env var table, Production deployment checklist with migration command |\n| **Upgrade notes** | Fresh install steps; migration path from pre-beta dev builds including password policy and 409 behavior changes |\n| **Verification** | 239/239 tests, 0 build warnings, no vulnerable packages, all P0 blockers closed |\n\n### Suggested tag command\n\n```bash\ngit tag -a v0.1.0-beta -m \"FlowForge beta: User/Project/Task CRUD, JWT auth, production hardening\"\n```\n\nThe document cross-links existing docs rather than duplicating full API examples — those remain in README.md.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "9ae687f7-8903-4e12-a94d-ff66952fbb41",
+    "rev": 1,
+    "createdAt": 1780078163327,
+    "updatedAt": 1780078163327
   }
 ]

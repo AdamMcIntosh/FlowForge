@@ -2962,7 +2962,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items, improvements, or gaps.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -2970,9 +2970,9 @@
     ],
     "relatedIds": [],
     "id": "8aa40b69-57ac-41bb-8f49-a9c73413c722",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780066771950,
-    "updatedAt": 1780066771950
+    "updatedAt": 1780068267642
   },
   {
     "type": "task",
@@ -3231,5 +3231,91 @@
     "rev": 1,
     "createdAt": 1780067687753,
     "updatedAt": 1780067687753
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement partitioned rate limiting (by IP for anonymous, by user sub when authenticated) and add EF Core foreign key + unique composite indexes for Project-Task relationship in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "d6c98f23-73f8-45e1-8656-3910de0e695f",
+    "rev": 1,
+    "createdAt": 1780067849103,
+    "updatedAt": 1780067849103
+  },
+  {
+    "type": "task",
+    "title": "Add EF Core FK + unique composite indexes for Project-Task",
+    "content": "Add EF Core foreign-key relationship and unique composite index on (ProjectId, Name) for Tasks (plus OwnerId, Name for Projects if required for consistency). Generate and apply a migration. ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "eea2ec43-e8a2-4d2e-bdb5-919bf997882b",
+    "rev": 1,
+    "createdAt": 1780067926686,
+    "updatedAt": 1780067926686
+  },
+  {
+    "type": "task",
+    "title": "Implement partitioned rate limiting (IP / user sub)",
+    "content": "Replace the current global FixedWindow policy with a partitioned policy: use client IP for anonymous requests and the JWT `sub` claim for authenticated users. Keep `/health` excluded. Update DI registration and any related configuration. ⚠️ PRODUCTION HARDENING — MANDATORY: Before marking this task done, verify each item that applies:\n- [ ] EF Core migrations: any schema change has a migration file; run `dotnet ef migrations add <Name>` and verify `dotnet ef database update` completes without error\n- [ ] Secrets/config: no hardcoded secrets or connection strings; all config loaded via IConfiguration / user-secrets / environment variables; validate required config at startup\n- [ ] Input validation: all request inputs validated with FluentValidation or DataAnnotations at the API boundary; invalid inputs return RFC 7807 ProblemDetails with appropriate status code (400/422)\n- [ ] Rate limiting: any public or authenticated endpoint has ASP.NET Core RateLimiter middleware applied (fixed window / sliding window / token bucket as appropriate)\n- [ ] Structured logging: key operations use ILogger<T> with structured log entries — never string interpolation in log messages; log request IDs, entity IDs, and error codes\n- [ ] Error responses: all error and exception paths return RFC 7807 ProblemDetails — never raw exception messages, stack traces, or unstructured strings\n- [ ] CancellationToken: every async method signature, repository method, and EF Core query accepts and propagates CancellationToken; never use CancellationToken.None in production paths\nExplicitly state which items do NOT apply to this task and why. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response (Node.js). Always write the full JSON error response first, THEN let the stream drain naturally.\n2. Always include a unique `jti` (JWT ID) claim (crypto.randomUUID()) in every access token you sign (Node.js).\n3. Never expose internal exception details in HTTP responses (.NET). Use ProblemDetails with a generic message; log the full exception server-side with a correlation ID.\n4. Always propagate CancellationToken through the full async call chain (.NET). Never ignore cancellation in long-running operations. ⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, middleware, and DI registration that must use the new code actually calls it. A service class or repository that is not registered in the DI container, or a middleware that is not added to the pipeline, is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "e53295e4-5be6-4270-a66a-8f2a6b0a331c",
+    "rev": 1,
+    "createdAt": 1780067926688,
+    "updatedAt": 1780067926688
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement partitioned rate limiting (IP / user sub)",
+    "content": "## Implementation\n\nReplaced the global fixed-window rate limiter with a **partitioned** fixed-window policy. Each client gets an independent bucket keyed by JWT `sub` when authenticated, or by client IP when anonymous.\n\n## Changes Made\n\n### `RateLimitPartitionKeyResolver.cs` (new)\n\nResolves the partition key for each request:\n\n- **Authenticated** — `sub:{userId}` from `JwtRegisteredClaimNames.Sub` (falls back to `ClaimTypes.NameIdentifier`)\n- **Anonymous** — `ip:{RemoteIpAddress}` (IPv4-mapped IPv6 normalized; missing IP → `ip:unknown`)\n\n### `RateLimitingExtensions.cs`\n\nSwitched from `AddFixedWindowLimiter` (single global bucket) to `AddPolicy` + `RateLimitPartition.GetFixedWindowLimiter`:\n\n```46:57:src/FlowForge.Api/RateLimiting/RateLimitingExtensions.cs\n            options.AddPolicy(RateLimitPolicies.FixedWindow, httpContext =>\n            {\n                var partitionKey = RateLimitPartitionKeyResolver.Resolve(httpContext);\n                return RateLimitPartition.GetFixedWindowLimiter(\n                    partitionKey,\n                    _ => new FixedWindowRateLimiterOptions\n                    {\n                        PermitLimit = permitLimit,\n                        Window = TimeSpan.FromSeconds(windowSeconds),\n                        QueueLimit = 0,\n                    });\n            });\n```\n\n### Wiring (unchanged, still end-to-end)\n\n| Layer | Status |\n|-------|--------|\n| DI | `AddFlowForgeRateLimiting(builder.Configuration)` in `Program.cs` |\n| Middleware | `app.UseRateLimiter()` after auth/authorization |\n| Endpoints | Auth, Me, Project, Task groups still use `.RequireRateLimiting(RateLimitPolicies.FixedWindow)` |\n| `/health` | Still `.DisableRateLimiting()` |\n| Config | `RateLimiting:PermitLimit` / `RateLimiting:WindowSeconds` unchanged |\n\n### `RateLimitPartitionKeyResolverTests.cs` (new)\n\nFour unit tests cover anonymous IP, authenticated `sub`, missing-`sub` fallback, and missing IP.\n\n## Test Results\n\n**9/9 rate-limit tests pass** (5 integration \n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "c3f098c0-eeb9-4a1b-a9c6-cf9c566ad363",
+    "rev": 1,
+    "createdAt": 1780068081266,
+    "updatedAt": 1780068081266
+  },
+  {
+    "type": "result",
+    "title": "Result: Add EF Core FK + unique composite indexes for Project-Task",
+    "content": "## Implementation\n\nEF Core now enforces the Project–Task relationship with a foreign key and composite unique indexes. The schema is delivered in a single regenerated `InitialCreate` migration so SQLite applies cleanly without ALTER TABLE rebuild failures.\n\n## Changes Made\n\n### `TaskConfiguration.cs`\n- **FK:** `Task.ProjectId` → `Project.ProjectId` (alternate key), cascade delete\n- **Unique index:** `(ProjectId, Name)` — per-project task name uniqueness (matches `InMemoryTaskRepository`)\n\n### `ProjectConfiguration.cs`\n- **Alternate key:** `ProjectId` (required for the typed FK relationship)\n- **Unique index:** `(OwnerId, Name)` — per-owner project name uniqueness (owner-scoped, not global)\n\n### Migration (`20260529152309_InitialCreate`)\nReplaced the prior `20260529140041` migration with one that creates the full schema up front:\n\n| Constraint | Detail |\n|---|---|\n| `AK_Projects_ProjectId` | Alternate key on `Projects.ProjectId` |\n| `FK_Tasks_Projects_ProjectId` | `Tasks.ProjectId` → `Projects.ProjectId`, `ON DELETE CASCADE` |\n| `IX_Tasks_ProjectId_Name` | Unique composite on tasks |\n| `IX_Projects_OwnerId_Name` | Unique composite on projects |\n\nVerified:\n```bash\ndotnet ef database update --project src/FlowForge.Infrastructure --startup-project src/FlowForge.Api\n# Done.\n\ndotnet test tests/FlowForge.Tests/FlowForge.Tests.csproj\n# Passed: 218/218\n```\n\n**Note for existing databases:** If a database was created with migration `20260529140041`, drop/recreate or run `dotnet ef database update` on a fresh DB. Production SQL Server instances that already applied the old migration need a separate additive migration — this deliverable squashes dev/SQLite history into one initial migration.\n\n## Production Hardening Checklist (this task)\n\n| Item | Status |\n|---|---|\n| EF Core migrations | **Done** — migration file present; `dotnet ef database update` succeeds on SQLite |\n| Secrets/config | **N/A** — schema-only change |\n| Input validation | **N/A** — no API surface changed |\n| R\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "ac945038-6aa1-4dd4-9aa4-bd4362b0be9b",
+    "rev": 1,
+    "createdAt": 1780068235603,
+    "updatedAt": 1780068235603
   }
 ]

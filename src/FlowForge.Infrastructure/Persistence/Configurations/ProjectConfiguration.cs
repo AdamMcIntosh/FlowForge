@@ -23,6 +23,8 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .HasColumnName("ProjectId")
             .IsRequired();
 
+        builder.HasAlternateKey(project => project.ProjectId);
+
         builder.Property(project => project.OwnerId)
             .HasConversion(
                 ownerId => ownerId.Value,
@@ -30,13 +32,12 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .HasColumnName("OwnerId")
             .IsRequired();
 
-        builder.HasIndex(project => project.OwnerId);
-
         builder.Property(project => project.Name)
             .HasMaxLength(Project.MaxNameLength)
             .IsRequired();
 
-        builder.HasIndex(project => project.Name);
+        builder.HasIndex(project => new { project.OwnerId, project.Name })
+            .IsUnique();
 
         builder.Property(project => project.CreatedAt)
             .IsRequired();

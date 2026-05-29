@@ -1,23 +1,34 @@
 {
-  "runId": "d6ef3e3c",
-  "goal": "Perform a final review of the FlowForge .NET 10 solution for beta readiness and list any remaining pre-production items, improvements, or gaps.",
-  "startedAt": 1780067624364,
-  "updatedAt": 1780067716570,
+  "runId": "6ec35453",
+  "goal": "Implement partitioned rate limiting (by IP for anonymous, by user sub when authenticated) and add EF Core foreign key + unique composite indexes for Project-Task relationship in the FlowForge .NET 10 solution.",
+  "startedAt": 1780067849095,
+  "updatedAt": 1780068267644,
   "status": "done",
   "currentWave": 1,
-  "totalTasks": 1,
-  "completedTasks": 1,
+  "totalTasks": 2,
+  "completedTasks": 2,
   "tasks": [
     {
       "id": "task-1",
-      "title": "Beta-readiness review of FlowForge .NET 10 solution",
-      "agent": "critic",
+      "title": "Add EF Core FK + unique composite indexes for Project-Task",
+      "agent": "executor",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780067636772,
-      "completedAt": 1780067687755,
+      "startedAt": 1780067926692,
+      "completedAt": 1780068235605,
       "hadBlocker": false,
-      "outputPreview": "…on | ⚠️ README good; ARCHITECTURE stale | Fix doc drift |\n\n**Bottom line:** Ship a **limited beta** once P0 items #1, #2, #3, #6, and #7 are addressed (and #4 verified if SQL Server is in scope). Treat Production GA as blocked until the full P0 list and health/pagination/proxy items are resolved."
+      "outputPreview": "…gnatures changed |\n\n## Next Steps\n\nNone required for this task. Downstream agents implementing partitioned rate limiting are unblocked. For production SQL Server databases already on the old migration, the PM should schedule an additive `AddProjectTaskConstraints` migration rather than squashing."
+    },
+    {
+      "id": "task-2",
+      "title": "Implement partitioned rate limiting (IP / user sub)",
+      "agent": "executor",
+      "wave": 1,
+      "status": "done",
+      "startedAt": 1780067929698,
+      "completedAt": 1780068081268,
+      "hadBlocker": false,
+      "outputPreview": "…gration without matching checked-in configurations). That causes `PendingModelChangesWarning` and breaks the full test host until that task completes with a consistent migration + configuration. Rate-limiting verification was done in isolation with a clean EF state; **9/9 rate-limit tests pass**."
     }
   ],
   "activeTaskIds": []

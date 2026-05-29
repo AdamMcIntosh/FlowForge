@@ -43,11 +43,17 @@ public static class RateLimitingExtensions
                 await context.HttpContext.Response.WriteAsJsonAsync(problem, cancellationToken);
             };
 
-            options.AddFixedWindowLimiter(RateLimitPolicies.FixedWindow, limiterOptions =>
+            options.AddPolicy(RateLimitPolicies.FixedWindow, httpContext =>
             {
-                limiterOptions.PermitLimit = permitLimit;
-                limiterOptions.Window = TimeSpan.FromSeconds(windowSeconds);
-                limiterOptions.QueueLimit = 0;
+                var partitionKey = RateLimitPartitionKeyResolver.Resolve(httpContext);
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey,
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = permitLimit,
+                        Window = TimeSpan.FromSeconds(windowSeconds),
+                        QueueLimit = 0,
+                    });
             });
         });
 

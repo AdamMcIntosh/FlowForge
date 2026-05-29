@@ -20,5 +20,14 @@
     "deliveredTo": [
       "test-author"
     ]
+  },
+  {
+    "id": "5f84e00b-de9a-4ca4-b1fd-f3861dc01e21",
+    "from": "executor",
+    "to": "lead-pm",
+    "subject": "Message from agent",
+    "body": "The parallel **EF Core FK + composite index** task is leaving partial migration/config changes in the workspace (e.g. `AddProjectTaskConstraints2` migration without matching checked-in configurations). That causes `PendingModelChangesWarning` and breaks the full test host until that task completes with a consistent migration + configuration. Rate-limiting verification was done in isolation with a clean EF state; **9/9 rate-limit tests pass**.",
+    "sentAt": 1780068081266,
+    "deliveredTo": []
   }
 ]

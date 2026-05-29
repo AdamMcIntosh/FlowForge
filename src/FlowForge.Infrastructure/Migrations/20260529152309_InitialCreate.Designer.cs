@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlowForge.Infrastructure.Migrations
 {
     [DbContext(typeof(FlowForgeDbContext))]
-    [Migration("20260529140041_InitialCreate")]
+    [Migration("20260529152309_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -46,9 +46,8 @@ namespace FlowForge.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
-
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("OwnerId", "Name")
+                        .IsUnique();
 
                     b.ToTable("Projects", (string)null);
                 });
@@ -79,9 +78,8 @@ namespace FlowForge.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
-
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("ProjectId", "Name")
+                        .IsUnique();
 
                     b.ToTable("Tasks", (string)null);
                 });
@@ -118,6 +116,16 @@ namespace FlowForge.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("FlowForge.Domain.Tasks.Task", b =>
+                {
+                    b.HasOne("FlowForge.Domain.Projects.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .HasPrincipalKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

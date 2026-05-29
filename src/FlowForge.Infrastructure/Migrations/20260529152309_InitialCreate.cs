@@ -25,22 +25,7 @@ namespace FlowForge.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tasks",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TaskId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProjectId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.UniqueConstraint("AK_Projects_ProjectId", x => x.ProjectId);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,25 +44,39 @@ namespace FlowForge.Infrastructure.Migrations
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Tasks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TaskId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Projects_Name",
+                name: "IX_Projects_OwnerId_Name",
                 table: "Projects",
-                column: "Name");
+                columns: new[] { "OwnerId", "Name" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projects_OwnerId",
-                table: "Projects",
-                column: "OwnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_Name",
+                name: "IX_Tasks_ProjectId_Name",
                 table: "Tasks",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_ProjectId",
-                table: "Tasks",
-                column: "ProjectId");
+                columns: new[] { "ProjectId", "Name" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
@@ -90,13 +89,13 @@ namespace FlowForge.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Projects");
-
-            migrationBuilder.DropTable(
                 name: "Tasks");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Projects");
         }
     }
 }

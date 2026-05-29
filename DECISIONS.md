@@ -80,3 +80,8 @@ _Each section corresponds to one Roland run that produced new decisions._
 
 - [Decision: Global FixedWindow rate limiting accepted for beta simplicity; per-client partitioning required before multi-tenant scale]
 - [Decision: EF must enforce composite unique indexes on (ProjectId, Name) for Tasks and (OwnerId, Name) for Projects to match InMemory behavior]
+
+## 2026-05-29 — Implement partitioned rate limiting (by IP for anonymous, by user sub when authe _(run mpr2fqtl)_
+
+- [Decision: Use partitioned fixed-window rate limiting keyed by `sub` (authenticated) or IP (anonymous) — chosen for per-client fairness without per-endpoint policy explosion]
+- [Decision: Model Project–Task FK via alternate key on `ProjectId` + composite unique indexes — required to match existing in-memory uniqueness rules while using EF Core constraints]

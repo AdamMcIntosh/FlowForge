@@ -31,13 +31,18 @@ public class TaskConfiguration : IEntityTypeConfiguration<DomainTask>
             .HasColumnName("ProjectId")
             .IsRequired();
 
-        builder.HasIndex(task => task.ProjectId);
+        builder.HasOne<Project>()
+            .WithMany()
+            .HasForeignKey(task => task.ProjectId)
+            .HasPrincipalKey(project => project.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(task => task.Name)
             .HasMaxLength(DomainTask.MaxNameLength)
             .IsRequired();
 
-        builder.HasIndex(task => task.Name);
+        builder.HasIndex(task => new { task.ProjectId, task.Name })
+            .IsUnique();
 
         builder.Property(task => task.CreatedAt)
             .IsRequired();

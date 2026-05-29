@@ -4,8 +4,6 @@ _Updated automatically after each run. Edit manually at any time._
 
 ## Architecture Decisions
 
-- Fixed-window rate limiter chosen as the single policy for all auth/CRUD endpoints.
-- N/A (no new decisions)
 - Centralized exception-to-ProblemDetails mapping lives in `GlobalExceptionHandler` (not per-endpoint).
 - JWT 401/403 responses are overridden via `JwtBearerEvents` to guarantee ProblemDetails format.
 - Validation failures return RFC 7807 ProblemDetails via the existing `ProblemDetailsResults.BadRequest` helper for consistency.
@@ -24,11 +22,11 @@ _Updated automatically after each run. Edit manually at any time._
 - None new (documentation only).
 - Rate limiting remains a single global FixedWindow policy (simplicity trade-off accepted for beta).
 - EF relationships and unique constraints were intentionally omitted in the initial migration (now flagged as P0).
+- Partitioned rate limiting chosen over global limiter to give fair per-user/per-IP quotas.
+- `ProjectId` modeled as alternate key (not primary) to support both surrogate `Id` and domain `ProjectId` while enabling typed FKs.
 
 ## Coding Standards
 
-- Shared rules live in `*ValidationRules.cs` as extension methods.
-- Tests split by layer (unit validator tests + HTTP integration tests).
 - Swagger operation metadata is attached via `.WithMetadata(new SwaggerOperationAttribute(...))` on minimal API routes.
 - XML documentation comments are placed on DTO records and endpoint handler methods.
 - Endpoints use non-static marker types (`AuthEndpointLogs`) for `ILogger<T>` because static classes cannot be generic arguments.
@@ -47,6 +45,8 @@ _Updated automatically after each run. Edit manually at any time._
 - None new.
 - All endpoints use primary-constructor minimal APIs and FluentValidation.
 - ProblemDetails + traceId on every error response (including 429).
+- Rate-limit resolver placed in `RateLimiting` folder alongside policy constants.
+- All EF configurations use explicit `HasAlternateKey` + `HasIndex(...).IsUnique()` for composite uniqueness.
 
 ## Past Mistakes
 
@@ -68,6 +68,8 @@ _Updated automatically after each run. Edit manually at any time._
 - Never reuse a single low-PermitLimit factory for both setup and rate-limit assertions — setup calls consume permits and cause the third create to hit 429 on the second attempt instead of the third.
 - None encountered in this run.
 - Never rely on InMemory uniqueness behavior to protect production DB (root cause: EF indexes were non-unique while repositories enforced uniqueness).
+- Never leave two `InitialCreate` migrations in the same folder — causes model snapshot conflicts.
+- Do not rely on SQLite `ALTER TABLE` for complex constraint changes; always regenerate initial migration in dev.
 
 ## Preferences
 
@@ -81,6 +83,7 @@ _Updated automatically after each run. Edit manually at any time._
 - `CollectCoverage=false` by default so normal `dotnet test` remains fast.
 - None surfaced.
 - Production connection strings must use SQL auth + `Encrypt=True` (avoid Windows `Trusted_Connection`).
+- Prefer `JwtRegisteredClaimNames.Sub` first, then `ClaimTypes.NameIdentifier` for authenticated partition keys.
 
 ## Project Gotchas
 
@@ -103,10 +106,10 @@ _Updated automatically after each run. Edit manually at any time._
 - Rate-limit counters are per `WebApplicationFactory` instance; separate factories are required to isolate permit windows even when the database is shared.
 - None new.
 - Relative `logs/` path for Serilog file sink will fail in read-only containers.
+- Old migration `20260529140041` must be dropped before applying the new `20260529152309` on fresh SQLite databases.
 
 ## Proven Patterns
 
-- Splitting test-author by layer (endpoint factories vs. repository tests) allowed parallel execution.
 - Splitting migration generation + verification into a dedicated executor task allowed clean parallel review.
 - Centralizing policy names in a static class allows easy reuse across endpoint groups.
 - Splitting the duplicate-name guard into an explicit `Id`-based lookup + dedicated index-removal helper produced a correct, testable fix in one small change.
@@ -126,6 +129,7 @@ _Updated automatically after each run. Edit manually at any time._
 - Composite fixture with two factories sharing one `SqliteConnection` cleanly separates setup traffic from the rate-limit window while preserving JWT validity.
 - None new.
 - Splitting test-author responsibility by layer (endpoint vs repository) allowed parallel execution with zero conflicts.
+- Splitting work into isolated tasks (rate-limiting vs EF) allowed parallel execution with clean handoff via blackboard.
 
 ## Anti-Patterns
 
@@ -147,7 +151,8 @@ _Updated automatically after each run. Edit manually at any time._
 - [Single-factory rate-limit tests] — root cause: all HTTP calls share the same permit counter; example: original `ProjectCreateRateLimitTests` and `TaskCreateRateLimitTests`.
 - None new.
 - [Copy-paste of `TryGetOwnerId` helper] — root cause: duplicated in two endpoint files; example: `ProjectEndpoints.cs` and `TaskEndpoints.cs`.
+- [Squashing migrations in a shared repo without documenting prod impact] — root cause: desire for clean SQLite history; example: previous `InitialCreate` left dangling in git.
 
 ---
 
-_Last updated: 2026-05-29 · run mpr2axf2 · Perform a final review of the FlowForge .NET 10 solution for_
+_Last updated: 2026-05-29 · run mpr2fqtl · Implement partitioned rate limiting (by IP for anonymous, by_

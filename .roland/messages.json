@@ -29,5 +29,14 @@
     "body": "The parallel **EF Core FK + composite index** task is leaving partial migration/config changes in the workspace (e.g. `AddProjectTaskConstraints2` migration without matching checked-in configurations). That causes `PendingModelChangesWarning` and breaks the full test host until that task completes with a consistent migration + configuration. Rate-limiting verification was done in isolation with a clean EF state; **9/9 rate-limit tests pass**.",
     "sentAt": 1780068081266,
     "deliveredTo": []
+  },
+  {
+    "id": "f13d994e-f71b-4a68-9c18-9da60aa2a289",
+    "from": "security-auditor",
+    "to": "lead-pm",
+    "subject": "Message from agent",
+    "body": "**Subject:** Security audit complete — beta OK with auth hardening gaps\n\nPartitioned rate limiting is implemented (not global). Primary blockers for production are **weak password policy**, **PBKDF2 DoS via unbounded passwords**, **no JWT secret length enforcement**, and **insufficient auth-specific rate limits**. Recommend assigning executor tasks H1–H5 before open beta; M1–M3 before scale. No dependency vulnerabilities found; 218/218 tests pass.",
+    "sentAt": 1780069912957,
+    "deliveredTo": []
   }
 ]

@@ -60,6 +60,56 @@ public class AuthRequestValidatorTests
     }
 
     [Fact]
+    public void AuthRequest_WithPasswordTooShort_HasValidationError()
+    {
+        var result = _validator.TestValidate(new AuthRequest("user@example.com", "Short1!"));
+        result.ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorMessage("Password must be at least 12 characters long.");
+    }
+
+    [Fact]
+    public void AuthRequest_WithPasswordTooLong_HasValidationError()
+    {
+        var password = $"Aa1!{new string('x', 125)}";
+
+        var result = _validator.TestValidate(new AuthRequest("user@example.com", password));
+        result.ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorMessage("Password must be at most 128 characters long.");
+    }
+
+    [Fact]
+    public void AuthRequest_WithPasswordMissingUppercase_HasValidationError()
+    {
+        var result = _validator.TestValidate(new AuthRequest("user@example.com", "securepass123!"));
+        result.ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorMessage("Password must contain at least one uppercase letter.");
+    }
+
+    [Fact]
+    public void AuthRequest_WithPasswordMissingLowercase_HasValidationError()
+    {
+        var result = _validator.TestValidate(new AuthRequest("user@example.com", "SECUREPASS123!"));
+        result.ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorMessage("Password must contain at least one lowercase letter.");
+    }
+
+    [Fact]
+    public void AuthRequest_WithPasswordMissingDigit_HasValidationError()
+    {
+        var result = _validator.TestValidate(new AuthRequest("user@example.com", "SecurePassword!"));
+        result.ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorMessage("Password must contain at least one digit.");
+    }
+
+    [Fact]
+    public void AuthRequest_WithPasswordMissingSpecialCharacter_HasValidationError()
+    {
+        var result = _validator.TestValidate(new AuthRequest("user@example.com", "SecurePass1234"));
+        result.ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorMessage("Password must contain at least one special character.");
+    }
+
+    [Fact]
     public void AuthRequest_WithValidInput_IsValid()
     {
         var result = _validator.TestValidate(new AuthRequest("user@example.com", "SecurePass123!"));

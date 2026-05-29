@@ -15,12 +15,12 @@ namespace FlowForge.Infrastructure.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProjectId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,12 +32,12 @@ namespace FlowForge.Infrastructure.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 320, nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 512, nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(320)", maxLength: 320, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,12 +48,12 @@ namespace FlowForge.Infrastructure.Migrations
                 name: "Tasks",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TaskId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProjectId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {

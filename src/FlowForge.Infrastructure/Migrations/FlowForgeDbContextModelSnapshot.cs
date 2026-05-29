@@ -3,6 +3,7 @@ using System;
 using FlowForge.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -15,31 +16,35 @@ namespace FlowForge.Infrastructure.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.8");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "10.0.8")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("FlowForge.Domain.Projects.Project", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid>("OwnerId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("OwnerId");
 
                     b.Property<Guid>("ProjectId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ProjectId");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -52,26 +57,26 @@ namespace FlowForge.Infrastructure.Migrations
             modelBuilder.Entity("FlowForge.Domain.Tasks.Task", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid>("ProjectId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ProjectId");
 
                     b.Property<Guid>("TaskId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("TaskId");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -84,27 +89,27 @@ namespace FlowForge.Infrastructure.Migrations
             modelBuilder.Entity("FlowForge.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(320)
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(320)")
                         .HasColumnName("Email");
 
                     b.Property<string>("PasswordHash")
                         .HasMaxLength(512)
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(512)")
                         .HasColumnName("PasswordHash");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("UserId");
 
                     b.HasKey("Id");

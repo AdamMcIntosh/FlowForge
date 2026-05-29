@@ -60,6 +60,7 @@ try
 {
     await app.ApplyMigrationsInNonProductionAsync();
 
+    app.UseFlowForgeForwardedHeaders(builder.Configuration);
     app.UseFlowForgeTraceId();
     app.UseExceptionHandler();
     app.UseFlowForgeSecurityHeaders();

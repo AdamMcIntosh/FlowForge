@@ -65,6 +65,22 @@ public class ValidationEndpointTests : IClassFixture<ExceptionHandlingWebApplica
     }
 
     [Fact]
+    public async Task Register_WithWeakPassword_ReturnsProblemDetails()
+    {
+        var response = await _client.PostAsJsonAsync(
+            "/register",
+            new AuthRequest($"weak-pass-{Guid.NewGuid():N}@example.com", "short"));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        Assert.NotNull(problem);
+        Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+        Assert.Equal("Invalid request", problem.Title);
+        Assert.Equal("Password must be at least 12 characters long.", problem.Detail);
+    }
+
+    [Fact]
     public async Task CreateProject_WithNameTooLong_ReturnsProblemDetails()
     {
         var token = await RegisterAndGetTokenAsync($"project-long-{Guid.NewGuid():N}@example.com");

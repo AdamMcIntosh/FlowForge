@@ -1,34 +1,45 @@
 {
-  "runId": "6ec35453",
-  "goal": "Implement partitioned rate limiting (by IP for anonymous, by user sub when authenticated) and add EF Core foreign key + unique composite indexes for Project-Task relationship in the FlowForge .NET 10 solution.",
-  "startedAt": 1780067849095,
-  "updatedAt": 1780068267644,
+  "runId": "7979cfe4",
+  "goal": "Regenerate EF Core migration for SQL Server compatibility, add partitioned rate limiting improvements, and strengthen password policy in the FlowForge .NET 10 solution.",
+  "startedAt": 1780070149134,
+  "updatedAt": 1780070386509,
   "status": "done",
   "currentWave": 1,
-  "totalTasks": 2,
-  "completedTasks": 2,
+  "totalTasks": 3,
+  "completedTasks": 3,
   "tasks": [
     {
       "id": "task-1",
-      "title": "Add EF Core FK + unique composite indexes for Project-Task",
+      "title": "Regenerate EF Core migration for SQL Server compatibility",
       "agent": "executor",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780067926692,
-      "completedAt": 1780068235605,
+      "startedAt": 1780070187245,
+      "completedAt": 1780070337203,
       "hadBlocker": false,
-      "outputPreview": "…gnatures changed |\n\n## Next Steps\n\nNone required for this task. Downstream agents implementing partitioned rate limiting are unblocked. For production SQL Server databases already on the old migration, the PM should schedule an additive `AddProjectTaskConstraints` migration rather than squashing."
+      "outputPreview": "…ion, delete `flowforge.db` (or run `dotnet ef database update` on a fresh file).\n- For Production SQL Server, run `dotnet ef database update` with `Database__Provider=SqlServer` and a configured connection string before deploy (auto-migration remains disabled in Production per project decisions)."
     },
     {
       "id": "task-2",
-      "title": "Implement partitioned rate limiting (IP / user sub)",
+      "title": "Add partitioned rate limiting improvements",
       "agent": "executor",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780067929698,
-      "completedAt": 1780068081268,
+      "startedAt": 1780070190249,
+      "completedAt": 1780070262015,
       "hadBlocker": false,
-      "outputPreview": "…gration without matching checked-in configurations). That causes `PendingModelChangesWarning` and breaks the full test host until that task completes with a consistent migration + configuration. Rate-limiting verification was done in isolation with a clean EF state; **9/9 rate-limit tests pass**."
+      "outputPreview": "…No** — no request DTO changes |\n| Rate limiting | **Yes** | Enhanced partitioned limiter with per-client fairness |\n| Structured logging | **No** — no new log paths |\n| Error responses | **No** — existing 429 ProblemDetails unchanged |\n| CancellationToken | **No** — no new async service methods |"
+    },
+    {
+      "id": "task-3",
+      "title": "Strengthen password policy",
+      "agent": "executor",
+      "wave": 1,
+      "status": "done",
+      "startedAt": 1780070262016,
+      "completedAt": 1780070325789,
+      "hadBlocker": false,
+      "outputPreview": "…dy passed through `ValidateAsync` |\n\n**Note:** `ValidationEndpointTests` may fail in this workspace if another in-flight change left pending EF model changes (`PendingModelChangesWarning` on startup). That is unrelated to this password work; auth E2E coverage is confirmed via `AuthEndpointTests`."
     }
   ],
   "activeTaskIds": []

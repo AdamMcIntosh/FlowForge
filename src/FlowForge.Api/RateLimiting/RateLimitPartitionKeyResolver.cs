@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 
 namespace FlowForge.Api.RateLimiting;
@@ -21,17 +22,31 @@ internal static class RateLimitPartitionKeyResolver
             }
         }
 
-        var ip = httpContext.Connection.RemoteIpAddress;
-        if (ip is not null)
-        {
-            if (ip.IsIPv4MappedToIPv6)
-            {
-                ip = ip.MapToIPv4();
-            }
+        var clientIp = GetClientIpAddress(httpContext);
+        return $"{AnonymousPrefix}{clientIp}";
+    }
 
-            return $"{AnonymousPrefix}{ip}";
+    public static bool IsAuthenticatedPartition(string partitionKey) =>
+        partitionKey.StartsWith(AuthenticatedPrefix, StringComparison.Ordinal);
+
+    internal static string GetClientIpAddress(HttpContext httpContext)
+    {
+        var ip = httpContext.Connection.RemoteIpAddress;
+        if (ip is null)
+        {
+            return "unknown";
         }
 
-        return $"{AnonymousPrefix}unknown";
+        if (ip.IsIPv4MappedToIPv6)
+        {
+            ip = ip.MapToIPv4();
+        }
+
+        if (IPAddress.IsLoopback(ip))
+        {
+            return "127.0.0.1";
+        }
+
+        return ip.ToString();
     }
 }

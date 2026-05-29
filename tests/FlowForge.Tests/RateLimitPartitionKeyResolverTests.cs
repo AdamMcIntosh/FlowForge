@@ -60,4 +60,34 @@ public sealed class RateLimitPartitionKeyResolverTests
 
         Assert.Equal($"{RateLimitPartitionKeyResolver.AnonymousPrefix}unknown", partitionKey);
     }
+
+    [Fact]
+    public void GetClientIpAddress_WhenIpv4MappedToIpv6_NormalizesToIpv4()
+    {
+        var context = new DefaultHttpContext();
+        context.Connection.RemoteIpAddress = IPAddress.Parse("::ffff:203.0.113.10");
+
+        var clientIp = RateLimitPartitionKeyResolver.GetClientIpAddress(context);
+
+        Assert.Equal("203.0.113.10", clientIp);
+    }
+
+    [Fact]
+    public void GetClientIpAddress_WhenLoopback_NormalizesTo127001()
+    {
+        var context = new DefaultHttpContext();
+        context.Connection.RemoteIpAddress = IPAddress.IPv6Loopback;
+
+        var clientIp = RateLimitPartitionKeyResolver.GetClientIpAddress(context);
+
+        Assert.Equal("127.0.0.1", clientIp);
+    }
+
+    [Theory]
+    [InlineData("sub:user-1", true)]
+    [InlineData("ip:203.0.113.10", false)]
+    public void IsAuthenticatedPartition_DistinguishesPartitionTypes(string partitionKey, bool expected)
+    {
+        Assert.Equal(expected, RateLimitPartitionKeyResolver.IsAuthenticatedPartition(partitionKey));
+    }
 }

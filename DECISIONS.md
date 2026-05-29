@@ -85,3 +85,16 @@ _Each section corresponds to one Roland run that produced new decisions._
 
 - [Decision: Use partitioned fixed-window rate limiting keyed by `sub` (authenticated) or IP (anonymous) — chosen for per-client fairness without per-endpoint policy explosion]
 - [Decision: Model Project–Task FK via alternate key on `ProjectId` + composite unique indexes — required to match existing in-memory uniqueness rules while using EF Core constraints]
+
+## 2026-05-29 — Add EF Core foreign key and composite unique indexes for Project-Task relationsh _(run mpr30rdz)_
+
+- [Decision: Project–Task relationship uses typed alternate key (ProjectId) + composite unique indexes on (OwnerId, Name) and (ProjectId, Name) — rationale: enforces business rules at the database level while keeping domain value objects intact.]
+
+## 2026-05-29 — Perform a final review of the FlowForge .NET 10 solution for beta readiness and  _(run mpr3mddn)_
+
+- [Decision: Partitioned rate limiting (JWT sub / IP) replaces global FixedWindow for per-user fairness under load]
+- [Decision: Explicit `dotnet ef database update` required in Production; auto-migrate disabled]
+
+## 2026-05-29 — Regenerate EF Core migration for SQL Server compatibility, add partitioned rate  _(run mpr3t1jj)_
+
+- [Decision: `FlowForgeDbContextFactory` now defaults to SQL Server for design-time operations so migrations are always authored against the production provider.]

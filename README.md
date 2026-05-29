@@ -353,6 +353,11 @@ Register and login validate input with FluentValidation before calling the servi
 | Invalid email format | `Email address format is invalid.` |
 | Email longer than 320 characters | `Email address is too long.` |
 | Missing or whitespace password | `Password is required.` |
+| Password shorter than 12 characters | `Password must be at least 12 characters long.` |
+| Password longer than 128 characters | `Password must be at most 128 characters long.` |
+| Password missing uppercase, lowercase, digit, or special character | `Password must contain at least one uppercase letter.` (and related messages for each missing class) |
+
+Passwords must be **12–128 characters** and include at least one uppercase letter, one lowercase letter, one digit, and one special character (non-alphanumeric). Example: `SecurePass123!`.
 
 Example — empty email:
 

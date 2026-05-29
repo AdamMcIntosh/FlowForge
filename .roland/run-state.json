@@ -1,34 +1,23 @@
 {
-  "runId": "8722d048",
-  "goal": "Add a basic protected /me endpoint that returns current user info using JWT authentication in the FlowForge .NET 10 solution.",
-  "startedAt": 1780012658073,
-  "updatedAt": 1780012768913,
+  "runId": "fac56d67",
+  "goal": "Implement Project HTTP controller and routes with protected middleware in the FlowForge .NET 10 solution.",
+  "startedAt": 1780019538450,
+  "updatedAt": 1780019634834,
   "status": "done",
   "currentWave": 1,
-  "totalTasks": 2,
-  "completedTasks": 2,
+  "totalTasks": 1,
+  "completedTasks": 1,
   "tasks": [
     {
       "id": "task-1",
-      "title": "Implement protected /me endpoint",
-      "agent": "executor",
+      "title": "Review Project endpoints and protected routes",
+      "agent": "code-reviewer",
       "wave": 1,
       "status": "done",
-      "startedAt": 1780012686862,
-      "completedAt": 1780012742022,
+      "startedAt": 1780019557557,
+      "completedAt": 1780019597802,
       "hadBlocker": false,
-      "outputPreview": "… Handler reads `sub` claim → `GetByIdAsync` → returns `{ \"id\": \"...\", \"email\": \"...\" }`\n\n## Test Results\n\nAll **24 tests pass**, including the two new `/me` endpoint tests.\n\n## Next Steps\n\nThe doc-writer task can document the `/me` endpoint with a Bearer token example and expected response shape."
-    },
-    {
-      "id": "task-2",
-      "title": "Document the new /me endpoint",
-      "agent": "doc-writer",
-      "wave": 1,
-      "status": "done",
-      "startedAt": 1780012689866,
-      "completedAt": 1780012707976,
-      "hadBlocker": false,
-      "outputPreview": "…er + expected fields\n\n## Summary\n\nDocumentation is complete and unblocked. The protected `/me` endpoint is documented with a copy-paste `curl` example, Bearer token usage, and the expected JSON response. No blockers — the executor’s `/me` implementation was already in place when this was written."
+      "outputPreview": "…HTTP mapping all check out. Tests pass end-to-end for the primary CRUD flow.\n\n**Action items before closing the team goal:** fix README drift and extend endpoint tests for PUT/DELETE forbidden and validation/unauthorized cases. No code changes required in the endpoints themselves for correctness."
     }
   ],
   "activeTaskIds": []

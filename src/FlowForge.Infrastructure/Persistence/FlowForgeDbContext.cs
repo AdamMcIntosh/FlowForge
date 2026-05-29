@@ -1,3 +1,4 @@
+using FlowForge.Domain.Projects;
 using FlowForge.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,8 @@ namespace FlowForge.Infrastructure.Persistence;
 public class FlowForgeDbContext(DbContextOptions<FlowForgeDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users => Set<User>();
+
+    public DbSet<Project> Projects => Set<Project>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

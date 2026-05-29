@@ -465,7 +465,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Add integration test for UserService using real EF Core UserRepository in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -473,9 +473,9 @@
     ],
     "relatedIds": [],
     "id": "290383fe-8dae-4139-9411-3e2a4eef514d",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780012001392,
-    "updatedAt": 1780012001392
+    "updatedAt": 1780013107150
   },
   {
     "type": "task",
@@ -586,7 +586,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Add basic User registration and login Minimal API endpoints with JWT issuance in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -594,9 +594,9 @@
     ],
     "relatedIds": [],
     "id": "7921f419-0469-41b0-8734-1ccda087de20",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780012319450,
-    "updatedAt": 1780012319450
+    "updatedAt": 1780013691304
   },
   {
     "type": "task",
@@ -707,7 +707,7 @@
     "type": "task",
     "title": "TEAM GOAL",
     "content": "Add a basic protected /me endpoint that returns current user info using JWT authentication in the FlowForge .NET 10 solution.",
-    "status": "in_progress",
+    "status": "done",
     "author": "system",
     "priority": "critical",
     "tags": [
@@ -715,9 +715,9 @@
     ],
     "relatedIds": [],
     "id": "779cfa24-e50d-490b-b902-e08f59d50fb0",
-    "rev": 1,
+    "rev": 2,
     "createdAt": 1780012658076,
-    "updatedAt": 1780012658076
+    "updatedAt": 1780013830571
   },
   {
     "type": "task",
@@ -788,5 +788,575 @@
     "rev": 1,
     "createdAt": 1780012742022,
     "updatedAt": 1780012742022
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Add basic Project entity, repository interface, and EF Core configuration in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "a7cff9d9-c582-4172-bbb6-56093ca25b29",
+    "rev": 2,
+    "createdAt": 1780013002465,
+    "updatedAt": 1780014343661
+  },
+  {
+    "type": "task",
+    "title": "Add basic Project entity to Domain",
+    "content": "Create basic Project aggregate root (and minimal supporting ProjectId value object) under src/FlowForge.Domain/Projects/ following the exact style, namespaces, BaseEntity inheritance, private constructors, and validation patterns used by User.cs and UserId.cs. Include only the core properties needed for a basic entity.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "752be05b-9c42-4e65-8484-80b0ba512b04",
+    "rev": 1,
+    "createdAt": 1780013032940,
+    "updatedAt": 1780013032940
+  },
+  {
+    "type": "task",
+    "title": "Add IProjectRepository interface to Domain",
+    "content": "Add IProjectRepository interface in src/FlowForge.Domain/Projects/ with the standard async CRUD methods plus any obvious lookup. Follow IUserRepository exactly, including CancellationToken = default as the final parameter on every method and correct namespace.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "7a52af1f-c96a-44f1-8d99-4fbebb429116",
+    "rev": 1,
+    "createdAt": 1780013032941,
+    "updatedAt": 1780013032941
+  },
+  {
+    "type": "task",
+    "title": "Add basic EF Core Project configuration in Infrastructure",
+    "content": "Add ProjectConfiguration.cs under src/FlowForge.Infrastructure/Persistence/Configurations/ that implements IEntityTypeConfiguration<Project> with table mapping, key, value conversions for value objects, required columns, and indexes. Ensure it will be picked up automatically by FlowForgeDbContext.ApplyConfigurationsFromAssembly.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "f2903007-6e2a-4acd-82ce-c42dae6c29ba",
+    "rev": 1,
+    "createdAt": 1780013032941,
+    "updatedAt": 1780013032941
+  },
+  {
+    "type": "result",
+    "title": "Result: Add basic Project entity to Domain",
+    "content": "## Implementation\n\nAdded the basic `Project` aggregate root and `ProjectId` value object under `src/FlowForge.Domain/Projects/`, mirroring the `User` / `UserId` patterns.\n\n## Changes Made\n\n**New file:** `src/FlowForge.Domain/Projects/ProjectId.cs`\n- Sealed `ValueObject` with private constructor, `New()`, and `From(Guid)` with empty-Guid validation\n- Same equality and `ToString()` pattern as `UserId`\n\n**New file:** `src/FlowForge.Domain/Projects/Project.cs`\n- Extends `BaseEntity` with `ProjectId` and `Name`\n- Private parameterless constructor for EF Core\n- Public constructors: `(string name)` delegates to `(ProjectId.New(), name)`; `(ProjectId, string)` sets `Id`, timestamps, and validates name (non-whitespace, max 200 chars, trimmed)\n- `MaxNameLength` constant for validation and future EF configuration\n\n## Verification\n\n```\ndotnet build  → succeeded (0 warnings, 0 errors)\ndotnet test   → 24 passed, 0 failed\n```\n\n## Next Steps\n\nDownstream agents can add `IProjectRepository`, EF Core `ProjectConfiguration`, and repository implementations using these types.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "0aae27b0-3bb3-4e1e-bda0-62a729007d59",
+    "rev": 1,
+    "createdAt": 1780013049067,
+    "updatedAt": 1780013049067
+  },
+  {
+    "type": "result",
+    "title": "Result: Add IProjectRepository interface to Domain",
+    "content": "## Implementation\n\nAdded `IProjectRepository` in the Domain layer, matching `IUserRepository` structure and conventions.\n\n## Changes Made\n\n**New file:** `src/FlowForge.Domain/Projects/IProjectRepository.cs`\n\nThe interface exposes:\n\n| Method | Purpose |\n|--------|---------|\n| `GetByIdAsync` | Load by `Guid` id |\n| `GetAllAsync` | List all projects |\n| `AddAsync` | Persist new project |\n| `UpdateAsync` | Persist changes |\n| `DeleteAsync` | Remove project |\n| `FindByNameAsync` | Lookup by name (parallel to `FindByEmailAsync` on users) |\n\nAll methods use `CancellationToken cancellationToken = default` as the final parameter, and the namespace is `FlowForge.Domain.Projects`.\n\n## Verification\n\nSolution builds with 0 warnings and 0 errors.\n\n## Next Steps\n\nDownstream agents can:\n\n1. Implement `ProjectRepository` and `InMemoryProjectRepository` in Infrastructure (including `FindByNameAsync` with trimmed/normalized name matching, consistent with `Project` validation).\n2. Register `IProjectRepository` in `DependencyInjection.cs` when repository implementations exist.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "d78abad1-9a93-485b-898d-56f183c1233b",
+    "rev": 1,
+    "createdAt": 1780013055598,
+    "updatedAt": 1780013055598
+  },
+  {
+    "type": "result",
+    "title": "Result: Add basic EF Core Project configuration in Infrastructure",
+    "content": "## Implementation\n\nAdded `ProjectConfiguration` in Infrastructure, mirroring the existing `UserConfiguration` pattern. The solution builds with 0 warnings and all 24 tests pass.\n\n## Changes Made\n\n**New file:** `src/FlowForge.Infrastructure/Persistence/Configurations/ProjectConfiguration.cs`\n\nThe configuration:\n\n- Maps `Project` to the `Projects` table\n- Sets `Id` as the primary key with `ValueGeneratedNever()` (IDs come from `ProjectId`)\n- Converts `ProjectId` value object ↔ `Guid` column (`ProjectId`, required)\n- Maps `Name` as required with `MaxLength(Project.MaxNameLength)` (200)\n- Adds a non-unique index on `Name` to support `FindByNameAsync` lookups\n- Marks `CreatedAt` and `UpdatedAt` as required\n\nDiscovery is automatic: `FlowForgeDbContext` already calls `ApplyConfigurationsFromAssembly(typeof(FlowForgeDbContext).Assembly)`, so this configuration is registered without further wiring.\n\n## Next Steps\n\nDownstream work (out of scope here):\n\n- Add `DbSet<Project>` to `FlowForgeDbContext` when implementing `ProjectRepository`\n- Implement `IProjectRepository` (EF Core + in-memory) and register in DI",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "6b7af0a1-bc8d-4e32-be4b-e6c3dca8a008",
+    "rev": 1,
+    "createdAt": 1780013063738,
+    "updatedAt": 1780013063738
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement EF Core ProjectRepository and InMemoryProjectRepository in the FlowForge .NET 10 solution.",
+    "status": "done",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "8e2787c1-4b86-4e61-a058-7c097d3026e9",
+    "rev": 2,
+    "createdAt": 1780013345483,
+    "updatedAt": 1780019634833
+  },
+  {
+    "type": "task",
+    "title": "Implement ProjectRepository and InMemoryProjectRepository",
+    "content": "Create ProjectRepository.cs (EF Core) and InMemoryProjectRepository.cs under src/FlowForge.Infrastructure/Persistence/Repositories/. Follow the exact style, primary-constructor injection, CancellationToken = default, and unique-name enforcement of the existing User repositories. Ensure both classes fully implement IProjectRepository. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "1f5b322a-fe5a-4a4a-b6b2-980defa00fc6",
+    "rev": 1,
+    "createdAt": 1780013374229,
+    "updatedAt": 1780013374229
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement ProjectRepository and InMemoryProjectRepository",
+    "content": "## Implementation\n\nAdded EF Core and in-memory implementations of `IProjectRepository`, mirroring the existing User repository patterns.\n\n## Changes Made\n\n**New file:** `src/FlowForge.Infrastructure/Persistence/Repositories/ProjectRepository.cs`\n- Primary-constructor injection of `FlowForgeDbContext`\n- All six interface methods: `GetByIdAsync`, `GetAllAsync`, `AddAsync`, `UpdateAsync`, `DeleteAsync`, `FindByNameAsync`\n- `GetAllAsync` uses `AsNoTracking()`; mutating methods call `SaveChangesAsync`\n- `FindByNameAsync` trims the search name to match `Project` constructor behavior\n\n**New file:** `src/FlowForge.Infrastructure/Persistence/Repositories/InMemoryProjectRepository.cs`\n- Dual-index storage (`_projectsById`, `_projectsByName`) with thread-safe locking\n- Unique name enforcement on add/update (same semantics as `InMemoryUserRepository` email handling)\n- Prisma-style error throwing for missing records and duplicate names\n\n**Updated:** `src/FlowForge.Infrastructure/Persistence/FlowForgeDbContext.cs`\n- Added `DbSet<Project> Projects` — required for `ProjectRepository` to compile and operate\n\n**New file:** `tests/FlowForge.Tests/InMemoryProjectRepositoryTests.cs`\n- Nine tests covering CRUD, name lookup (including trim), duplicate-name rejection, and missing-record errors\n\n## Verification\n\n```\ndotnet build  → succeeded (0 warnings, 0 errors)\ndotnet test   → 33 passed, 0 failed\n```\n\n## Next Steps\n\nDownstream agents can:\n1. Register `IProjectRepository` → `ProjectRepository` in `DependencyInjection.cs` (separate task, not in scope here)\n2. Add `ProjectService` and API endpoints that consume the repository",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "76297abd-32a7-4ead-ba70-5948ac4bffd8",
+    "rev": 1,
+    "createdAt": 1780013654385,
+    "updatedAt": 1780013654385
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Register IProjectRepository in DependencyInjection and create a basic ProjectService that consumes it in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "b01636f9-bacb-48e1-b59d-886a40159d3e",
+    "rev": 1,
+    "createdAt": 1780013733516,
+    "updatedAt": 1780013733516
+  },
+  {
+    "type": "task",
+    "title": "Create IProjectService + basic ProjectService",
+    "content": "Create src/FlowForge.Application/Projects/IProjectService.cs and ProjectService.cs. Follow the exact UserService pattern: primary constructor injection, CancellationToken = default on every method, delegate CRUD + FindByName to IProjectRepository. Add the service registration inside AddApplication. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "b4077662-d28c-4aa6-9594-feb28fea09c2",
+    "rev": 1,
+    "createdAt": 1780013760018,
+    "updatedAt": 1780013760018
+  },
+  {
+    "type": "task",
+    "title": "Register IProjectRepository and IProjectService in DI",
+    "content": "In src/FlowForge.Infrastructure/DependencyInjection.cs add `services.AddScoped<IProjectRepository, ProjectRepository>();` inside AddInfrastructure (following the IUserRepository line). In src/FlowForge.Application/DependencyInjection.cs ensure `services.AddScoped<IProjectService, ProjectService>();` is present inside AddApplication. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "2e48d470-8432-459d-a96f-fcdbef1977f3",
+    "rev": 1,
+    "createdAt": 1780013760019,
+    "updatedAt": 1780013760019
+  },
+  {
+    "type": "result",
+    "title": "Result: Register IProjectRepository and IProjectService in DI",
+    "content": "## Implementation\n\nRegistered `IProjectRepository` and `IProjectService` in DI and added the missing Application-layer service types so the registrations compile and resolve end-to-end.\n\n## Changes Made\n\n**Infrastructure DI** (`src/FlowForge.Infrastructure/DependencyInjection.cs`):\n- Added `services.AddScoped<IProjectRepository, ProjectRepository>();` immediately after the `IUserRepository` registration\n- Added `using FlowForge.Domain.Projects;`\n\n**Application DI** (`src/FlowForge.Application/DependencyInjection.cs`):\n- Confirmed `services.AddScoped<IProjectService, ProjectService>();` is present in `AddApplication`\n- Removed duplicate `using FlowForge.Application.Projects;`\n\n**Application layer** (required dependency for DI registration):\n- Added `src/FlowForge.Application/Projects/IProjectService.cs` — mirrors `IUserService` with basic CRUD + name lookup\n- Added `src/FlowForge.Application/Projects/ProjectService.cs` — primary-constructor injection of `IProjectRepository`, following the `UserService` pattern\n\n## Verification\n\n- Build succeeds with **0 warnings**\n- All **33 tests pass**\n- DI chain is complete: `AddApplication()` + `AddInfrastructure()` (used by `Program.cs` and the EF Core test fixture) now resolve `IProjectService` → `ProjectService` → `IProjectRepository` → `ProjectRepository`\n\n## Next Steps\n\nProject service/repository are registered but not yet exposed via API endpoints — that would be a separate task for a downstream agent.",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "c5e13506-0108-4f1c-801e-b83ce7e8724c",
+    "rev": 1,
+    "createdAt": 1780013793429,
+    "updatedAt": 1780013793429
+  },
+  {
+    "type": "result",
+    "title": "Result: Create IProjectService + basic ProjectService",
+    "content": "## Implementation\n\nAdded `IProjectService` and `ProjectService` in the Application layer, mirroring the `UserService` pattern, and registered the service in `AddApplication`.\n\n## Changes Made\n\n### Application layer — `IProjectService` / `ProjectService`\n\n**New files under `src/FlowForge.Application/Projects/`:**\n\n| File | Purpose |\n|---|---|\n| `IProjectService.cs` | Contract: get-by-id, get-all, create, delete, get-by-name |\n| `ProjectService.cs` | Thin service delegating to `IProjectRepository` |\n\n`ProjectService` uses primary constructor injection:\n\n```csharp\npublic class ProjectService(IProjectRepository projectRepository) : IProjectService\n```\n\n| Method | Behavior |\n|---|---|\n| `GetByIdAsync` | Delegates to `IProjectRepository.GetByIdAsync` |\n| `GetAllAsync` | Delegates to `IProjectRepository.GetAllAsync` |\n| `CreateAsync` | Creates `new Project(name)`, persists via `AddAsync`, returns entity |\n| `DeleteAsync` | Loads by id (throws if missing), calls `DeleteAsync` |\n| `GetByNameAsync` | Delegates to `FindByNameAsync` (mirrors `UserService.GetByEmailAsync`) |\n\n`UpdateAsync` is not exposed on the service interface, matching `IUserService` (repository still supports update for future callers).\n\n### DI registration — `AddApplication`\n\n```13:15:src/FlowForge.Application/DependencyInjection.cs\n        services.AddScoped<IUserService, UserService>();\n        services.AddScoped<IProjectService, ProjectService>();\n```\n\n`IProjectRepository` → `ProjectRepository` is already registered in `AddInfrastructure` (sibling task). With both registrations in place, `Program.cs` (`AddApplication()` + `AddInfrastructure()`) resolves `IProjectService` end-to-end.\n\n## Verification\n\n- Build: 0 warnings, 0 errors\n- Tests: **33/33 passed** (`dotnet test`)\n\n## Next Steps\n\nDownstream work (separate tasks): Project API endpoints, integration tests for `ProjectService`, and any auth-scoped project operations. `AuthEndpointWebApplicationFactory` may need `IProjectRepository` registered in `Con\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "b5e53203-9689-4590-b3f0-5f090a0f1740",
+    "rev": 1,
+    "createdAt": 1780013796662,
+    "updatedAt": 1780013796662
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement all Project application use cases (create, list, getById, update, delete) with ownership authorization in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "4fe5aa7b-fcb8-4a44-b495-504586908459",
+    "rev": 1,
+    "createdAt": 1780014029807,
+    "updatedAt": 1780014029807
+  },
+  {
+    "type": "task",
+    "title": "Add OwnerId to Project aggregate root",
+    "content": "Extend Project entity (and ProjectId value object if needed) to include an immutable OwnerId (UserId) set at construction. Update constructors, BaseEntity usage, and any invariants. Keep primary constructor DI pattern and CancellationToken = default convention. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "f5faa5c4-52b1-4333-a70d-24c195af8ab2",
+    "rev": 1,
+    "createdAt": 1780014064954,
+    "updatedAt": 1780014064954
+  },
+  {
+    "type": "task",
+    "title": "Update IProjectRepository and both implementations for ownership",
+    "content": "Add GetAllByOwnerAsync and GetByIdForOwnerAsync (or equivalent) overloads to IProjectRepository. Update ProjectRepository (EF) and InMemoryProjectRepository to implement ownership-scoped queries while preserving existing constraint enforcement and CancellationToken = default. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "05f97289-f1f4-4fcc-842c-5f172f5c1ba2",
+    "rev": 1,
+    "createdAt": 1780014064955,
+    "updatedAt": 1780014064955
+  },
+  {
+    "type": "task",
+    "title": "Implement ownership-authorized use cases in ProjectService",
+    "content": "Extend IProjectService and ProjectService to support create (with owner), list/getById (owner-scoped), update, and delete with ownership authorization checks. Use primary constructor injection. All methods must accept CancellationToken = default. Throw appropriate domain exceptions on auth failure. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "3f5955b6-4c86-4a7c-a756-68771ab8420b",
+    "rev": 1,
+    "createdAt": 1780014064956,
+    "updatedAt": 1780014064956
+  },
+  {
+    "type": "task",
+    "title": "Register ownership changes in EF configuration and DI",
+    "content": "Update ProjectConfiguration to map OwnerId, ensure DbContext registration, and confirm AddApplication/AddInfrastructure still wire everything correctly. Keep solution building cleanly. ⚠️ EXECUTOR CONSTRAINTS — MANDATORY:\n1. Never call req.destroy() before sending the HTTP response. On error paths (oversized body, bad JSON, etc.) always write the full JSON error response first, THEN let the stream drain naturally. Calling req.destroy() first closes the socket and the client receives a connection error instead of your 400.\n2. Always include a unique `jti` (JWT ID) claim in every access token you sign. Use `crypto.randomUUID()` for jti. Without jti, rotating refresh tokens produces identical access tokens when the clock hasn't advanced, breaking rotation tests and replay-detection.\n⚠️ COMPLETENESS CHECK: Before marking this task done, verify the feature is reachable end-to-end — every route, handler, and middleware that must use the new code actually calls it. A constant or helper that is not wired in is a partial delivery and a release blocker.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "medium",
+    "tags": [
+      "dispatched",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "238e5f1e-a25e-49ec-9a75-03539ce31687",
+    "rev": 1,
+    "createdAt": 1780014064956,
+    "updatedAt": 1780014064956
+  },
+  {
+    "type": "task",
+    "title": "Document ownership-authorized Project use cases",
+    "content": "Update README or Architecture docs with the new ownership authorization rules for create/list/getById/update/delete, including example calls and exception behavior. One deliverable: concise usage documentation.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "doc-writer",
+    "priority": "low",
+    "tags": [
+      "dispatched",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "4c84f2b4-6cfb-43cf-93d2-309953a77704",
+    "rev": 1,
+    "createdAt": 1780014064957,
+    "updatedAt": 1780014064957
+  },
+  {
+    "type": "result",
+    "title": "Result: Add OwnerId to Project aggregate root",
+    "content": "## Implementation\n\nExtended the `Project` aggregate with an immutable `OwnerId` (`UserId`) set at construction, mirroring how `User` carries `UserId`.\n\n## Changes Made\n\n### Domain — `Project.cs`\n\n- Added `public UserId OwnerId { get; private set; }` (immutable, no setter beyond construction)\n- Replaced `Project(string name)` with `Project(UserId ownerId, string name)`\n- Updated full constructor to `Project(ProjectId projectId, UserId ownerId, string name)` with null checks on both value objects\n- `ProjectId` unchanged — ownership is modeled via `UserId`, not `ProjectId`\n\n### Infrastructure — `ProjectConfiguration.cs`\n\n- Mapped `OwnerId` with the same `HasConversion` pattern as `ProjectId` and `UserId`\n- Required so EF Core can materialize `Project` after the entity change (without this, integration tests fail on model binding)\n\n### Application — compile fix\n\n- `IProjectService.CreateAsync` and `ProjectService.CreateAsync` now accept `UserId ownerId` and pass it into `new Project(ownerId, name)`\n- Minimal change to keep the solution building; full ownership authorization (list/getById/update/delete scoping) remains for the next task\n\n### Tests — `InMemoryProjectRepositoryTests.cs`\n\n- All `new Project(...)` call sites updated to pass `UserId.New()`\n- `AddAsync_ThenGetByIdAsync_ReturnsProject` asserts `OwnerId` round-trips through the repository\n\n## Verification\n\n- Build: **0 warnings, 0 errors**\n- Tests: **33/33 passed**\n\n## Next Steps\n\nFor downstream agents:\n\n1. **Repository** — add `GetAllByOwnerAsync` / `GetByIdForOwnerAsync` to `IProjectRepository` and both implementations\n2. **ProjectService** — owner-scoped list/getById/update/delete with authorization checks\n3. **API** — wire project endpoints to pass the authenticated user's id as `ownerId` on create and enforce ownership on reads/writes",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "001619fb-583f-410c-9862-e1889926e254",
+    "rev": 1,
+    "createdAt": 1780014106922,
+    "updatedAt": 1780014106922
+  },
+  {
+    "type": "result",
+    "title": "Result: Update IProjectRepository and both implementations for ownership",
+    "content": "## Implementation\n\nAdded ownership-scoped query methods to `IProjectRepository` and implemented them in both EF Core and in-memory repositories, with tests covering owner filtering behavior.\n\n## Changes Made\n\n### Domain — `IProjectRepository.cs`\n\n- Added `GetByIdForOwnerAsync(Guid id, UserId ownerId, ...)`\n- Added `GetAllByOwnerAsync(UserId ownerId, ...)`\n- Imported `FlowForge.Domain.Users` for `UserId`\n\n### Infrastructure — `ProjectRepository.cs`\n\n- `GetByIdForOwnerAsync` — `FirstOrDefaultAsync` on `Id` and `OwnerId`\n- `GetAllByOwnerAsync` — `AsNoTracking()` + `Where(project => project.OwnerId == ownerId)`\n- Both methods null-check `ownerId` (same as `FindByNameAsync` name validation)\n\n### Infrastructure — `InMemoryProjectRepository.cs`\n\n- `GetByIdForOwnerAsync` — returns the project only when id exists and `OwnerId` matches; otherwise `null`\n- `GetAllByOwnerAsync` — filters `_projectsById.Values` by owner under the existing lock\n- Preserves duplicate-name/id constraint enforcement on add/update/delete (unchanged)\n\n### Tests — `InMemoryProjectRepositoryTests.cs`\n\n- `GetAllByOwnerAsync_ReturnsOnlyProjectsForOwner`\n- `GetByIdForOwnerAsync_WhenOwnerMatches_ReturnsProject`\n- `GetByIdForOwnerAsync_WhenOwnerDoesNotMatch_ReturnsNull`\n\n## Verification\n\n- Build: **0 warnings, 0 errors**\n- Tests: **36/36 passed** (3 new repository tests)\n\n## Next Steps\n\nFor downstream agents (out of this task’s scope):\n\n1. **ProjectService** — switch list/getById to `GetAllByOwnerAsync` / `GetByIdForOwnerAsync` and add ownership checks on update/delete\n2. **API** — pass authenticated user id as `ownerId` on create; use owner-scoped reads/writes on project endpoints",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-2"
+    ],
+    "relatedIds": [],
+    "id": "239edb32-c5ae-40c2-b4ab-225c017ce6a2",
+    "rev": 1,
+    "createdAt": 1780014141194,
+    "updatedAt": 1780014141194
+  },
+  {
+    "type": "result",
+    "title": "Result: Register ownership changes in EF configuration and DI",
+    "content": "## Implementation\n\nRegistered `OwnerId` in EF Core, confirmed DbContext and DI wiring, and added an integration test so ownership mapping is exercised through real SQLite + `ProjectRepository`.\n\n## Changes Made\n\n### EF configuration — `ProjectConfiguration.cs`\n\n`OwnerId` is mapped with the same `HasConversion` pattern as `ProjectId` and `UserId` (Guid column, required). Added a non-unique index on `OwnerId` to support owner-scoped queries (`GetAllByOwnerAsync`, `GetByIdForOwnerAsync`).\n\n```26:33:src/FlowForge.Infrastructure/Persistence/Configurations/ProjectConfiguration.cs\n        builder.Property(project => project.OwnerId)\n            .HasConversion(\n                ownerId => ownerId.Value,\n                value => UserId.From(value))\n            .HasColumnName(\"OwnerId\")\n            .IsRequired();\n\n        builder.HasIndex(project => project.OwnerId);\n```\n\nConfiguration is picked up automatically via `ApplyConfigurationsFromAssembly` on `FlowForgeDbContext`.\n\n### DbContext — `FlowForgeDbContext.cs`\n\n- `DbSet<Project> Projects` is registered\n- `using FlowForge.Domain.Projects` added\n\n### DI wiring (verified)\n\n| Registration | Location |\n|---|---|\n| `AddDbContext<FlowForgeDbContext>` | `AddInfrastructure` |\n| `IProjectRepository` → `ProjectRepository` | `AddInfrastructure` (scoped, after `IUserRepository`) |\n| `IProjectService` → `ProjectService` | `AddApplication` (scoped) |\n\n`Program.cs` calls `AddApplication()` and `AddInfrastructure(builder.Configuration)` — no API changes required for this task.\n\n### Test — `ProjectRepositoryEfCoreTests.cs`\n\nSingle EF integration test resolves `IProjectRepository` through the existing SQLite fixture and asserts `OwnerId` round-trips after `AddAsync` / `GetByIdAsync`.\n\n## Verification\n\n```\ndotnet build  → 0 warnings, 0 errors\ndotnet test   → 37 passed, 0 failed\n```\n\nEnd-to-end path for this deliverable: `Project(ownerId, name)` → EF `OwnerId` conversion → `FlowForgeDbContext.Projects` → `ProjectRepository` persist/load → `Own\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-4"
+    ],
+    "relatedIds": [],
+    "id": "3b79571a-5366-455c-b3b8-63fade52138a",
+    "rev": 1,
+    "createdAt": 1780014170251,
+    "updatedAt": 1780014170251
+  },
+  {
+    "type": "task",
+    "title": "Wire owner-scoped repository methods into ProjectService",
+    "content": "Update ProjectService to expose and use the owner-scoped repository methods: replace or augment GetByIdAsync/DeleteAsync with GetByIdForOwnerAsync, and GetAllAsync with GetAllByOwnerAsync (or add new owner-aware overloads). Ensure CreateAsync continues to set OwnerId. All changes must compile and existing tests must pass. One deliverable: ProjectService methods now enforce ownership at the application layer.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "spawned",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "d91c4479-9295-490c-b328-eed27c701cfd",
+    "rev": 1,
+    "createdAt": 1780014192257,
+    "updatedAt": 1780014192257
+  },
+  {
+    "type": "result",
+    "title": "Result: Wire owner-scoped repository methods into ProjectService",
+    "content": "## Implementation\n\n`ProjectService` now enforces ownership at the application layer by routing read and delete operations through the owner-scoped repository methods. `CreateAsync` was already setting `OwnerId` via `new Project(ownerId, name)` and is unchanged.\n\n## Changes Made\n\n### `IProjectService.cs`\n\nAdded `UserId ownerId` to the methods that must be owner-scoped:\n\n| Method | Change |\n|---|---|\n| `GetByIdAsync` | Now `(Guid id, UserId ownerId, ...)` |\n| `GetAllAsync` | Now `(UserId ownerId, ...)` |\n| `DeleteAsync` | Now `(Guid id, UserId ownerId, ...)` |\n| `CreateAsync` | Unchanged — already accepts `ownerId` |\n| `GetByNameAsync` | Unchanged — no owner-scoped repository method exists yet |\n\n### `ProjectService.cs`\n\n| Method | Repository call |\n|---|---|\n| `GetByIdAsync` | `GetByIdForOwnerAsync(id, ownerId, ...)` |\n| `GetAllAsync` | `GetAllByOwnerAsync(ownerId, ...)` |\n| `DeleteAsync` | Loads via `GetByIdForOwnerAsync`; throws `InvalidOperationException` if missing or not owned |\n| `CreateAsync` | Still creates `new Project(ownerId, name)` and persists via `AddAsync` |\n\nWhen a caller passes the wrong owner, `GetByIdForOwnerAsync` returns `null` — same as a missing project — so delete does not leak existence across owners.\n\n## Verification\n\n- Build: **0 warnings, 0 errors**\n- Tests: **37/37 passed**\n\n## Next Steps\n\nFor downstream agents (out of this task’s scope):\n\n1. **Task-3 (ProjectService use cases)** — add `UpdateAsync` with ownership authorization and domain exceptions for auth failures\n2. **API** — project endpoints must pass the authenticated user's `UserId` into `GetByIdAsync`, `GetAllAsync`, `CreateAsync`, and `DeleteAsync`",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-6"
+    ],
+    "relatedIds": [],
+    "id": "77e59475-8622-4487-9b6b-1675f175b227",
+    "rev": 1,
+    "createdAt": 1780014218807,
+    "updatedAt": 1780014218807
+  },
+  {
+    "type": "result",
+    "title": "Result: Implement ownership-authorized use cases in ProjectService",
+    "content": "## Implementation\n\nExtended `IProjectService` and `ProjectService` with ownership-authorized create, list, getById, update, and delete use cases. All methods use primary constructor injection and accept `CancellationToken = default`. Domain exceptions are thrown on not-found and authorization failures.\n\n## Changes Made\n\n### Domain — `Project.cs`\n\n- Added `Rename(string name)` so update can change the project name and refresh `UpdatedAt`.\n\n### Application — exceptions\n\n- **`ProjectNotFoundException`** — project id does not exist.\n- **`UnauthorizedProjectAccessException`** — project exists but the caller is not the owner.\n\n### Application — `IProjectService` / `ProjectService`\n\n| Method | Behavior |\n|--------|----------|\n| `CreateAsync(UserId ownerId, string name, ...)` | Creates project with immutable `OwnerId` (unchanged contract, null-check added). |\n| `GetAllAsync(UserId ownerId, ...)` | Lists via `GetAllByOwnerAsync`. |\n| `GetByIdAsync(Guid id, UserId ownerId, ...)` | Loads by id, throws `ProjectNotFoundException` or `UnauthorizedProjectAccessException`. |\n| `UpdateAsync(Guid id, UserId ownerId, string name, ...)` | Ownership check, then `Rename` + `UpdateAsync`. |\n| `DeleteAsync(Guid id, UserId ownerId, ...)` | Ownership check, then delete. |\n\nShared helper `GetOwnedProjectAsync` centralizes the load → not-found → owner-mismatch logic for get/update/delete.\n\n`GetByNameAsync` remains as an unscoped lookup (not part of this task’s five use cases; nothing calls it yet).\n\n### Tests — `ProjectServiceIntegrationTests.cs`\n\nEight integration tests through the EF Core fixture covering create, owner-scoped list/get, update, delete, and both exception paths.\n\n## Verification\n\n- Build: **0 warnings, 0 errors**\n- Tests: **45/45 passed** (8 new service tests)\n\n## Next Steps\n\nFor downstream agents (out of this task’s scope):\n\n1. **API endpoints** — wire project CRUD routes to pass the authenticated user’s `UserId` as `ownerId`, and map `ProjectNotFoundException` → 404, `Unauth\n…(truncated)",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-3"
+    ],
+    "relatedIds": [],
+    "id": "bd413770-d7bd-48a3-a65d-1605762599ad",
+    "rev": 1,
+    "createdAt": 1780014239356,
+    "updatedAt": 1780014239356
+  },
+  {
+    "type": "task",
+    "title": "Wire ProjectService into API controller with ownership authorization",
+    "content": "Create ProjectsController (or equivalent) in FlowForge.Api that exposes the ownership-authorized endpoints from IProjectService: Create, List (GetAll), GetById, Update, Delete. All endpoints must accept/validate the authenticated user's id as ownerId, return appropriate HTTP status codes, and handle ProjectNotFoundException / UnauthorizedProjectAccessException. Ensure the controller is registered and the solution builds. Add minimal integration tests that hit the endpoints end-to-end.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "executor",
+    "priority": "high",
+    "tags": [
+      "spawned",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "2ab690ec-085d-4a75-8b57-fccef16ee829",
+    "rev": 1,
+    "createdAt": 1780014253574,
+    "updatedAt": 1780014253574
+  },
+  {
+    "type": "result",
+    "title": "Result: Document ownership-authorized Project use cases",
+    "content": "## Documentation\n\nUpdated two files with ownership-authorized Project use case documentation.\n\n### [`README.md`](README.md) — API usage section\n\nAdded **Projects (ownership-authorized)** covering:\n\n- **Ownership model** — immutable `OwnerId` set at create; JWT `sub` claim drives authorization\n- **Use case table** — create, list, getById, update, delete mapped to `IProjectService` methods\n- **Exception behavior** — `ProjectNotFoundException` → 404, `UnauthorizedProjectAccessException` → 403, invalid/missing JWT → 401\n- **Security note** — foreign-owned project ids return **403** (not **404**) to avoid leaking existence\n- **curl examples** — full CRUD flow for the intended `/projects` routes (with a note that HTTP endpoints are not wired yet)\n\n### [`ARCHITECTURE.MD`](ARCHITECTURE.MD) — architecture reference\n\n- Updated **Current State** to reflect completed Project ownership use cases\n- Added **Project ownership** section describing repository filtering and `GetOwnedProjectAsync` authorization flow\n- Adjusted **Next Major Milestones** to list Project HTTP endpoints as the next step\n\n## Summary\n\nDocumentation is aligned with the implemented `ProjectService` behavior from integration tests. The README gives downstream API work a concrete contract: REST routes, request/response shapes, `ProblemDetails` error format, and the 403-vs-404 distinction for authorization failures.",
+    "status": "done",
+    "author": "doc-writer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-5"
+    ],
+    "relatedIds": [],
+    "id": "8bfe7ff8-4ca0-4031-95fc-3ff1cf7f2b88",
+    "rev": 1,
+    "createdAt": 1780014275382,
+    "updatedAt": 1780014275382
+  },
+  {
+    "type": "result",
+    "title": "Result: Wire ProjectService into API controller with ownership authorization",
+    "content": "## Implementation\n\nAdded ownership-authorized Project CRUD endpoints to the API using the existing Minimal API pattern (`ProjectEndpoints`, matching `MeEndpoints` / `AuthEndpoints`). All five use cases are wired end-to-end through JWT auth → `UserId` extraction → `IProjectService`.\n\n## Changes Made\n\n### API — `ProjectEndpoints.cs`\n\nProtected routes under `/projects` (all require `Authorization: Bearer`):\n\n| Method | Route | Behavior |\n|--------|-------|----------|\n| `POST` | `/projects` | Create project for authenticated owner → **201 Created** |\n| `GET` | `/projects` | List owner's projects → **200 OK** |\n| `GET` | `/projects/{id}` | Get by id with ownership check → **200 OK** |\n| `PUT` | `/projects/{id}` | Update name with ownership check → **200 OK** |\n| `DELETE` | `/projects/{id}` | Delete with ownership check → **204 No Content** |\n\nException mapping:\n- `ProjectNotFoundException` → **404**\n- `UnauthorizedProjectAccessException` → **403**\n- Missing/invalid JWT subject claim → **401**\n- Missing/invalid name → **400**\n\nThe authenticated user's id is resolved from the JWT `sub` claim and passed as `UserId` to every service call.\n\n### Registration — `Program.cs`\n\nAdded `app.MapProjectEndpoints();` alongside the existing endpoint maps.\n\n### Tests — `ProjectEndpointTests.cs`\n\nFour integration tests via `WebApplicationFactory` + SQLite in-memory:\n\n1. Full CRUD flow (create → list → get → update → delete → verify 404)\n2. Unauthenticated request → 401\n3. Cross-owner access → 403\n4. Missing project → 404\n\n## Verification\n\n- Build: **0 warnings, 0 errors**\n- Tests: **49/49 passed** (4 new endpoint tests)\n\n## Next Steps\n\nFor downstream agents (out of this task's scope):\n\n1. **Documentation** — document the `/projects` API (auth header, request/response shapes, 403/404 behavior) in README\n2. **Validation** — optional request validation middleware or OpenAPI annotations if the team wants richer error responses",
+    "status": "done",
+    "author": "executor",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-7"
+    ],
+    "relatedIds": [],
+    "id": "7f431904-1729-4f32-a25d-eb267ade3506",
+    "rev": 1,
+    "createdAt": 1780014299236,
+    "updatedAt": 1780014299236
+  },
+  {
+    "type": "task",
+    "title": "TEAM GOAL",
+    "content": "Implement Project HTTP controller and routes with protected middleware in the FlowForge .NET 10 solution.",
+    "status": "in_progress",
+    "author": "system",
+    "priority": "critical",
+    "tags": [
+      "goal"
+    ],
+    "relatedIds": [],
+    "id": "ebf5358e-34b2-4b41-abf7-a50b124080cb",
+    "rev": 1,
+    "createdAt": 1780019538455,
+    "updatedAt": 1780019538455
+  },
+  {
+    "type": "task",
+    "title": "Review Project endpoints and protected routes",
+    "content": "Perform a comprehensive review of src/FlowForge.Api/Endpoints/ProjectEndpoints.cs and its integration in Program.cs. Verify correctness of auth extraction (jti not required here but claim handling), error responses, route protection via RequireAuthorization, dependency on IProjectService, and adherence to coding standards. Flag any missing wiring, security issues, or style violations. Report findings only; do not edit.",
+    "status": "pending",
+    "author": "Lead-PM",
+    "assignee": "code-reviewer",
+    "priority": "high",
+    "tags": [
+      "dispatched",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "07c416da-4421-4fb6-94e4-2b4dde886ca0",
+    "rev": 1,
+    "createdAt": 1780019557553,
+    "updatedAt": 1780019557553
+  },
+  {
+    "type": "result",
+    "title": "Result: Review Project endpoints and protected routes",
+    "content": "## Review\n\nReviewed `ProjectEndpoints.cs`, its registration in `Program.cs`, and how it compares to `MeEndpoints` / `AuthEndpoints`, the JWT pipeline, `IProjectService`, and `ProjectEndpointTests`. All 49 tests pass, including 4 project endpoint integration tests.\n\n**Verdict:** Wiring is correct and the implementation is production-ready for the current scope. No blockers. A few medium/low issues around test coverage and stale README text should be addressed before calling this feature fully done.\n\n---\n\n## What's Working Well\n\n### Program.cs integration\n\nMiddleware order is correct: `UseAuthentication()` → `UseAuthorization()` before endpoint mapping. `app.MapProjectEndpoints()` is registered alongside the other endpoint groups. `IProjectService` resolves through `AddApplication()` — no extra API-layer registration needed.\n\n### Route protection\n\n```14:15:src/FlowForge.Api/Endpoints/ProjectEndpoints.cs\n        var projects = app.MapGroup(\"/projects\")\n            .RequireAuthorization();\n```\n\nThe entire `/projects` group requires a valid JWT. Unauthenticated requests return **401** (verified by `GetProject_WithoutToken_ReturnsUnauthorized`).\n\n### Auth claim extraction\n\n`TryGetOwnerId` matches the `/me` pattern:\n\n```165:166:src/FlowForge.Api/Endpoints/ProjectEndpoints.cs\n        var subClaim = user.FindFirstValue(JwtRegisteredClaimNames.Sub)\n            ?? user.FindFirstValue(ClaimTypes.NameIdentifier);\n```\n\n- **`jti` is correctly not required** for project ownership; only `sub` matters.\n- Fallback to `ClaimTypes.NameIdentifier` handles ASP.NET Core’s inbound JWT claim mapping.\n- `UserId.From(userId)` aligns with `JwtTokenService`, which sets `sub` to `user.Id.ToString()` at register/login.\n- **Owner ID is never taken from the request body** — only from the token. That closes the obvious IDOR vector.\n\n### Service dependency and ownership\n\nAll five handlers inject `IProjectService` and pass the token-derived `UserId` into owner-scoped methods. Exception mapping is consi\n…(truncated)",
+    "status": "done",
+    "author": "code-reviewer",
+    "priority": "medium",
+    "tags": [
+      "result",
+      "task-1"
+    ],
+    "relatedIds": [],
+    "id": "30921087-e516-4a78-ab19-682e3de45cde",
+    "rev": 1,
+    "createdAt": 1780019597801,
+    "updatedAt": 1780019597801
   }
 ]

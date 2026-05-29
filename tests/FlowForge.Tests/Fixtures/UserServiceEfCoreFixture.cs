@@ -1,5 +1,7 @@
 using FlowForge.Application;
+using FlowForge.Application.Projects;
 using FlowForge.Application.Users;
+using FlowForge.Domain.Projects;
 using FlowForge.Infrastructure;
 using FlowForge.Infrastructure.Persistence;
 using Microsoft.Data.Sqlite;
@@ -40,6 +42,12 @@ public sealed class UserServiceEfCoreFixture : IDisposable
 
     public IUserService ResolveUserService(IServiceScope scope) =>
         scope.ServiceProvider.GetRequiredService<IUserService>();
+
+    public IProjectService ResolveProjectService(IServiceScope scope) =>
+        scope.ServiceProvider.GetRequiredService<IProjectService>();
+
+    public IProjectRepository ResolveProjectRepository(IServiceScope scope) =>
+        scope.ServiceProvider.GetRequiredService<IProjectRepository>();
 
     public void Dispose()
     {
